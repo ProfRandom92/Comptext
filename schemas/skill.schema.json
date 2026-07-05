@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/skill.schema.json",
+  "title": "COMPTEXT Skill Document",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["required_headings"],
+  "properties": {
+    "required_headings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 9
+    }
+  }
+}

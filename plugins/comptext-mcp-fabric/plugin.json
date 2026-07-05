@@ -1,0 +1,29 @@
+{
+  "name": "comptext-mcp-fabric",
+  "version": "0.1.0",
+  "status": "experimental",
+  "purpose": "Preparation-only MCP fabric design placeholder without starting MCP runtimes.",
+  "capabilities": [
+    "mcp_design_guidance",
+    "local_contract_guidance",
+    "safety_boundary_guidance"
+  ],
+  "skills": [
+    "skills/comptext-bootstrap/SKILL.md",
+    "skills/comptext-security/SKILL.md"
+  ],
+  "hooks": [],
+  "schemas": [
+    "schemas/plugin.schema.json"
+  ],
+  "checks": [
+    "$env:PYTHONPATH=\".\"; python -m pytest -q tests"
+  ],
+  "safety_rules": [
+    "local_dry_run_only",
+    "no_mcp_start",
+    "no_gateway_start",
+    "no_provider_calls",
+    "no_secrets"
+  ]
+}

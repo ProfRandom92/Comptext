@@ -1,0 +1,30 @@
+{
+  "name": "comptext-evidence-replay",
+  "version": "0.1.0",
+  "status": "experimental",
+  "purpose": "Local synthetic Evidence and replay guidance for hash-chain verification samples.",
+  "capabilities": [
+    "synthetic_evidence_guidance",
+    "hash_chain_validation",
+    "replay_sample_guidance"
+  ],
+  "skills": [
+    "skills/comptext-evidence/SKILL.md",
+    "skills/comptext-runtime/SKILL.md",
+    "skills/comptext-security/SKILL.md"
+  ],
+  "hooks": [],
+  "schemas": [
+    "schemas/plugin.schema.json"
+  ],
+  "checks": [
+    "python -m modules.cli.cli_entrypoint evidence verify --sample",
+    "python -m modules.cli.cli_entrypoint run sample --dry-run"
+  ],
+  "safety_rules": [
+    "synthetic_or_redacted_evidence_only",
+    "no_provider_payloads",
+    "no_secrets",
+    "no_forensic_claims"
+  ]
+}

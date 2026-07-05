@@ -1,0 +1,30 @@
+{
+  "name": "comptext-provider-gateway",
+  "version": "0.1.0",
+  "status": "experimental",
+  "purpose": "Preparation-only provider registry guidance without live provider activation or healthchecks.",
+  "capabilities": [
+    "provider_registry_guidance",
+    "safe_provider_status_validation",
+    "gateway_design_notes"
+  ],
+  "skills": [
+    "skills/comptext-provider-registry/SKILL.md",
+    "skills/comptext-security/SKILL.md"
+  ],
+  "hooks": [],
+  "schemas": [
+    "schemas/provider-registry.schema.json",
+    "schemas/plugin.schema.json"
+  ],
+  "checks": [
+    "$env:PYTHONPATH=\".\"; python -m pytest -q tests"
+  ],
+  "safety_rules": [
+    "local_dry_run_only",
+    "no_provider_calls",
+    "no_healthchecks",
+    "no_gateway_start",
+    "safe_provider_states_only"
+  ]
+}

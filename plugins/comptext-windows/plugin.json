@@ -1,0 +1,30 @@
+{
+  "name": "comptext-windows",
+  "version": "0.1.0",
+  "status": "experimental",
+  "purpose": "Windows-first local command and path guidance for CompText dry-run development.",
+  "capabilities": [
+    "powershell_command_guidance",
+    "windows_path_guidance",
+    "local_test_guidance"
+  ],
+  "skills": [
+    "skills/comptext-windows/SKILL.md",
+    "skills/comptext-dry-run-cli/SKILL.md"
+  ],
+  "hooks": [],
+  "schemas": [
+    "schemas/plugin.schema.json"
+  ],
+  "checks": [
+    "python -m compileall modules tests",
+    "$env:PYTHONPATH=\".\"; python -m pytest -q tests"
+  ],
+  "safety_rules": [
+    "local_dry_run_only",
+    "no_destructive_commands",
+    "no_gateway_start",
+    "no_mcp_start",
+    "no_secrets"
+  ]
+}
