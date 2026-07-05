@@ -37,6 +37,20 @@ def test_cli_evidence_verify_sample(capsys) -> None:
     assert output["providers"] == "not_called"
 
 
+def test_cli_run_sample_dry_run(capsys) -> None:
+    assert run(["run", "sample", "--dry-run"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["command"] == "comptext run sample --dry-run"
+    assert output["mode"] == "dry-run"
+    assert output["ok"] is True
+    assert output["run"]["status"] == "completed"
+    assert output["execution"]["provider_calls"] == 0
+    assert output["execution"]["network"] == "not_called"
+    assert output["execution"]["providers"] == "not_called"
+    assert output["execution"]["secrets"] == "not_read"
+    assert output["evidence"]["verified"] is True
+
+
 def test_cli_doctor_returns_non_zero_when_doctor_fails(tmp_path: Path, capsys) -> None:
     assert run(["doctor", "--dry-run"], repo_root=tmp_path) == 1
     output = json.loads(capsys.readouterr().out)
