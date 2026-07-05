@@ -10,6 +10,9 @@ Implemented local-only MVP command surface:
 comptext doctor --dry-run
 comptext validate schemas --dry-run
 comptext providers list --dry-run
+comptext gateway health --dry-run
+comptext gateway models --dry-run
+comptext gateway sample --dry-run
 comptext evidence verify --sample
 comptext run sample --dry-run
 ```
@@ -28,9 +31,10 @@ See `tasks/01_local_dry_run_mvp.md`.
 - Commands do not start servers.
 - Commands do not read secrets or raw environment variables.
 - Provider states are limited to `not_configured`, `disabled`, or `experimental`.
+- Gateway v0 returns deterministic dry-run JSON only.
 - Evidence output is synthetic or redacted.
 - Local checks are documented honestly.
 
 ## Deferred work
 
-Gateway server, live provider healthchecks, MCP runtime, desktop UI, package release, plugin marketplace, and production claims are explicitly deferred.
+Gateway server, live provider routing, live provider healthchecks, MCP runtime, desktop UI, package release, plugin marketplace, and production claims are explicitly deferred.
