@@ -22,6 +22,6 @@ Use when inspecting review threads, preparing PR text, or responding to actionab
 
 ## Related docs
 
-- `AGENTS.md`
-- `docs/CODEX_DESKTOP_PROMPTS.md`
-- `docs/CODEX_DESKTOP_WORKFLOW.md`
+- [`AGENTS.md`](../../AGENTS.md)
+- [`docs/CODEX_DESKTOP_PROMPTS.md`](../../docs/CODEX_DESKTOP_PROMPTS.md)
+- [`docs/CODEX_DESKTOP_WORKFLOW.md`](../../docs/CODEX_DESKTOP_WORKFLOW.md)
