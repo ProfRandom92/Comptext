@@ -53,20 +53,28 @@ def normalize_gateway_request(request: dict[str, Any], *, dry_run: bool = True) 
     if not isinstance(request, dict):
         raise ValueError("gateway request root must be an object")
 
-    model = request.get("model", DRY_RUN_MODEL_ID)
-    if not isinstance(model, str):
+    model = request.get("model")
+    if model is None:
+        model = DRY_RUN_MODEL_ID
+    elif not isinstance(model, str):
         raise ValueError("gateway request model must be a string")
 
-    messages = request.get("messages", [])
-    if not isinstance(messages, list):
+    messages = request.get("messages")
+    if messages is None:
+        messages = []
+    elif not isinstance(messages, list):
         raise ValueError("gateway request messages must be a list")
 
-    tools = request.get("tools", [])
-    if not isinstance(tools, list):
+    tools = request.get("tools")
+    if tools is None:
+        tools = []
+    elif not isinstance(tools, list):
         raise ValueError("gateway request tools must be a list")
 
-    metadata = request.get("metadata", {})
-    if not isinstance(metadata, dict):
+    metadata = request.get("metadata")
+    if metadata is None:
+        metadata = {}
+    elif not isinstance(metadata, dict):
         raise ValueError("gateway request metadata must be an object")
 
     return {
