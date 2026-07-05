@@ -10,6 +10,7 @@ from typing import Any
 from modules.doctor.doctor import run_doctor
 from modules.evidence.evidence import verify_sample_evidence
 from modules.provider_registry.provider_registry import list_providers
+from modules.runtime.sample_run import run_sample
 from modules.validation.schema_validator import validate_local_schemas
 
 EXPECTED_COMMAND_ERRORS = (OSError, json.JSONDecodeError, ValueError, KeyError)
@@ -36,6 +37,11 @@ def build_parser() -> argparse.ArgumentParser:
     evidence_subparsers = evidence.add_subparsers(dest="evidence_command", required=True)
     evidence_verify = evidence_subparsers.add_parser("verify")
     evidence_verify.add_argument("--sample", action="store_true", required=True)
+
+    run_parser = subparsers.add_parser("run")
+    run_subparsers = run_parser.add_subparsers(dest="run_command", required=True)
+    sample_run = run_subparsers.add_parser("sample")
+    sample_run.add_argument("--dry-run", action="store_true", required=True)
     return parser
 
 
@@ -64,6 +70,10 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             return 0
         if args.command == "evidence" and args.evidence_command == "verify":
             result = verify_sample_evidence(sample=args.sample)
+            _print_json(result)
+            return 0 if result.get("ok") is True else 1
+        if args.command == "run" and args.run_command == "sample":
+            result = run_sample(dry_run=args.dry_run)
             _print_json(result)
             return 0 if result.get("ok") is True else 1
     except EXPECTED_COMMAND_ERRORS as error:
