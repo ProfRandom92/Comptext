@@ -9,7 +9,7 @@ Implement the next CompText task.
 
 Repository: ProfRandom92/Comptext
 Base branch: main
-Create branch: codex/<task-name>
+Create branch: <prefix>/<task-name> (where <prefix> is codex, fix, docs, or plugin depending on the task type)
 
 Before editing:
 - fetch the latest main
