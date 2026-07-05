@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comptext"
+version = "0.0.0"
+description = "Local dry-run-first scaffold for CompText."
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.scripts]
+comptext = "modules.cli.cli_entrypoint:main"
+
+[tool.setuptools.packages.find]
+include = ["modules*"]
