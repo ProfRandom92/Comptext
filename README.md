@@ -16,7 +16,7 @@ Prepared surfaces:
 - local dry-run CLI scaffolding,
 - local doctor and validation helpers,
 - provider registry loading with safe states only,
-- evidence hash-chain verification stubs,
+- deterministic sample evidence hash-chain verification,
 - approval-gate and scheduler dry-run contracts,
 - Windows dry-run scripts,
 - unit tests for the prepared contracts.

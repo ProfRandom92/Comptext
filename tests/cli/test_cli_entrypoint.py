@@ -26,6 +26,17 @@ def test_cli_providers_list_dry_run(capsys) -> None:
     assert {provider["healthcheck"] for provider in output["providers"]} == {"not_run"}
 
 
+def test_cli_evidence_verify_sample(capsys) -> None:
+    assert run(["evidence", "verify", "--sample"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["command"] == "comptext evidence verify --sample"
+    assert output["mode"] == "sample"
+    assert output["ok"] is True
+    assert output["events"] == 3
+    assert output["network"] == "not_called"
+    assert output["providers"] == "not_called"
+
+
 def test_cli_doctor_returns_non_zero_when_doctor_fails(tmp_path: Path, capsys) -> None:
     assert run(["doctor", "--dry-run"], repo_root=tmp_path) == 1
     output = json.loads(capsys.readouterr().out)
