@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Sequence
 
 from modules.doctor.doctor import run_doctor
+from modules.evidence.evidence_verifier import verify_sample_evidence
 from modules.provider_registry.provider_registry import format_provider_list, load_provider_registry
 from modules.validation.schema_validator import validate_local_schemas
 
@@ -30,6 +31,11 @@ def build_parser() -> argparse.ArgumentParser:
     providers_subparsers = providers.add_subparsers(dest="action", required=True)
     providers_list = providers_subparsers.add_parser("list", help="List local provider sample states.")
     providers_list.add_argument("--dry-run", action="store_true", required=True)
+
+    evidence = subparsers.add_parser("evidence", help="Verify local synthetic evidence samples.")
+    evidence_subparsers = evidence.add_subparsers(dest="action", required=True)
+    evidence_verify = evidence_subparsers.add_parser("verify", help="Verify a synthetic evidence hash chain.")
+    evidence_verify.add_argument("--sample", action="store_true", required=True)
 
     return parser
 
@@ -56,6 +62,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         registry = load_provider_registry(PROJECT_ROOT / "examples" / "provider" / "provider-registry-sample.json")
         print(format_provider_list(registry))
         return 0
+
+    if args.command == "evidence" and args.action == "verify":
+        result = verify_sample_evidence()
+        print("CompText evidence verification sample")
+        for item in result["checked"]:
+            print(f"- {item['kind']}: ok ({item['hash']})")
+        print(f"final_hash: {result['final_hash']}")
+        return 0 if result["ok"] else 1
 
     parser.error("Unsupported command")
     return 2
