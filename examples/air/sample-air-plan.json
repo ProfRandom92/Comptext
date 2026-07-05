@@ -1,0 +1,17 @@
+{
+  "plan_id": "air-plan-local-sample-001",
+  "title": "COMPTEXT Local Dry-Run Sample",
+  "dry_run": true,
+  "tasks": [
+    {
+      "task_id": "task-001",
+      "kind": "local_validation",
+      "summary": "Load a synthetic AIR plan and build a local Run Record."
+    },
+    {
+      "task_id": "task-002",
+      "kind": "synthetic_evidence",
+      "summary": "Create synthetic Evidence Events and verify their hash chain."
+    }
+  ]
+}

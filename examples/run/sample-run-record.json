@@ -1,0 +1,8 @@
+{
+  "run_id": "run-local-sample-001",
+  "plan_id": "air-plan-local-sample-001",
+  "dry_run": true,
+  "status": "verified",
+  "flow": ["Run", "Plan", "Execution", "Evidence", "Replay", "Verify"],
+  "task_count": 2
+}

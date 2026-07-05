@@ -9,6 +9,7 @@ from typing import Sequence
 from modules.doctor.doctor import run_doctor
 from modules.evidence.evidence_verifier import verify_sample_evidence
 from modules.provider_registry.provider_registry import format_provider_list, load_provider_registry
+from modules.runtime.sample_run import run_sample_dry_run
 from modules.validation.schema_validator import validate_local_schemas
 
 
@@ -36,6 +37,11 @@ def build_parser() -> argparse.ArgumentParser:
     evidence_subparsers = evidence.add_subparsers(dest="action", required=True)
     evidence_verify = evidence_subparsers.add_parser("verify", help="Verify a synthetic evidence hash chain.")
     evidence_verify.add_argument("--sample", action="store_true", required=True)
+
+    run = subparsers.add_parser("run", help="Run local synthetic CompText workflows.")
+    run_subparsers = run.add_subparsers(dest="target", required=True)
+    run_sample = run_subparsers.add_parser("sample", help="Execute a synthetic local sample run.")
+    run_sample.add_argument("--dry-run", action="store_true", required=True)
 
     return parser
 
@@ -70,6 +76,17 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"- {item['kind']}: ok ({item['hash']})")
         print(f"final_hash: {result['final_hash']}")
         return 0 if result["ok"] else 1
+
+    if args.command == "run" and args.target == "sample":
+        result = run_sample_dry_run(PROJECT_ROOT)
+        run_record = result["run_record"]
+        print("CompText sample run dry-run")
+        print(f"run id: {run_record['run_id']}")
+        print(f"plan id: {run_record['plan_id']}")
+        print(f"evidence events: {len(result['evidence_events'])}")
+        print(f"hash chain status: {'ok' if result['hash_chain']['ok'] else 'failed'}")
+        print(f"dry-run: {str(result['dry_run']).lower()}")
+        return 0 if result["hash_chain"]["ok"] else 1
 
     parser.error("Unsupported command")
     return 2
