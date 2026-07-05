@@ -1,0 +1,19 @@
+{
+  "providers": [
+    {
+      "id": "local-synthetic",
+      "display_name": "Local synthetic provider placeholder",
+      "state": "disabled"
+    },
+    {
+      "id": "manual-experimental",
+      "display_name": "Manual experimental provider placeholder",
+      "state": "experimental"
+    },
+    {
+      "id": "future-provider",
+      "display_name": "Future provider placeholder",
+      "state": "not_configured"
+    }
+  ]
+}
