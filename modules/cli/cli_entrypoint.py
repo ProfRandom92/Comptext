@@ -5,10 +5,13 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 from modules.doctor.doctor import run_doctor
 from modules.provider_registry.provider_registry import list_providers
 from modules.validation.schema_validator import validate_local_schemas
+
+EXPECTED_COMMAND_ERRORS = (OSError, json.JSONDecodeError, ValueError, KeyError)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -30,19 +33,32 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _print_json(payload: dict[str, Any]) -> None:
+    print(json.dumps(payload, indent=2, sort_keys=True))
+
+
+def _print_error(error: Exception) -> None:
+    _print_json({"error": {"message": str(error), "type": type(error).__name__}, "ok": False})
+
+
 def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
     args = build_parser().parse_args(argv)
     root = repo_root or Path.cwd()
 
-    if args.command == "doctor":
-        print(json.dumps(run_doctor(repo_root=root, dry_run=args.dry_run), indent=2, sort_keys=True))
-        return 0
-    if args.command == "validate" and args.target == "schemas":
-        print(json.dumps({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)}, indent=2, sort_keys=True))
-        return 0
-    if args.command == "providers" and args.provider_command == "list":
-        print(json.dumps({"mode": "dry-run", "providers": list_providers(path=root / "examples/provider/provider-registry-sample.json", dry_run=args.dry_run)}, indent=2, sort_keys=True))
-        return 0
+    try:
+        if args.command == "doctor":
+            result = run_doctor(repo_root=root, dry_run=args.dry_run)
+            _print_json(result)
+            return 0 if result.get("ok") is True else 1
+        if args.command == "validate" and args.target == "schemas":
+            _print_json({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)})
+            return 0
+        if args.command == "providers" and args.provider_command == "list":
+            _print_json({"mode": "dry-run", "providers": list_providers(path=root / "examples/provider/provider-registry-sample.json", dry_run=args.dry_run)})
+            return 0
+    except EXPECTED_COMMAND_ERRORS as error:
+        _print_error(error)
+        return 1
     return 2
 
 
