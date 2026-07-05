@@ -53,6 +53,26 @@ def test_normalize_gateway_request_valid_input() -> None:
     }
 
 
+def test_normalize_gateway_request_defaults_explicit_null_values() -> None:
+    normalized = normalize_gateway_request(
+        {
+            "model": None,
+            "messages": None,
+            "tools": None,
+            "metadata": None,
+        }
+    )
+
+    assert normalized == {
+        "mode": "dry-run",
+        "provider": "comptext-local",
+        "model": "comptext-dry-run-model",
+        "messages": [],
+        "tools": [],
+        "metadata": {},
+    }
+
+
 def test_normalize_gateway_request_rejects_non_object_input() -> None:
     with pytest.raises(ValueError, match="root must be an object"):
         normalize_gateway_request(["not", "an", "object"])  # type: ignore[arg-type]
@@ -64,6 +84,7 @@ def test_normalize_gateway_request_rejects_non_object_input() -> None:
         ({"messages": "hello"}, "messages must be a list"),
         ({"tools": {"name": "tool"}}, "tools must be a list"),
         ({"model": 123}, "model must be a string"),
+        ({"metadata": "sample"}, "metadata must be an object"),
     ],
 )
 def test_normalize_gateway_request_rejects_invalid_field_types(
