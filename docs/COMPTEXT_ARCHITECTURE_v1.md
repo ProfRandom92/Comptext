@@ -172,3 +172,14 @@ CompText defines clear interfaces between layers. These interfaces are described
 | **Subagent Manifest** | name, role, responsibilities, allowed_tools, forbidden_actions, inputs, outputs, escalation_rules, version |
 
 The AIR Plan describes intended behavior. Evidence Events document what actually happened. The Run Record connects both with status and timestamps. Further detail belongs in the dedicated specifications such as `docs/COMPTEXT_AIR_SPEC.md`, `docs/COMPTEXT_EVIDENCE.md`, and `docs/COMPTEXT_RUNTIME.md`.
+
+## Agent Workflow Baseline
+
+Dedicated workflow model documents:
+
+- Agent model: [`docs/AGENT_SYSTEM.md`](AGENT_SYSTEM.md)
+- Skills model: [`docs/SKILLS_SYSTEM.md`](SKILLS_SYSTEM.md)
+- Hooks model: [`docs/HOOKS_SYSTEM.md`](HOOKS_SYSTEM.md)
+- Subagents model: [`docs/SUBAGENTS_SYSTEM.md`](SUBAGENTS_SYSTEM.md)
+- Plugin model: [`docs/PLUGIN_SYSTEM.md`](PLUGIN_SYSTEM.md)
+- Context and memory model: [`docs/CONTEXT_AND_MEMORY.md`](CONTEXT_AND_MEMORY.md)

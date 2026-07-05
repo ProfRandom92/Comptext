@@ -72,3 +72,13 @@ Read `START_HERE.md`, then `docs/COMPTEXT_MVP.md` and `docs/COMPTEXT_ARCHITECTUR
 For a future repository publication plan, read `docs/REPOSITORY_STRATEGY.md`.
 
 For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `docs/CODEX_DESKTOP_PROMPTS.md`.
+
+## Agent workflow docs
+
+- [`AGENTS.md`](AGENTS.md)
+- [`docs/AGENT_SYSTEM.md`](docs/AGENT_SYSTEM.md)
+- [`docs/SKILLS_SYSTEM.md`](docs/SKILLS_SYSTEM.md)
+- [`docs/HOOKS_SYSTEM.md`](docs/HOOKS_SYSTEM.md)
+- [`docs/SUBAGENTS_SYSTEM.md`](docs/SUBAGENTS_SYSTEM.md)
+- [`docs/PLUGIN_SYSTEM.md`](docs/PLUGIN_SYSTEM.md)
+- [`docs/CONTEXT_AND_MEMORY.md`](docs/CONTEXT_AND_MEMORY.md)
