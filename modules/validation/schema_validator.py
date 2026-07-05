@@ -11,13 +11,26 @@ SCHEMA_EXAMPLE_PAIRS = (
 )
 
 
+def _matches_type(value: Any, expected: str) -> bool:
+    if expected == "object":
+        return isinstance(value, dict)
+    if expected == "array":
+        return isinstance(value, list)
+    if expected == "string":
+        return isinstance(value, str)
+    if expected == "boolean":
+        return isinstance(value, bool)
+    if expected == "integer":
+        return isinstance(value, int) and not isinstance(value, bool)
+    if expected == "number":
+        return isinstance(value, (int, float)) and not isinstance(value, bool)
+    if expected == "null":
+        return value is None
+    raise ValueError(f"unsupported schema type: {expected}")
+
+
 def _require_type(value: Any, expected: str, location: str) -> None:
-    type_map = {
-        "object": dict,
-        "array": list,
-        "string": str,
-    }
-    if expected in type_map and not isinstance(value, type_map[expected]):
+    if not _matches_type(value, expected):
         raise ValueError(f"{location} must be {expected}")
 
 
