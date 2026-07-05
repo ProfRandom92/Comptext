@@ -4,7 +4,7 @@ The first CompText MVP is a local dry-run MVP. It is not a full agent OS, provid
 
 ## MVP commands
 
-Implement these commands first:
+Implemented local-only MVP command surface:
 
 ```bash
 comptext doctor --dry-run
