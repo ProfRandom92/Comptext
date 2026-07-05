@@ -1,8 +1,10 @@
 # AGENTS.md
 
-This repository is the clean main project for **CompText**, a local AI orchestration platform for software engineering.
+Operational instructions for agents working in this repository.
 
-## Product naming
+## Project identity
+
+CompText is a local AI orchestration platform for software engineering.
 
 Use these names consistently:
 
@@ -10,57 +12,46 @@ Use these names consistently:
 - Repository, package, and CLI name: `comptext`
 - Constants and document titles: `COMPTEXT`
 
-Do not use legacy product-core names or framing or migration-era names/competition positioning.
+## Current status
 
-## Current operating mode
+This repository is local dry-run MVP only. Do not present docs, schemas, contracts, or scaffolding as production-ready features.
 
-The repository is preparation-only and local-dry-run-first. Do not present stubs or contracts as production-ready features.
+## Branch policy
 
-## Architecture baseline
+`main` is canonical. New work branches from latest `main`.
 
-CompText is organized as a seven-layer system:
+Branch prefixes:
 
-1. Terminal OS / UI
-2. Runtime
-3. Gateway
-4. Agent Bus
-5. AIR
-6. Evidence
-7. Memory / Knowledge Graph
+- `codex/<task>`
+- `fix/<bug>`
+- `docs/<topic>`
+- `plugin/<feature>`
 
-Core flow:
+## Review policy
 
-```text
-Run -> Plan -> Execution -> Evidence -> Replay -> Verify
-```
+- Inspect all review and Gemini threads.
+- Fix actionable comments.
+- Resolve every completed thread.
+- Do not resolve ambiguous, unfixed, or out-of-scope comments.
 
-## Allowed work
+## Safety policy
 
-- Create and update documentation, schemas, examples, tests, and dry-run scaffolding.
-- Run local-only checks that parse files, validate schemas, scan for obvious secret patterns, compile Python files, or execute unit tests.
+- Do not perform provider calls unless explicitly configured and requested.
+- Do not store secrets, API keys, raw environment variables, hidden chain-of-thought, or unredacted provider payloads in Evidence or logs.
+- Do not execute destructive commands without explicit approval.
+- Do not auto-push or auto-merge unless the user explicitly asks.
+- Do not create pull requests, merge, or release unless repository policy is explicitly changed.
+
+## Validation policy
+
+- Run relevant local tests or checks for the changed surface.
+- Documentation-only PRs may use markdown checks and `git diff --check`.
 - Keep provider states limited to `not_configured`, `disabled`, or `experimental`.
 
-## Forbidden work
+## Navigation
 
-- Do not create pull requests, merge, or release.
-- Do not perform live provider calls, real healthchecks, gateway startup, or MCP runtime startup.
-- Do not read, use, print, or log secrets, API keys, tokens, raw environment variables, or provider payloads.
-- Do not execute destructive commands.
-- Do not claim production security, compliance, forensic, or provider readiness.
-- Do not store hidden chain-of-thought or unredacted payloads in Evidence.
-
-## Evidence rules
-
-Evidence may store redacted metadata, hashes, tool summaries, synthetic test results, and approved diffs. Evidence must not store secrets, API keys, raw environment variables, hidden chain-of-thought, or unredacted provider payloads.
-
-## MVP focus
-
-The next safe implementation step is a local dry-run MVP:
-
-```bash
-comptext doctor --dry-run
-comptext validate schemas --dry-run
-comptext providers list --dry-run
-comptext evidence verify --sample
-comptext run sample --dry-run
-```
+- Codex Desktop workflow: `docs/CODEX_DESKTOP_WORKFLOW.md`
+- Codex Desktop prompts: `docs/CODEX_DESKTOP_PROMPTS.md`
+- Architecture: `docs/COMPTEXT_ARCHITECTURE_v1.md`
+- Security: `docs/COMPTEXT_SECURITY.md`
+- MVP tasks: `docs/COMPTEXT_MVP_TASKS.md`
