@@ -22,6 +22,6 @@ Use for README, architecture docs, operational instructions, and documentation-o
 
 ## Related docs
 
-- `AGENTS.md`
-- `docs/COMPTEXT_ARCHITECTURE_v1.md`
-- `docs/COMPTEXT_SECURITY.md`
+- [`AGENTS.md`](../../AGENTS.md)
+- [`docs/COMPTEXT_ARCHITECTURE_v1.md`](../../docs/COMPTEXT_ARCHITECTURE_v1.md)
+- [`docs/COMPTEXT_SECURITY.md`](../../docs/COMPTEXT_SECURITY.md)
