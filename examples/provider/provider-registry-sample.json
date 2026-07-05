@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "providers": [
+    {
+      "name": "openai",
+      "state": "not_configured"
+    },
+    {
+      "name": "local_echo",
+      "state": "disabled"
+    },
+    {
+      "name": "experimental_local_adapter",
+      "state": "experimental"
+    }
+  ]
+}
