@@ -17,6 +17,7 @@ Prepared surfaces:
 - local doctor and validation helpers,
 - provider registry loading with safe states only,
 - deterministic sample evidence hash-chain verification,
+- deterministic sample run dry-run runtime,
 - approval-gate and scheduler dry-run contracts,
 - Windows dry-run scripts,
 - unit tests for the prepared contracts.
