@@ -177,9 +177,9 @@ The AIR Plan describes intended behavior. Evidence Events document what actually
 
 Dedicated workflow model documents:
 
-- Agent model: `docs/AGENT_SYSTEM.md`
-- Skills model: `docs/SKILLS_SYSTEM.md`
-- Hooks model: `docs/HOOKS_SYSTEM.md`
-- Subagents model: `docs/SUBAGENTS_SYSTEM.md`
-- Plugin model: `docs/PLUGIN_SYSTEM.md`
-- Context and memory model: `docs/CONTEXT_AND_MEMORY.md`
+- Agent model: [`docs/AGENT_SYSTEM.md`](AGENT_SYSTEM.md)
+- Skills model: [`docs/SKILLS_SYSTEM.md`](SKILLS_SYSTEM.md)
+- Hooks model: [`docs/HOOKS_SYSTEM.md`](HOOKS_SYSTEM.md)
+- Subagents model: [`docs/SUBAGENTS_SYSTEM.md`](SUBAGENTS_SYSTEM.md)
+- Plugin model: [`docs/PLUGIN_SYSTEM.md`](PLUGIN_SYSTEM.md)
+- Context and memory model: [`docs/CONTEXT_AND_MEMORY.md`](CONTEXT_AND_MEMORY.md)
