@@ -29,3 +29,22 @@ def test_load_provider_registry_rejects_unsafe_state(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="not dry-run safe"):
         load_provider_registry(registry)
+
+
+def test_load_provider_registry_rejects_non_object_root(tmp_path: Path) -> None:
+    registry = tmp_path / "registry.json"
+    registry.write_text(json.dumps([]), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="root must be an object"):
+        load_provider_registry(registry)
+
+
+def test_load_provider_registry_requires_provider_id(tmp_path: Path) -> None:
+    registry = tmp_path / "registry.json"
+    registry.write_text(
+        json.dumps({"providers": [{"display_name": "Missing id", "state": "disabled"}]}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="must contain 'id'"):
+        load_provider_registry(registry)
