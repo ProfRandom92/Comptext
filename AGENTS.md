@@ -50,8 +50,8 @@ Branch prefixes:
 
 ## Navigation
 
-- Codex Desktop workflow: `docs/CODEX_DESKTOP_WORKFLOW.md`
-- Codex Desktop prompts: `docs/CODEX_DESKTOP_PROMPTS.md`
-- Architecture: `docs/COMPTEXT_ARCHITECTURE_v1.md`
-- Security: `docs/COMPTEXT_SECURITY.md`
-- MVP tasks: `docs/COMPTEXT_MVP_TASKS.md`
+- Codex Desktop workflow: [`docs/CODEX_DESKTOP_WORKFLOW.md`](docs/CODEX_DESKTOP_WORKFLOW.md)
+- Codex Desktop prompts: [`docs/CODEX_DESKTOP_PROMPTS.md`](docs/CODEX_DESKTOP_PROMPTS.md)
+- Architecture: [`docs/COMPTEXT_ARCHITECTURE_v1.md`](docs/COMPTEXT_ARCHITECTURE_v1.md)
+- Security: [`docs/COMPTEXT_SECURITY.md`](docs/COMPTEXT_SECURITY.md)
+- MVP tasks: [`docs/COMPTEXT_MVP_TASKS.md`](docs/COMPTEXT_MVP_TASKS.md)
