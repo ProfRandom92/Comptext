@@ -22,5 +22,5 @@ Use for branch setup, status checks, diff inspection, and commit preparation.
 
 ## Related docs
 
-- `AGENTS.md`
-- `docs/CODEX_DESKTOP_WORKFLOW.md`
+- [`AGENTS.md`](../../AGENTS.md)
+- [`docs/CODEX_DESKTOP_WORKFLOW.md`](../../docs/CODEX_DESKTOP_WORKFLOW.md)
