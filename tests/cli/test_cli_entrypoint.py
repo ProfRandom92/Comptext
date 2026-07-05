@@ -26,6 +26,32 @@ def test_cli_providers_list_dry_run(capsys) -> None:
     assert {provider["healthcheck"] for provider in output["providers"]} == {"not_run"}
 
 
+def test_cli_gateway_health_dry_run(capsys) -> None:
+    assert run(["gateway", "health", "--dry-run"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is True
+    assert output["server"] == "not_started"
+    assert output["providers"] == "not_called"
+
+
+def test_cli_gateway_models_dry_run(capsys) -> None:
+    assert run(["gateway", "models", "--dry-run"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["mode"] == "dry-run"
+    assert output["models"][0]["id"] == "comptext-dry-run-model"
+    assert output["models"][0]["state"] == "not_configured"
+
+
+def test_cli_gateway_sample_dry_run(capsys) -> None:
+    assert run(["gateway", "sample", "--dry-run"]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is True
+    assert output["providers"] == "not_called"
+    assert output["network"] == "not_called"
+    assert output["secrets"] == "not_read"
+    assert output["evidence"] == {"planned": True}
+
+
 def test_cli_evidence_verify_sample(capsys) -> None:
     assert run(["evidence", "verify", "--sample"]) == 0
     output = json.loads(capsys.readouterr().out)

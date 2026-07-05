@@ -16,6 +16,7 @@ Prepared surfaces:
 - local dry-run CLI scaffolding,
 - local doctor and validation helpers,
 - provider registry loading with safe states only,
+- local Provider Gateway v0 dry-run scaffold,
 - deterministic sample evidence hash-chain verification,
 - deterministic sample run dry-run runtime,
 - approval-gate and scheduler dry-run contracts,
@@ -26,6 +27,7 @@ Not implemented yet:
 
 - no live provider calls,
 - no gateway server,
+- no live provider routing,
 - no real MCP runtime,
 - no production scheduler,
 - no desktop app,
@@ -82,3 +84,18 @@ For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `
 - [`docs/SUBAGENTS_SYSTEM.md`](docs/SUBAGENTS_SYSTEM.md)
 - [`docs/PLUGIN_SYSTEM.md`](docs/PLUGIN_SYSTEM.md)
 - [`docs/CONTEXT_AND_MEMORY.md`](docs/CONTEXT_AND_MEMORY.md)
+
+## Local dry-run commands
+
+```bash
+comptext doctor --dry-run
+comptext validate schemas --dry-run
+comptext providers list --dry-run
+comptext gateway health --dry-run
+comptext gateway models --dry-run
+comptext gateway sample --dry-run
+comptext evidence verify --sample
+comptext run sample --dry-run
+```
+
+Gateway v0 commands are deterministic local scaffolding only. They do not start a server, bind ports, read secrets or environment variables, call provider APIs, or infer real model availability. Live provider routing is deferred.
