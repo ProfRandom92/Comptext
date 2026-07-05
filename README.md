@@ -70,3 +70,5 @@ The main layers are:
 Read `START_HERE.md`, then `docs/COMPTEXT_MVP.md` and `docs/COMPTEXT_ARCHITECTURE_v1.md`.
 
 For a future repository publication plan, read `docs/REPOSITORY_STRATEGY.md`.
+
+For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `docs/CODEX_DESKTOP_PROMPTS.md`.
