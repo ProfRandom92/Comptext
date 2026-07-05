@@ -4,18 +4,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from modules.evidence.evidence import verify_evidence_chain
-
-
-def _event(index: int, event_type: str, payload: dict[str, Any], previous_hash: str) -> dict[str, Any]:
-    from modules.evidence.evidence import _make_event
-
-    return _make_event(index=index, event_type=event_type, payload=payload, previous_hash=previous_hash)
+from modules.evidence.evidence import GENESIS_HASH, _make_event, verify_evidence_chain
 
 
 def build_sample_run_events() -> list[dict[str, Any]]:
     """Build deterministic local-only evidence events for a sample run."""
-    previous_hash = "0" * 64
+    previous_hash = GENESIS_HASH
     event_specs = (
         (
             "run.started",
@@ -49,7 +43,7 @@ def build_sample_run_events() -> list[dict[str, Any]]:
 
     events: list[dict[str, Any]] = []
     for index, (event_type, payload) in enumerate(event_specs):
-        event = _event(index, event_type, payload, previous_hash)
+        event = _make_event(index=index, event_type=event_type, payload=payload, previous_hash=previous_hash)
         events.append(event)
         previous_hash = str(event["hash"])
     return events
