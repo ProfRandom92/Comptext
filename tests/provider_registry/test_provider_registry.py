@@ -25,6 +25,18 @@ def test_list_providers_never_runs_healthchecks() -> None:
     assert {row["healthcheck"] for row in rows} == {"not_run"}
 
 
+def test_list_providers_exposes_only_local_dry_run_fields() -> None:
+    rows = list_providers(path=SAMPLE, dry_run=True)
+
+    assert rows
+    assert {frozenset(row) for row in rows} == {frozenset({"id", "display_name", "state", "healthcheck"})}
+
+
+def test_list_providers_rejects_non_dry_run_mode() -> None:
+    with pytest.raises(ValueError, match="--dry-run only"):
+        list_providers(path=SAMPLE, dry_run=False)
+
+
 def test_provider_registry_sample_exercises_documented_safe_states() -> None:
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     registry = json.loads(SAMPLE.read_text(encoding="utf-8"))
@@ -63,4 +75,15 @@ def test_load_provider_registry_requires_provider_id(tmp_path: Path) -> None:
     )
 
     with pytest.raises(ValueError, match="must contain 'id'"):
+        load_provider_registry(registry)
+
+
+def test_load_provider_registry_requires_display_name(tmp_path: Path) -> None:
+    registry = tmp_path / "registry.json"
+    registry.write_text(
+        json.dumps({"providers": [{"id": "missing-display-name", "state": "disabled"}]}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="must contain 'display_name'"):
         load_provider_registry(registry)

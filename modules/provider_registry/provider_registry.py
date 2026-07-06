@@ -8,7 +8,7 @@ from typing import Any
 
 ALLOWED_PROVIDER_STATES = {"not_configured", "disabled", "experimental"}
 DEFAULT_PROVIDER_REGISTRY = Path("examples/provider/provider-registry-sample.json")
-REQUIRED_PROVIDER_FIELDS = ("id", "state")
+REQUIRED_PROVIDER_FIELDS = ("id", "display_name", "state")
 
 
 def load_provider_registry(path: Path | str = DEFAULT_PROVIDER_REGISTRY) -> dict[str, Any]:
