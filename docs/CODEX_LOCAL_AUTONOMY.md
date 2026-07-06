@@ -16,6 +16,8 @@ Start with CompText Token Saver/project state. Load compact repository state bef
 
 If the requested base is `main`, confirm local `main` is current before editing. If it is stale, stop and ask before running `git fetch`.
 
+Related navigation: `AGENTS.md` holds concise repo rules, `START_HERE.md` routes new contributors, and `plugins/pr-review-memory/README.md` covers PR Review Memory / Token Saver handoff work.
+
 ## Allowed local actions
 
 - Read and edit repository files needed for the requested task.
