@@ -4,6 +4,9 @@ from pathlib import Path
 from modules.cli.cli_entrypoint import run
 
 
+ROOT = Path(__file__).resolve().parents[2]
+
+
 def test_cli_doctor_dry_run(capsys) -> None:
     assert run(["doctor", "--dry-run"]) == 0
     output = json.loads(capsys.readouterr().out)
@@ -88,3 +91,11 @@ def test_cli_expected_errors_are_json_without_traceback(tmp_path: Path, capsys) 
     output = json.loads(capsys.readouterr().out)
     assert output["ok"] is False
     assert output["error"]["type"] == "FileNotFoundError"
+
+
+def test_start_here_local_checks_match_available_commands() -> None:
+    text = (ROOT / "START_HERE.md").read_text(encoding="utf-8")
+
+    assert "python scripts/validate_clean_repo.py ." not in text
+    assert "python -m pytest" in text
+    assert "git diff --check" in text

@@ -55,7 +55,6 @@ It contains:
 From the repository root:
 
 ```bash
-python scripts/validate_clean_repo.py .
 python -m pytest
 git diff --check
 ```
