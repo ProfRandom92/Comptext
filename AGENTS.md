@@ -46,10 +46,11 @@ Branch prefixes:
 
 - Use local autonomous mode only when explicitly requested.
 - Start with Token Saver/project state before broad repo reads.
-- Do not push, open PRs, merge, enable auto-merge, or call GitHub APIs unless explicitly instructed.
+- Do not push, open PRs, merge, enable auto-merge, call GitHub APIs, perform provider calls, or read secrets unless explicitly instructed.
 - If local `main` is stale, stop and ask before `git fetch`.
 - Local commits are allowed in autonomous mode.
 - Required validation is `python -m pytest` and `git diff --check`.
+- Keep final reports compact: branch, local commit SHA, changed files, validation, blockers, and next action.
 - Detailed playbook: [`docs/CODEX_LOCAL_AUTONOMY.md`](docs/CODEX_LOCAL_AUTONOMY.md).
 
 ## Validation policy

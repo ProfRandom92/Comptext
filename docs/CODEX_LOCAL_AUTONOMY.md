@@ -77,12 +77,13 @@ When the batch is related to review memory or review follow-up, keep a compact l
 
 ## Final report format
 
-End each autonomous batch with:
+End each autonomous batch with a compact report:
 
 - Branch name.
 - Local commit SHA, when a commit was made.
 - Changed files.
 - Validation result.
+- Blockers, or `none`.
 - Confirmation that nothing was pushed.
 - Next recommended local task.
 
