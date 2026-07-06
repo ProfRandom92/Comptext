@@ -31,6 +31,10 @@ MCP tools may or may not be exposed depending on the local environment, installe
 
 The CompText Token Saver plugin is a workflow integration concept for compact project-state-first operation and codebase-memory-assisted context gathering. It may not be installed or available in every environment.
 
+The local [`comptext-pr-review-memory`](../plugins/pr-review-memory/README.md) scaffold is a companion for token-saving workflows. It defines compact PR review-memory formats for recurring review work, including actionable comments, resolved threads, validation, merge readiness, and next action.
+
+This scaffold does not replace CompText Token Saver. It does not perform GitHub actions, make network calls, make provider calls, modify PRs, merge branches, read secrets, or implement an MCP runtime server. Its skill instructions are documented in [`plugins/pr-review-memory/SKILL.md`](../plugins/pr-review-memory/SKILL.md).
+
 ## Safety requirements
 
 - Plugins must declare required tools and permissions.

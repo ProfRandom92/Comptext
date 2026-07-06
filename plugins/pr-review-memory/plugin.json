@@ -1,0 +1,27 @@
+{
+  "name": "comptext-pr-review-memory",
+  "version": "0.1.0",
+  "status": "dry-run",
+  "description": "Documentation-first companion scaffold for compact PR review memory handoffs in local CompText workflows.",
+  "provides": [
+    "pr_review_memory_template",
+    "gemini_comment_summary_template",
+    "merge_readiness_summary_template",
+    "token_saver_handoff_template"
+  ],
+  "consumes": [
+    "project_state",
+    "codebase_memory",
+    "review_threads"
+  ],
+  "permissions": {
+    "network": false,
+    "provider_calls": false,
+    "github_write": false,
+    "secrets": false,
+    "filesystem_write": false
+  },
+  "entrypoints": {
+    "dry_run": "templates_only"
+  }
+}
