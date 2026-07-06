@@ -1,4 +1,9 @@
 {
+  "repository": "ProfRandom92/Comptext",
+  "pr_number": 17,
+  "pr_url": "https://github.com/ProfRandom92/Comptext/pull/17",
+  "branch": "plugin/pr-review-memory-renderer-v0",
+  "head_sha": "dryrun1234567890abcdef1234567890abcdef1234",
   "status": "review_in_progress",
   "actionable_items": [
     {
@@ -14,6 +19,12 @@
         "docs/PLUGIN_SYSTEM.md"
       ],
       "summary": "Added plugin system link and dry-run boundary language."
+    }
+  ],
+  "resolved_items": [
+    {
+      "thread_id": "review-thread-2",
+      "summary": "Documentation boundary language updated and rechecked."
     }
   ],
   "unresolved_items": [

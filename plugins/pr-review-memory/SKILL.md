@@ -33,6 +33,7 @@ Use this skill to emit compact PR review memory blocks for recurring review work
 - Gemini or reviewer comment summary.
 - Merge-readiness summary.
 - Token Saver handoff block.
+- Deterministic local renderer v0 output from `plugins/pr-review-memory/renderer.py` when structured review-memory JSON is available.
 
 Keep output compact. Preserve only decisions, blockers, file paths, thread state, validation, and next action.
 
@@ -42,6 +43,7 @@ Keep output compact. Preserve only decisions, blockers, file paths, thread state
 - Confirm whether review threads are resolved, unresolved, or out of scope.
 - Confirm validation status with concrete commands or note that validation was not run.
 - Confirm merge readiness only after checking the current branch, base, and review state.
+- Use `render_pr_review_memory_handoff(data)` for local conversion when the review memory is already structured as a dictionary.
 - Keep provider states and external integrations limited to documented dry-run behavior.
 
 ## Safety notes
@@ -54,6 +56,7 @@ Keep output compact. Preserve only decisions, blockers, file paths, thread state
 - No MCP runtime server behavior.
 - No automatic PR modification.
 - No merge behavior.
+- No live GitHub integration or automatic review-thread resolution.
 
 ## Anti-patterns
 
@@ -63,6 +66,7 @@ Keep output compact. Preserve only decisions, blockers, file paths, thread state
 - Do not claim mergeability without checking.
 - Do not assume CompText Token Saver is installed.
 - Do not present this scaffold as production-ready.
+- Do not treat renderer output as proof that review threads are resolved or that a PR is mergeable.
 
 ## Related docs
 
