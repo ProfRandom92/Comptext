@@ -7,7 +7,7 @@ from collections.abc import Iterable, Mapping
 from typing import Any
 
 
-REQUIRED_FIELDS = ("repository", "pr_number", "branch", "head_sha", "status", "next_action")
+REQUIRED_FIELDS = ("repository", "pr_number", "branch", "head_sha", "validation_summary", "next_action")
 DIFF_MARKER_PREFIXES = ("diff --git", "index ", "@@", "+++", "---")
 SECRET_PATTERN = re.compile(
     r"(?i)\b(api[_-]?key|secret|token|password)\b\s*[:=]\s*(?:\"[^\"]*\"|'[^']*'|[^\s,;]+)"
@@ -31,8 +31,9 @@ def render_pr_review_memory_handoff(data: dict[str, Any]) -> str:
         f"PR: {_format_pr(data['pr_number'], data.get('pr_url'))}",
         f"Branch: {_clean_text(data['branch'])}",
         f"Head SHA: {_clean_text(data['head_sha'])}",
-        f"Review status: {_clean_text(data['status'])}",
     ]
+    if not _is_empty(data.get("status")):
+        lines.append(f"Review status: {_clean_text(data['status'])}")
 
     _append_item_section(lines, "Actionable comments", data.get("actionable_items"))
     _append_item_section(lines, "Fixes applied", data.get("completed_fixes"))

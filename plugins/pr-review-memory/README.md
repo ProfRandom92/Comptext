@@ -30,6 +30,19 @@ The function accepts a dictionary shaped like `examples/pr-review-memory.sample.
 
 No CLI command is added in v0. Runtime GitHub integration, MCP runtime behavior, automatic review resolution, automatic merge behavior, and production behavior remain deferred.
 
+## Schema v0
+
+`schema/pr-review-memory.v0.schema.json` documents the local renderer input contract used by examples and tests. Required fields are:
+
+- `repository`
+- `pr_number`
+- `branch`
+- `head_sha`
+- `validation_summary`
+- `next_action`
+
+The schema is intentionally simple and local. It is not live GitHub integration, not MCP runtime behavior, and not provider behavior. Future schema changes require explicit compatibility tests.
+
 ## Expected workflow
 
 1. Capture the current PR review state before long work.
@@ -42,6 +55,7 @@ No CLI command is added in v0. Runtime GitHub integration, MCP runtime behavior,
 
 - Dry-run-only scaffold.
 - Deterministic local renderer v0.
+- Local renderer input schema v0.
 - No GitHub writes.
 - No network calls.
 - No provider calls.
