@@ -35,6 +35,8 @@ The local [`comptext-pr-review-memory`](../plugins/pr-review-memory/README.md) s
 
 This scaffold does not replace CompText Token Saver. It does not perform GitHub actions, make network calls, make provider calls, modify PRs, merge branches, read secrets, or implement an MCP runtime server. Its skill instructions are documented in [`plugins/pr-review-memory/SKILL.md`](../plugins/pr-review-memory/SKILL.md).
 
+The repo-side Codex skill bridge at [`.agents/skills/pr-review-memory/SKILL.md`](../.agents/skills/pr-review-memory/SKILL.md) connects prompts that begin with `[@comptext-token-saver](plugin://comptext-token-saver@personal)` to the local scaffold. It is static instruction context only. A renderer, runtime GitHub integration, MCP runtime behavior, automatic review resolution, and merge behavior are deferred.
+
 ## Safety requirements
 
 - Plugins must declare required tools and permissions.
