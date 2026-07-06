@@ -2,7 +2,7 @@
 
 `comptext-pr-review-memory` is a documentation-first, dry-run-only plugin scaffold for preserving compact pull request review state.
 
-It exists to support the recurring CompText workflow where a PR is opened, Gemini or reviewer comments are found, actionable comments are fixed, review threads are resolved, merge readiness is checked, the work is merged to `main`, and the next task prompt is prepared.
+It exists to support the recurring CompText workflow where a PR or local review task is summarized, reviewer comments are captured, actionable comments are fixed, review state is rechecked, merge readiness is summarized, and the next task prompt is prepared. Any actual GitHub write, review-thread resolution, merge, or push remains outside this scaffold and requires explicit approval.
 
 This plugin complements CompText Token Saver by defining compact PR review memory blocks that a token-saving workflow can consume. It does not replace CompText Token Saver and does not assume that an external Token Saver plugin is installed.
 
@@ -15,6 +15,8 @@ The repo-side bridge at `.agents/skills/pr-review-memory/SKILL.md` makes this sc
 ```
 
 The bridge connects that token-saving workflow to this scaffold. It does not add GitHub integration, provider calls, MCP runtime behavior, automatic review resolution, auto-merge, or production behavior.
+
+For local autonomous Codex batches, follow `docs/CODEX_LOCAL_AUTONOMY.md` and keep PR Review Memory output compact.
 
 ## Renderer v0
 
