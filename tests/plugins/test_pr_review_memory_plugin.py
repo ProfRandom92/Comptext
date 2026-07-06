@@ -28,4 +28,5 @@ def test_pr_review_memory_json_examples_are_valid() -> None:
         PLUGIN / "examples" / "pr-review-input.sample.json",
         PLUGIN / "examples" / "pr-review-memory.sample.json",
     ):
-        assert json.loads(example.read_text(encoding="utf-8"))
+        data = json.loads(example.read_text(encoding="utf-8"))
+        assert isinstance(data, dict)
