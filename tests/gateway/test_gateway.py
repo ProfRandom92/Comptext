@@ -33,6 +33,20 @@ def test_gateway_models_dry_run() -> None:
     ]
 
 
+@pytest.mark.parametrize(
+    "call",
+    [
+        lambda: get_gateway_health(dry_run=False),
+        lambda: list_gateway_models(dry_run=False),
+        lambda: normalize_gateway_request({}, dry_run=False),
+        lambda: dry_run_gateway_response({}, dry_run=False),
+    ],
+)
+def test_gateway_helpers_reject_non_dry_run_mode(call) -> None:
+    with pytest.raises(ValueError, match="--dry-run only"):
+        call()
+
+
 def test_normalize_gateway_request_valid_input() -> None:
     normalized = normalize_gateway_request(
         {
@@ -51,6 +65,24 @@ def test_normalize_gateway_request_valid_input() -> None:
         "tools": [],
         "metadata": {"run_id": "sample"},
     }
+
+
+def test_normalize_gateway_request_copies_mutable_inputs() -> None:
+    request = {
+        "model": "comptext-dry-run-model",
+        "messages": [{"role": "user", "content": "hello"}],
+        "tools": [{"name": "sample"}],
+        "metadata": {"run_id": "sample"},
+    }
+
+    normalized = normalize_gateway_request(request)
+    request["messages"].append({"role": "user", "content": "mutated"})  # type: ignore[union-attr]
+    request["tools"].append({"name": "mutated"})  # type: ignore[union-attr]
+    request["metadata"]["run_id"] = "mutated"  # type: ignore[index]
+
+    assert normalized["messages"] == [{"role": "user", "content": "hello"}]
+    assert normalized["tools"] == [{"name": "sample"}]
+    assert normalized["metadata"] == {"run_id": "sample"}
 
 
 def test_normalize_gateway_request_defaults_explicit_null_values() -> None:
