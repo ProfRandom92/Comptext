@@ -36,7 +36,8 @@ This repository does not implement a full skill marketplace yet. Skill files are
 ## Skill requirements
 
 - Keep each skill scoped to one capability area.
-- Include when to use it and when not to use it.
+- Include trigger conditions, inputs, outputs, when to use it, and when not to use it.
 - List required local checks and safety notes.
+- List forbidden behavior explicitly, especially provider calls, GitHub writes, MCP runtime behavior, secret reads, auto-merge, and production claims.
 - Link to related CompText docs instead of duplicating architecture.
 - Avoid provider calls, network assumptions, and secret access unless an explicit future policy permits them.

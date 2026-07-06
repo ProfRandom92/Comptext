@@ -21,6 +21,11 @@ For local autonomous Codex batches, follow `docs/CODEX_LOCAL_AUTONOMY.md` and ke
 - Before merge-readiness checks.
 - When preparing Token Saver handoff context.
 
+## When not to use
+
+- Do not use this bridge to fetch review state, call GitHub APIs, resolve threads, push, merge, enable auto-merge, call providers, read secrets, or run MCP runtime behavior.
+- Do not use renderer output as proof of mergeability or review resolution.
+
 ## Compact handoff fields
 
 Preserve only the compact state needed to continue review work:
