@@ -1,4 +1,14 @@
+import pytest
+
 from modules.evidence.evidence import build_sample_evidence, verify_evidence_chain, verify_sample_evidence
+
+
+def test_build_sample_evidence_is_deterministic() -> None:
+    first = build_sample_evidence()
+    second = build_sample_evidence()
+
+    assert first == second
+    assert verify_evidence_chain(first) == verify_evidence_chain(second)
 
 
 def test_verify_sample_evidence_returns_verified_result() -> None:
@@ -11,6 +21,28 @@ def test_verify_sample_evidence_returns_verified_result() -> None:
     assert len(result["root_hash"]) == 64
     assert result["network"] == "not_called"
     assert result["providers"] == "not_called"
+
+
+def test_verify_sample_evidence_rejects_non_sample_mode() -> None:
+    with pytest.raises(ValueError, match="--sample only"):
+        verify_sample_evidence(sample=False)
+
+
+def test_verify_evidence_chain_rejects_non_object_event() -> None:
+    result = verify_evidence_chain(["not an event"])  # type: ignore[list-item]
+
+    assert result["ok"] is False
+    assert "must be an object" in result["error"]
+
+
+def test_verify_evidence_chain_rejects_missing_hash() -> None:
+    events = build_sample_evidence()
+    events[0].pop("hash")
+
+    result = verify_evidence_chain(events)
+
+    assert result["ok"] is False
+    assert "event hash missing" in result["error"]
 
 
 def test_verify_evidence_chain_rejects_tampered_payload() -> None:
