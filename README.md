@@ -89,8 +89,11 @@ For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `
 
 - [`plugins/pr-review-memory/README.md`](plugins/pr-review-memory/README.md)
 - [`plugins/pr-review-memory/SKILL.md`](plugins/pr-review-memory/SKILL.md)
+- [`.agents/skills/pr-review-memory/SKILL.md`](.agents/skills/pr-review-memory/SKILL.md)
 
 The PR Review Memory scaffold is a dry-run companion for token-saving workflows. It defines compact review-memory formats only; it does not replace CompText Token Saver, perform GitHub actions, make network or provider calls, read secrets, or implement an MCP runtime server.
+
+The repo-side PR Review Memory skill bridge is static Codex instruction context for prompts that start with `[@comptext-token-saver](plugin://comptext-token-saver@personal)`. It makes the scaffold easier to discover from this repository, while the renderer, runtime GitHub integration, and MCP runtime remain deferred.
 
 ## Local dry-run commands
 

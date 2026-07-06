@@ -60,6 +60,8 @@ The local [`comptext-pr-review-memory`](../plugins/pr-review-memory/README.md) s
 
 Use [`plugins/pr-review-memory/SKILL.md`](../plugins/pr-review-memory/SKILL.md) when preserving review state before or after long PR work. The memory block should keep only decisions, blockers, file paths, thread state, validation, merge readiness, risks, and next action. It must not perform GitHub actions, make network or provider calls, read secrets, or claim mergeability without a current check.
 
+The repo-side bridge at [`.agents/skills/pr-review-memory/SKILL.md`](../.agents/skills/pr-review-memory/SKILL.md) makes this workflow discoverable to Codex while keeping `[@comptext-token-saver](plugin://comptext-token-saver@personal)` as the first prompt header. The bridge is dry-run/static instruction context only; renderer output generation, runtime GitHub integration, and MCP runtime behavior remain deferred.
+
 ## Knowledge graph direction
 
 The long-term direction is a workspace knowledge graph that connects files, functions, types, tests, runs, evidence, docs, decisions, and failures. The graph should improve context selection without replacing explicit approvals or validation.
