@@ -28,15 +28,16 @@ def test_pr_review_memory_skill_bridge_references_workflow() -> None:
 def test_pr_review_memory_skill_bridge_avoids_runtime_claims() -> None:
     text = BRIDGE.read_text(encoding="utf-8").lower()
 
-    forbidden_claims = (
+    # These checks intentionally look for positive runtime/capability claims, not
+    # negative safety boundaries such as "does not make provider calls".
+    forbidden_positive_claims = (
         "implements an mcp runtime",
         "makes provider calls",
         "calls provider apis",
         "writes github state",
-        "github write behavior",
         "enables auto-merge",
-        "production-ready",
+        "is production-ready",
     )
 
-    for claim in forbidden_claims:
+    for claim in forbidden_positive_claims:
         assert claim not in text
