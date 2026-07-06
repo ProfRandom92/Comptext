@@ -36,6 +36,7 @@ def test_pr_review_memory_schema_file_exists_and_loads() -> None:
 
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
 
+    assert schema["$id"].endswith(f"/{SCHEMA.name}")
     assert schema["title"] == "CompText PR Review Memory Renderer Input v0"
     assert set(schema["required"]) == REQUIRED_V0_FIELDS
     assert schema["type"] == "object"
@@ -55,6 +56,13 @@ def test_sample_json_matches_documented_required_field_contract() -> None:
 
     for field in schema["required"]:
         assert field in sample
+
+
+def test_sample_json_uses_only_documented_v0_properties() -> None:
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    sample = json.loads(SAMPLE_JSON.read_text(encoding="utf-8"))
+
+    assert set(sample) <= set(schema["properties"])
 
 
 def test_validation_summary_schema_documents_non_empty_values() -> None:
@@ -92,6 +100,16 @@ def test_renderer_rejects_missing_required_v0_fields(field: str) -> None:
     renderer = _load_renderer()
     sample = json.loads(SAMPLE_JSON.read_text(encoding="utf-8"))
     sample.pop(field)
+
+    with pytest.raises(ValueError, match=field):
+        renderer.render_pr_review_memory_handoff(sample)
+
+
+@pytest.mark.parametrize("field", ["repository", "branch", "head_sha", "next_action"])
+def test_renderer_rejects_whitespace_only_required_text_fields(field: str) -> None:
+    renderer = _load_renderer()
+    sample = json.loads(SAMPLE_JSON.read_text(encoding="utf-8"))
+    sample[field] = "   "
 
     with pytest.raises(ValueError, match=field):
         renderer.render_pr_review_memory_handoff(sample)
