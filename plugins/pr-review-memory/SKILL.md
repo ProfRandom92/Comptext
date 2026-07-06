@@ -34,6 +34,7 @@ Use this skill to emit compact PR review memory blocks for recurring review work
 - Merge-readiness summary.
 - Token Saver handoff block.
 - Deterministic local renderer v0 output from `plugins/pr-review-memory/renderer.py` when structured review-memory JSON is available.
+- Renderer input schema v0 contract from `plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json`.
 
 Keep output compact. Preserve only decisions, blockers, file paths, thread state, validation, and next action.
 
@@ -44,6 +45,7 @@ Keep output compact. Preserve only decisions, blockers, file paths, thread state
 - Confirm validation status with concrete commands or note that validation was not run.
 - Confirm merge readiness only after checking the current branch, base, and review state.
 - Use `render_pr_review_memory_handoff(data)` for local conversion when the review memory is already structured as a dictionary.
+- Keep structured renderer input aligned with the v0 schema contract and add compatibility tests before changing required fields.
 - Keep provider states and external integrations limited to documented dry-run behavior.
 
 ## Safety notes

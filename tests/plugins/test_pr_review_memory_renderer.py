@@ -53,6 +53,7 @@ def test_renderer_rejects_missing_required_fields() -> None:
                 "branch": "plugin/pr-review-memory-renderer-v0",
                 "head_sha": "abc123",
                 "status": "review_in_progress",
+                "validation_summary": {"python -m pytest": "passed"},
                 "next_action": "Continue review.",
             }
         )
@@ -70,7 +71,7 @@ def test_renderer_omits_empty_optional_sections() -> None:
             "status": "ready_for_review",
             "actionable_items": [],
             "completed_fixes": [],
-            "validation_summary": {},
+            "validation_summary": {"python -m pytest": "passed"},
             "unresolved_items": [],
             "merge_readiness": {},
             "next_action": "Wait for review.",
@@ -79,7 +80,7 @@ def test_renderer_omits_empty_optional_sections() -> None:
 
     assert "Actionable comments:" not in markdown
     assert "Fixes applied:" not in markdown
-    assert "Validation:" not in markdown
+    assert "Validation:" in markdown
     assert "Unresolved threads:" not in markdown
     assert "Merge readiness:" not in markdown
     assert "Next action: Wait for review." in markdown
@@ -124,6 +125,7 @@ def test_renderer_redacts_quoted_multi_word_secret_values() -> None:
             "head_sha": "abc123",
             "status": "review_in_progress",
             "actionable_items": ["Use token=\"multi word secret\" only in tests."],
+            "validation_summary": {"python -m pytest": "passed"},
             "next_action": "Do not keep secret='another multi word value'.",
         }
     )
@@ -147,6 +149,7 @@ def test_renderer_handles_general_iterable_items_as_bullets() -> None:
             "actionable_items": ("tuple item", "second tuple item"),
             "completed_fixes": ["list item"],
             "unresolved_items": {"set item"},
+            "validation_summary": {"python -m pytest": "passed"},
             "next_action": "Continue review.",
         }
     )
@@ -186,6 +189,7 @@ def test_renderer_handles_empty_text_after_splitlines_simplification() -> None:
             "head_sha": "abc123",
             "status": "review_in_progress",
             "actionable_items": [""],
+            "validation_summary": {"python -m pytest": "passed"},
             "next_action": "Continue review.",
         }
     )
@@ -193,3 +197,21 @@ def test_renderer_handles_empty_text_after_splitlines_simplification() -> None:
     assert "Actionable comments:" not in markdown
     assert "\n- \n" not in markdown
     assert "Next action: Continue review." in markdown
+
+
+def test_renderer_treats_review_status_as_optional() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "validation_summary": {"python -m pytest": "passed"},
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Review status:" not in markdown
+    assert "Validation: python -m pytest: passed" in markdown

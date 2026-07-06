@@ -89,11 +89,12 @@ For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `
 
 - [`plugins/pr-review-memory/README.md`](plugins/pr-review-memory/README.md)
 - [`plugins/pr-review-memory/SKILL.md`](plugins/pr-review-memory/SKILL.md)
+- [`plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json`](plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json)
 - [`.agents/skills/pr-review-memory/SKILL.md`](.agents/skills/pr-review-memory/SKILL.md)
 
 The PR Review Memory scaffold is a dry-run companion for token-saving workflows. It defines compact review-memory formats only; it does not replace CompText Token Saver, perform GitHub actions, make network or provider calls, read secrets, or implement an MCP runtime server.
 
-The repo-side PR Review Memory skill bridge is static Codex instruction context for prompts that start with `[@comptext-token-saver](plugin://comptext-token-saver@personal)`. The scaffold now includes deterministic local renderer v0 at `plugins/pr-review-memory/renderer.py` for converting structured review-memory JSON into compact handoff markdown. Runtime GitHub integration, MCP runtime behavior, automatic review resolution, automatic merge behavior, and production behavior remain deferred.
+The repo-side PR Review Memory skill bridge is static Codex instruction context for prompts that start with `[@comptext-token-saver](plugin://comptext-token-saver@personal)`. The scaffold includes deterministic local renderer v0 at `plugins/pr-review-memory/renderer.py` plus a v0 renderer input schema contract under `plugins/pr-review-memory/schema/`. Runtime GitHub integration, MCP runtime behavior, automatic review resolution, automatic merge behavior, and production behavior remain deferred.
 
 ## Local dry-run commands
 

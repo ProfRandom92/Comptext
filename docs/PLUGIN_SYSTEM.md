@@ -39,6 +39,8 @@ The repo-side Codex skill bridge at [`.agents/skills/pr-review-memory/SKILL.md`]
 
 Renderer v0 for this scaffold is implemented as a deterministic local Python function at [`plugins/pr-review-memory/renderer.py`](../plugins/pr-review-memory/renderer.py). It converts structured PR review memory JSON into compact Token Saver handoff markdown. It does not add live GitHub API behavior, provider calls, MCP runtime behavior, automatic review resolution, automatic merge behavior, or production behavior.
 
+The renderer input contract is documented in [`plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json`](../plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json). This schema is for local examples, docs, and tests only; future contract changes should include explicit compatibility tests.
+
 ## Safety requirements
 
 - Plugins must declare required tools and permissions.

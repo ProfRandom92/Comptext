@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/pr-review-memory.v0.schema.json",
+  "title": "CompText PR Review Memory Renderer Input v0",
+  "description": "Local dry-run contract for structured PR review memory input consumed by the PR Review Memory renderer.",
+  "type": "object",
+  "required": [
+    "repository",
+    "pr_number",
+    "branch",
+    "head_sha",
+    "validation_summary",
+    "next_action"
+  ],
+  "properties": {
+    "repository": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pr_number": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    },
+    "pr_url": {
+      "type": "string"
+    },
+    "branch": {
+      "type": "string",
+      "minLength": 1
+    },
+    "head_sha": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string"
+    },
+    "actionable_items": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "completed_fixes": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "resolved_items": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "unresolved_items": {
+      "type": "array",
+      "items": {
+        "type": [
+          "object",
+          "string"
+        ]
+      }
+    },
+    "validation_summary": {
+      "type": [
+        "object",
+        "array",
+        "string"
+      ],
+      "minProperties": 1,
+      "minItems": 1,
+      "minLength": 1
+    },
+    "merge_readiness": {
+      "type": [
+        "object",
+        "string"
+      ]
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

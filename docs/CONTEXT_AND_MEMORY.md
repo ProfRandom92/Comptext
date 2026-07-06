@@ -64,6 +64,8 @@ The repo-side bridge at [`.agents/skills/pr-review-memory/SKILL.md`](../.agents/
 
 Renderer v0 is implemented locally in [`plugins/pr-review-memory/renderer.py`](../plugins/pr-review-memory/renderer.py). It accepts structured PR review memory dictionaries and returns deterministic compact handoff markdown. It is local and dry-run only; live GitHub integration, MCP runtime behavior, automatic review resolution, and automatic merge behavior remain deferred.
 
+The v0 renderer input schema lives at [`plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json`](../plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json). It documents the required local handoff fields used by examples and tests, including repository, PR number, branch, head SHA, validation, and next action.
+
 ## Knowledge graph direction
 
 The long-term direction is a workspace knowledge graph that connects files, functions, types, tests, runs, evidence, docs, decisions, and failures. The graph should improve context selection without replacing explicit approvals or validation.

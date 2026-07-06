@@ -9,7 +9,7 @@ Use this repo-side Codex skill bridge with the personal Token Saver prompt heade
 
 `[@comptext-token-saver](plugin://comptext-token-saver@personal)`
 
-This bridge connects Codex instructions to the scaffold in `plugins/pr-review-memory/`. It can use deterministic local renderer v0 in `plugins/pr-review-memory/renderer.py` when structured review-memory JSON is already available. It does not make provider calls, call GitHub APIs, write GitHub state, run an MCP server, resolve review threads, merge branches, or enable auto-merge.
+This bridge connects Codex instructions to the scaffold in `plugins/pr-review-memory/`. It can use deterministic local renderer v0 in `plugins/pr-review-memory/renderer.py` when structured review-memory JSON is already available, and the local schema contract in `plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json` documents that input shape. It does not make provider calls, call GitHub APIs, write GitHub state, run an MCP server, resolve review threads, merge branches, or enable auto-merge.
 
 ## When to use
 
@@ -45,6 +45,7 @@ Preserve only the compact state needed to continue review work:
 - Avoid automatic merge claims; only describe merge readiness after checking current state.
 - Do not claim production behavior.
 - Use renderer v0 only for local dictionary-to-markdown conversion; do not infer missing review state.
+- Keep renderer input aligned with schema v0 unless a task explicitly updates the contract and tests.
 
 ## Related scaffold files
 
@@ -52,4 +53,5 @@ Preserve only the compact state needed to continue review work:
 - `plugins/pr-review-memory/SKILL.md`
 - `plugins/pr-review-memory/plugin.json`
 - `plugins/pr-review-memory/renderer.py`
+- `plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json`
 - `plugins/pr-review-memory/examples/token-saver-handoff.sample.md`
