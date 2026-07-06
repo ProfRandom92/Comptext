@@ -75,9 +75,10 @@ def _format_pr(pr_number: Any, pr_url: Any) -> str:
     number = _clean_text(pr_number)
     if not number.startswith("#"):
         number = f"#{number}"
-    if _is_empty(pr_url):
+    rendered_url = _clean_text(pr_url)
+    if not rendered_url:
         return number
-    return f"{number} ({_clean_text(pr_url)})"
+    return f"{number} ({rendered_url})"
 
 
 def _append_item_section(lines: list[str], label: str, items: Any) -> None:
@@ -153,11 +154,15 @@ def _append_merge_readiness(lines: list[str], readiness: Any) -> None:
         status = readiness.get("status")
         reason = readiness.get("reason")
         parts = []
-        if not _is_empty(status):
-            parts.append(_clean_text(status))
-        if not _is_empty(reason):
-            parts.append(_clean_text(reason))
+        rendered_status = _clean_text(status) if not _is_empty(status) else ""
+        rendered_reason = _clean_text(reason) if not _is_empty(reason) else ""
+        if rendered_status:
+            parts.append(rendered_status)
+        if rendered_reason:
+            parts.append(rendered_reason)
         if parts:
             lines.append(f"Merge readiness: {' - '.join(parts)}")
         return
-    lines.append(f"Merge readiness: {_clean_text(readiness)}")
+    rendered_readiness = _clean_text(readiness)
+    if rendered_readiness:
+        lines.append(f"Merge readiness: {rendered_readiness}")

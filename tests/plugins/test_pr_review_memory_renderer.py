@@ -143,6 +143,25 @@ def test_renderer_accepts_minimal_valid_v0_input() -> None:
     assert "Next action: Continue review." in markdown
 
 
+def test_renderer_omits_whitespace_only_optional_pr_url() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "pr_url": "   ",
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "validation_summary": {"python -m pytest": "passed"},
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "PR: #17\n" in markdown
+    assert "PR: #17 (" not in markdown
+
+
 def test_renderer_accepts_full_valid_v0_input() -> None:
     renderer = _load_renderer()
 
@@ -173,6 +192,32 @@ def test_renderer_accepts_full_valid_v0_input() -> None:
     assert "Unresolved threads:" in markdown
     assert "Validation: git diff --check: passed; python -m pytest: passed" in markdown
     assert "Merge readiness: blocked - review pending" in markdown
+
+
+@pytest.mark.parametrize(
+    "merge_readiness",
+    [
+        "   ",
+        {"status": "  ", "reason": ""},
+    ],
+)
+def test_renderer_omits_merge_readiness_without_renderable_content(merge_readiness) -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "validation_summary": {"python -m pytest": "passed"},
+            "merge_readiness": merge_readiness,
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Merge readiness:" not in markdown
+    assert "Next action: Continue review." in markdown
 
 
 def test_renderer_omits_diff_markers_and_redacts_secret_like_values() -> None:
