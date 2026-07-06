@@ -86,6 +86,59 @@ def test_renderer_omits_empty_optional_sections() -> None:
     assert "Next action: Wait for review." in markdown
 
 
+def test_renderer_accepts_minimal_valid_v0_input() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "validation_summary": "python -m pytest passed",
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Repository: ProfRandom92/Comptext" in markdown
+    assert "PR: #17" in markdown
+    assert "Review status:" not in markdown
+    assert "Validation: python -m pytest passed" in markdown
+    assert "Next action: Continue review." in markdown
+
+
+def test_renderer_accepts_full_valid_v0_input() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": "17",
+            "pr_url": "https://example.invalid/pr/17",
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "status": "review_in_progress",
+            "actionable_items": [{"thread_id": "thread-1", "file": "README.md", "summary": "Tighten docs."}],
+            "completed_fixes": [{"files": {"b.py", "a.py"}, "summary": "Sorted files."}],
+            "resolved_items": ["thread-2 resolved locally"],
+            "unresolved_items": ["thread-3 requires reviewer input"],
+            "validation_summary": {"git diff --check": "passed", "python -m pytest": "passed"},
+            "merge_readiness": {"status": "blocked", "reason": "review pending"},
+            "next_action": "Wait for review.",
+        }
+    )
+
+    assert "PR: #17 (https://example.invalid/pr/17)" in markdown
+    assert "Review status: review_in_progress" in markdown
+    assert "Actionable comments:" in markdown
+    assert "Fixes applied:" in markdown
+    assert "a.py, b.py" in markdown
+    assert "Resolved threads:" in markdown
+    assert "Unresolved threads:" in markdown
+    assert "Validation: git diff --check: passed; python -m pytest: passed" in markdown
+    assert "Merge readiness: blocked - review pending" in markdown
+
+
 def test_renderer_omits_diff_markers_and_redacts_secret_like_values() -> None:
     renderer = _load_renderer()
 
@@ -99,7 +152,14 @@ def test_renderer_omits_diff_markers_and_redacts_secret_like_values() -> None:
             "actionable_items": [
                 {
                     "thread_id": "thread-1",
-                    "summary": "diff --git a/file b/file\n@@ hunk\nUse token=raw-secret-value only in tests.",
+                    "summary": (
+                        "diff --git a/file b/file\n"
+                        "index 111..222\n"
+                        "--- a/file\n"
+                        "+++ b/file\n"
+                        "@@ hunk\n"
+                        "Use token=raw-secret-value only in tests."
+                    ),
                 }
             ],
             "validation_summary": {"python -m pytest": "passed"},
@@ -111,6 +171,9 @@ def test_renderer_omits_diff_markers_and_redacts_secret_like_values() -> None:
     assert "token=<redacted>" in markdown
     assert "password=<redacted>" in markdown
     assert "diff --git" not in markdown
+    assert "index 111..222" not in markdown
+    assert "--- a/file" not in markdown
+    assert "+++ b/file" not in markdown
     assert "@@ hunk" not in markdown
 
 
@@ -158,6 +221,24 @@ def test_renderer_handles_general_iterable_items_as_bullets() -> None:
     assert "- second tuple item" in markdown
     assert "- list item" in markdown
     assert "- set item" in markdown
+
+
+def test_renderer_sorts_unordered_set_items_for_stable_output() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "actionable_items": {"b set item", "a set item"},
+            "validation_summary": {"python -m pytest": "passed"},
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert markdown.index("- a set item") < markdown.index("- b set item")
 
 
 def test_renderer_formats_iterable_validation_as_semicolon_text() -> None:

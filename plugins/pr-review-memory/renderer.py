@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Set
 from typing import Any
 
 
@@ -88,6 +88,8 @@ def _append_item_section(lines: list[str], label: str, items: Any) -> None:
 def _normalize_items(items: Any) -> list[Any]:
     if _is_empty(items):
         return []
+    if isinstance(items, Set) and not isinstance(items, (str, bytes, Mapping)):
+        return sorted(items, key=_clean_text)
     if isinstance(items, Iterable) and not isinstance(items, (str, bytes, Mapping)):
         return list(items)
     return [items]
@@ -104,7 +106,8 @@ def _render_item(item: Any) -> str:
             parts.append(_clean_text(file_path))
         files = item.get("files")
         if isinstance(files, Iterable) and not isinstance(files, (str, bytes, Mapping)):
-            rendered_files = ", ".join(_clean_text(file) for file in files if not _is_empty(file))
+            file_values = sorted(files, key=_clean_text) if isinstance(files, Set) else files
+            rendered_files = ", ".join(_clean_text(file) for file in file_values if not _is_empty(file))
             if rendered_files:
                 parts.append(rendered_files)
         summary = item.get("summary") or item.get("reason") or item.get("status")
