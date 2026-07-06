@@ -111,3 +111,85 @@ def test_renderer_omits_diff_markers_and_redacts_secret_like_values() -> None:
     assert "password=<redacted>" in markdown
     assert "diff --git" not in markdown
     assert "@@ hunk" not in markdown
+
+
+def test_renderer_redacts_quoted_multi_word_secret_values() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "status": "review_in_progress",
+            "actionable_items": ["Use token=\"multi word secret\" only in tests."],
+            "next_action": "Do not keep secret='another multi word value'.",
+        }
+    )
+
+    assert "multi word secret" not in markdown
+    assert "another multi word value" not in markdown
+    assert "token=<redacted>" in markdown
+    assert "secret=<redacted>" in markdown
+
+
+def test_renderer_handles_general_iterable_items_as_bullets() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "status": "review_in_progress",
+            "actionable_items": ("tuple item", "second tuple item"),
+            "completed_fixes": ["list item"],
+            "unresolved_items": {"set item"},
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "- tuple item" in markdown
+    assert "- second tuple item" in markdown
+    assert "- list item" in markdown
+    assert "- set item" in markdown
+
+
+def test_renderer_formats_iterable_validation_as_semicolon_text() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "status": "review_in_progress",
+            "validation_summary": ["python -m pytest passed", "git diff --check passed"],
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Validation: python -m pytest passed; git diff --check passed" in markdown
+
+
+def test_renderer_handles_empty_text_after_splitlines_simplification() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "status": "review_in_progress",
+            "actionable_items": [""],
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Actionable comments:" not in markdown
+    assert "\n- \n" not in markdown
+    assert "Next action: Continue review." in markdown

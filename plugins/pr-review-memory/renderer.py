@@ -10,7 +10,7 @@ from typing import Any
 REQUIRED_FIELDS = ("repository", "pr_number", "branch", "head_sha", "status", "next_action")
 DIFF_MARKER_PREFIXES = ("diff --git", "index ", "@@", "+++", "---")
 SECRET_PATTERN = re.compile(
-    r"(?i)\b(api[_-]?key|secret|token|password)\b\s*[:=]\s*([^\s,;]+)"
+    r"(?i)\b(api[_-]?key|secret|token|password)\b\s*[:=]\s*(?:\"[^\"]*\"|'[^']*'|[^\s,;]+)"
 )
 
 
@@ -52,7 +52,7 @@ def _is_empty(value: Any) -> bool:
 def _clean_text(value: Any) -> str:
     text = str(value)
     kept_lines = []
-    for line in text.splitlines() or [""]:
+    for line in text.splitlines():
         stripped = line.strip()
         if any(stripped.startswith(prefix) for prefix in DIFF_MARKER_PREFIXES):
             continue
@@ -75,18 +75,20 @@ def _append_item_section(lines: list[str], label: str, items: Any) -> None:
     normalized = _normalize_items(items)
     if not normalized:
         return
+    rendered_items = [_render_item(item) for item in normalized]
+    rendered_items = [item for item in rendered_items if item]
+    if not rendered_items:
+        return
     lines.append(f"{label}:")
-    for item in normalized:
-        rendered = _render_item(item)
-        if rendered:
-            lines.append(f"- {rendered}")
+    for rendered in rendered_items:
+        lines.append(f"- {rendered}")
 
 
 def _normalize_items(items: Any) -> list[Any]:
     if _is_empty(items):
         return []
-    if isinstance(items, list):
-        return items
+    if isinstance(items, Iterable) and not isinstance(items, (str, bytes, Mapping)):
+        return list(items)
     return [items]
 
 
@@ -116,6 +118,11 @@ def _append_validation(lines: list[str], validation: Any) -> None:
         return
     if isinstance(validation, Mapping):
         parts = [f"{_clean_text(command)}: {_clean_text(status)}" for command, status in sorted(validation.items())]
+        if parts:
+            lines.append(f"Validation: {'; '.join(parts)}")
+        return
+    if isinstance(validation, Iterable) and not isinstance(validation, (str, bytes)):
+        parts = [_clean_text(item) for item in validation if not _is_empty(item)]
         if parts:
             lines.append(f"Validation: {'; '.join(parts)}")
         return
