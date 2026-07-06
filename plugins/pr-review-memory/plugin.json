@@ -4,6 +4,7 @@
   "status": "dry-run",
   "description": "Documentation-first companion scaffold for compact PR review memory handoffs in local CompText workflows.",
   "provides": [
+    "pr_review_memory_renderer_v0",
     "pr_review_memory_template",
     "gemini_comment_summary_template",
     "merge_readiness_summary_template",
@@ -22,6 +23,6 @@
     "filesystem_write": false
   },
   "entrypoints": {
-    "dry_run": "templates_only"
+    "dry_run": "local_renderer_v0"
   }
 }

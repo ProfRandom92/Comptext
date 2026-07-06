@@ -37,6 +37,8 @@ This scaffold does not replace CompText Token Saver. It does not perform GitHub 
 
 The repo-side Codex skill bridge at [`.agents/skills/pr-review-memory/SKILL.md`](../.agents/skills/pr-review-memory/SKILL.md) connects prompts that begin with `[@comptext-token-saver](plugin://comptext-token-saver@personal)` to the local scaffold. It is static instruction context only. A renderer, runtime GitHub integration, MCP runtime behavior, automatic review resolution, and merge behavior are deferred.
 
+Renderer v0 for this scaffold is implemented as a deterministic local Python function at [`plugins/pr-review-memory/renderer.py`](../plugins/pr-review-memory/renderer.py). It converts structured PR review memory JSON into compact Token Saver handoff markdown. It does not add live GitHub API behavior, provider calls, MCP runtime behavior, automatic review resolution, automatic merge behavior, or production behavior.
+
 ## Safety requirements
 
 - Plugins must declare required tools and permissions.

@@ -14,7 +14,21 @@ The repo-side bridge at `.agents/skills/pr-review-memory/SKILL.md` makes this sc
 [@comptext-token-saver](plugin://comptext-token-saver@personal)
 ```
 
-The bridge connects that token-saving workflow to this scaffold. It does not add runtime behavior, GitHub integration, provider calls, MCP runtime behavior, automatic review resolution, auto-merge, or production behavior. A renderer that converts review-memory JSON into handoff markdown remains deferred.
+The bridge connects that token-saving workflow to this scaffold. It does not add GitHub integration, provider calls, MCP runtime behavior, automatic review resolution, auto-merge, or production behavior.
+
+## Renderer v0
+
+`renderer.py` implements deterministic local renderer v0:
+
+```python
+from renderer import render_pr_review_memory_handoff
+
+markdown = render_pr_review_memory_handoff(review_memory)
+```
+
+The function accepts a dictionary shaped like `examples/pr-review-memory.sample.json` and returns compact Token Saver handoff markdown. It validates required fields, omits empty optional sections, redacts simple secret-like values from rendered text, removes full-diff marker lines, and keeps output stable for tests.
+
+No CLI command is added in v0. Runtime GitHub integration, MCP runtime behavior, automatic review resolution, automatic merge behavior, and production behavior remain deferred.
 
 ## Expected workflow
 
@@ -27,6 +41,7 @@ The bridge connects that token-saving workflow to this scaffold. It does not add
 ## Status and boundaries
 
 - Dry-run-only scaffold.
+- Deterministic local renderer v0.
 - No GitHub writes.
 - No network calls.
 - No provider calls.

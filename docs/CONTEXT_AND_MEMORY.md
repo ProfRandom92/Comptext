@@ -62,6 +62,8 @@ Use [`plugins/pr-review-memory/SKILL.md`](../plugins/pr-review-memory/SKILL.md) 
 
 The repo-side bridge at [`.agents/skills/pr-review-memory/SKILL.md`](../.agents/skills/pr-review-memory/SKILL.md) makes this workflow discoverable to Codex while keeping `[@comptext-token-saver](plugin://comptext-token-saver@personal)` as the first prompt header. The bridge is dry-run/static instruction context only; renderer output generation, runtime GitHub integration, and MCP runtime behavior remain deferred.
 
+Renderer v0 is implemented locally in [`plugins/pr-review-memory/renderer.py`](../plugins/pr-review-memory/renderer.py). It accepts structured PR review memory dictionaries and returns deterministic compact handoff markdown. It is local and dry-run only; live GitHub integration, MCP runtime behavior, automatic review resolution, and automatic merge behavior remain deferred.
+
 ## Knowledge graph direction
 
 The long-term direction is a workspace knowledge graph that connects files, functions, types, tests, runs, evidence, docs, decisions, and failures. The graph should improve context selection without replacing explicit approvals or validation.
