@@ -78,7 +78,10 @@
         "object",
         "array",
         "string"
-      ]
+      ],
+      "minProperties": 1,
+      "minItems": 1,
+      "minLength": 1
     },
     "merge_readiness": {
       "type": [

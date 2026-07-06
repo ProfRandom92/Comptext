@@ -57,6 +57,25 @@ def test_sample_json_matches_documented_required_field_contract() -> None:
         assert field in sample
 
 
+def test_validation_summary_schema_documents_non_empty_values() -> None:
+    schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+    validation = schema["properties"]["validation_summary"]
+
+    assert validation["minProperties"] == 1
+    assert validation["minItems"] == 1
+    assert validation["minLength"] == 1
+
+
+@pytest.mark.parametrize("empty_value", [{}, [], ""])
+def test_renderer_rejects_empty_validation_summary_values(empty_value) -> None:
+    renderer = _load_renderer()
+    sample = json.loads(SAMPLE_JSON.read_text(encoding="utf-8"))
+    sample["validation_summary"] = empty_value
+
+    with pytest.raises(ValueError, match="validation_summary"):
+        renderer.render_pr_review_memory_handoff(sample)
+
+
 def test_renderer_accepts_schema_sample_json() -> None:
     renderer = _load_renderer()
     sample = json.loads(SAMPLE_JSON.read_text(encoding="utf-8"))
