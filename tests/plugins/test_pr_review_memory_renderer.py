@@ -59,6 +59,42 @@ def test_renderer_rejects_missing_required_fields() -> None:
         )
 
 
+@pytest.mark.parametrize("validation_summary", ["   ", ["", "  "], {"": "passed"}, {"python -m pytest": ""}])
+def test_renderer_rejects_validation_summary_without_renderable_content(validation_summary) -> None:
+    renderer = _load_renderer()
+
+    with pytest.raises(ValueError, match="validation_summary"):
+        renderer.render_pr_review_memory_handoff(
+            {
+                "repository": "ProfRandom92/Comptext",
+                "pr_number": 17,
+                "branch": "plugin/pr-review-memory-renderer-v0",
+                "head_sha": "abc123",
+                "validation_summary": validation_summary,
+                "next_action": "Continue review.",
+            }
+        )
+
+
+def test_renderer_omits_empty_validation_entries_when_valid_entries_remain() -> None:
+    renderer = _load_renderer()
+
+    markdown = renderer.render_pr_review_memory_handoff(
+        {
+            "repository": "ProfRandom92/Comptext",
+            "pr_number": 17,
+            "branch": "plugin/pr-review-memory-renderer-v0",
+            "head_sha": "abc123",
+            "validation_summary": {"": "ignored", "python -m pytest": "passed", "git diff --check": ""},
+            "next_action": "Continue review.",
+        }
+    )
+
+    assert "Validation: python -m pytest: passed" in markdown
+    assert "ignored" not in markdown
+    assert "git diff --check:" not in markdown
+
+
 def test_renderer_omits_empty_optional_sections() -> None:
     renderer = _load_renderer()
 
