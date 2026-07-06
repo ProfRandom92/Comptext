@@ -42,6 +42,16 @@ Branch prefixes:
 - Do not auto-push or auto-merge unless the user explicitly asks.
 - Do not create pull requests, merge, or release unless repository policy is explicitly changed.
 
+## Codex local autonomous mode
+
+- Use local autonomous mode only when explicitly requested.
+- Start with Token Saver/project state before broad repo reads.
+- Do not push, open PRs, merge, enable auto-merge, or call GitHub APIs unless explicitly instructed.
+- If local `main` is stale, stop and ask before `git fetch`.
+- Local commits are allowed in autonomous mode.
+- Required validation is `python -m pytest` and `git diff --check`.
+- Detailed playbook: [`docs/CODEX_LOCAL_AUTONOMY.md`](docs/CODEX_LOCAL_AUTONOMY.md).
+
 ## Validation policy
 
 - Run relevant local tests or checks for the changed surface.

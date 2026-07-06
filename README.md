@@ -75,9 +75,12 @@ For a future repository publication plan, read `docs/REPOSITORY_STRATEGY.md`.
 
 For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `docs/CODEX_DESKTOP_PROMPTS.md`.
 
+Codex local autonomous batches are governed by `AGENTS.md` and `docs/CODEX_LOCAL_AUTONOMY.md`.
+
 ## Agent workflow docs
 
 - [`AGENTS.md`](AGENTS.md)
+- [`docs/CODEX_LOCAL_AUTONOMY.md`](docs/CODEX_LOCAL_AUTONOMY.md)
 - [`docs/AGENT_SYSTEM.md`](docs/AGENT_SYSTEM.md)
 - [`docs/SKILLS_SYSTEM.md`](docs/SKILLS_SYSTEM.md)
 - [`docs/HOOKS_SYSTEM.md`](docs/HOOKS_SYSTEM.md)

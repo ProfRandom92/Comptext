@@ -49,6 +49,7 @@ Preserve only the compact state needed to continue review work:
 
 ## Related scaffold files
 
+- `docs/CODEX_LOCAL_AUTONOMY.md`
 - `plugins/pr-review-memory/README.md`
 - `plugins/pr-review-memory/SKILL.md`
 - `plugins/pr-review-memory/plugin.json`
