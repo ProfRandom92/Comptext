@@ -1,0 +1,34 @@
+{
+  "status": "review_in_progress",
+  "actionable_items": [
+    {
+      "thread_id": "gemini-thread-1",
+      "file": "plugins/pr-review-memory/SKILL.md",
+      "summary": "Clarify that unresolved review work must not be marked resolved."
+    }
+  ],
+  "completed_fixes": [
+    {
+      "thread_id": "review-thread-2",
+      "files": [
+        "docs/PLUGIN_SYSTEM.md"
+      ],
+      "summary": "Added plugin system link and dry-run boundary language."
+    }
+  ],
+  "unresolved_items": [
+    {
+      "thread_id": "gemini-thread-1",
+      "reason": "Actionable comment not fixed yet."
+    }
+  ],
+  "validation_summary": {
+    "python -m pytest": "passed",
+    "git diff --check": "passed"
+  },
+  "merge_readiness": {
+    "status": "blocked",
+    "reason": "Unresolved actionable review thread remains."
+  },
+  "next_action": "Fix gemini-thread-1, rerun validation, then recheck merge readiness."
+}

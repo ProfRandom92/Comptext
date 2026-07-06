@@ -85,6 +85,13 @@ For Codex Desktop workflow guidance, read `docs/CODEX_DESKTOP_WORKFLOW.md` and `
 - [`docs/PLUGIN_SYSTEM.md`](docs/PLUGIN_SYSTEM.md)
 - [`docs/CONTEXT_AND_MEMORY.md`](docs/CONTEXT_AND_MEMORY.md)
 
+## Local plugin scaffolds
+
+- [`plugins/pr-review-memory/README.md`](plugins/pr-review-memory/README.md)
+- [`plugins/pr-review-memory/SKILL.md`](plugins/pr-review-memory/SKILL.md)
+
+The PR Review Memory scaffold is a dry-run companion for token-saving workflows. It defines compact review-memory formats only; it does not replace CompText Token Saver, perform GitHub actions, make network or provider calls, read secrets, or implement an MCP runtime server.
+
 ## Local dry-run commands
 
 ```bash

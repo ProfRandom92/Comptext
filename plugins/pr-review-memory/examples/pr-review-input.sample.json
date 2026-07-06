@@ -1,0 +1,38 @@
+{
+  "repository": "ProfRandom92/Comptext",
+  "pr_number": 17,
+  "title": "plugin(pr-review-memory): add token saver companion scaffold",
+  "branch": "plugin/pr-review-memory",
+  "base": "main",
+  "head_sha": "dryrun1234567890abcdef1234567890abcdef1234",
+  "review_threads": [
+    {
+      "id": "gemini-thread-1",
+      "source": "gemini",
+      "file": "plugins/pr-review-memory/SKILL.md",
+      "state": "actionable",
+      "summary": "Clarify that unresolved review work must not be marked resolved."
+    },
+    {
+      "id": "review-thread-2",
+      "source": "human-review",
+      "file": "docs/PLUGIN_SYSTEM.md",
+      "state": "resolved",
+      "summary": "Add plugin system link and dry-run boundary language."
+    }
+  ],
+  "validation": [
+    {
+      "command": "python -m pytest",
+      "status": "passed",
+      "summary": "All local tests passed."
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "summary": "No whitespace errors."
+    }
+  ],
+  "mergeable": false,
+  "current_status": "One actionable Gemini thread remains; merge readiness is blocked until the thread is fixed and rechecked."
+}

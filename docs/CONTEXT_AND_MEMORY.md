@@ -54,6 +54,12 @@ Recent run data should help agents avoid repeated mistakes. It may include:
 
 Store summaries and hashes where possible. Do not store secrets or raw payloads.
 
+## PR review memory
+
+The local [`comptext-pr-review-memory`](../plugins/pr-review-memory/README.md) scaffold defines compact PR review-memory formats for token-saving workflows. It is a companion to CompText Token Saver, not a replacement, and does not assume the external token-saving plugin is installed.
+
+Use [`plugins/pr-review-memory/SKILL.md`](../plugins/pr-review-memory/SKILL.md) when preserving review state before or after long PR work. The memory block should keep only decisions, blockers, file paths, thread state, validation, merge readiness, risks, and next action. It must not perform GitHub actions, make network or provider calls, read secrets, or claim mergeability without a current check.
+
 ## Knowledge graph direction
 
 The long-term direction is a workspace knowledge graph that connects files, functions, types, tests, runs, evidence, docs, decisions, and failures. The graph should improve context selection without replacing explicit approvals or validation.
