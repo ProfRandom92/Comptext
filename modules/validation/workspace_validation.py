@@ -27,7 +27,11 @@ WORKSPACE_SCHEMA_EXAMPLE_PAIRS = (
 def validate_with_additional_properties(schema: dict[str, Any], instance: Any, location: str = "$") -> None:
     """Validate schema instance and enforce additionalProperties: false recursively."""
     validate_json_schema_instance(schema, instance, location)
+    _recursive_check_additional_properties(schema, instance, location)
 
+
+def _recursive_check_additional_properties(schema: dict[str, Any], instance: Any, location: str = "$") -> None:
+    """Recursively enforce additionalProperties: false without running validate_json_schema_instance again."""
     if isinstance(instance, dict) and isinstance(schema, dict):
         if schema.get("additionalProperties") is False:
             allowed_properties = set(schema.get("properties", {}).keys())
@@ -38,11 +42,11 @@ def validate_with_additional_properties(schema: dict[str, Any], instance: Any, l
         properties = schema.get("properties", {})
         for key, subschema in properties.items():
             if key in instance:
-                validate_with_additional_properties(subschema, instance[key], f"{location}.{key}")
+                _recursive_check_additional_properties(subschema, instance[key], f"{location}.{key}")
 
     elif isinstance(instance, list) and isinstance(schema, dict) and "items" in schema:
         for index, item in enumerate(instance):
-            validate_with_additional_properties(schema["items"], item, f"{location}[{index}]")
+            _recursive_check_additional_properties(schema["items"], item, f"{location}[{index}]")
 
 
 def validate_workspace_schemas(*, repo_root: Path | None = None) -> list[dict[str, str]]:

@@ -83,8 +83,6 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             _print_json({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)})
             return 0
         if args.command == "validate" and args.target == "workspace":
-            if not args.dry_run:
-                raise ValueError("CompText workspace validation currently supports --dry-run only")
             results = validate_workspace_schemas(repo_root=root)
             _print_json({"mode": "dry-run", "results": results})
             if any(r.get("status") == "invalid" for r in results):
