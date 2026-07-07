@@ -17,7 +17,17 @@ def _hash_event_content(event_without_hash: dict[str, Any]) -> str:
     return hashlib.sha256(_canonical_json(event_without_hash).encode("utf-8")).hexdigest()
 
 
+def _validate_payload(payload: Any) -> None:
+    if isinstance(payload, dict):
+        for ref_field in ("workspace_before_ref", "workspace_after_ref", "workspace_delta_ref"):
+            if ref_field in payload:
+                val = payload[ref_field]
+                if not isinstance(val, str):
+                    raise ValueError(f"payload field {ref_field} must be a string ref, not {type(val).__name__}")
+
+
 def _make_event(*, index: int, event_type: str, payload: dict[str, Any], previous_hash: str) -> dict[str, Any]:
+    _validate_payload(payload)
     event = {
         "index": index,
         "type": event_type,
@@ -58,6 +68,13 @@ def verify_evidence_chain(events: list[dict[str, Any]]) -> dict[str, Any]:
         expected_hash = event.get("hash")
         if not isinstance(expected_hash, str):
             return {"ok": False, "error": f"event hash missing at index {expected_index}"}
+
+        payload = event.get("payload")
+        try:
+            _validate_payload(payload)
+        except ValueError as err:
+            return {"ok": False, "error": str(err)}
+
         event_without_hash = {key: value for key, value in event.items() if key != "hash"}
         actual_hash = _hash_event_content(event_without_hash)
         if actual_hash != expected_hash:
