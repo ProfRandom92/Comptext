@@ -1,0 +1,14 @@
+{
+  "gate_id": "gate_01_verify_local",
+  "run_id": "run_01_workspace_init",
+  "workspace_ref": "workspace_state_v0",
+  "risk": "network_access",
+  "principles": [
+    "p_no_network",
+    "p_offline_only"
+  ],
+  "decision": "deny",
+  "allowed_next_action": "abort_run",
+  "forbidden_actions_confirmed": true,
+  "note": "Blocked outbound HTTP request due to strict offline rule."
+}
