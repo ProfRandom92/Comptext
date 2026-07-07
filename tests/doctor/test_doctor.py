@@ -13,6 +13,20 @@ def test_doctor_reports_required_project_files() -> None:
     assert result["providers"] == "not_called"
     assert set(result["project_files"]) == set(REQUIRED_PROJECT_FILES)
     assert all(result["project_files"].values())
+    assert "workspace_validation" in result
+    assert result["workspace_validation"]["ok"] is True
+    assert len(result["workspace_validation"]["results"]) == 3
+    assert result["ok"] is True
+
+
+def test_doctor_workspace_validation_fails_on_empty_dir(tmp_path: Path) -> None:
+    result = run_doctor(repo_root=tmp_path, dry_run=True)
+    assert result["workspace_validation"]["ok"] is False
+    assert result["ok"] is False
+    for item in result["workspace_validation"]["results"]:
+        assert item["status"] == "invalid"
+        assert "schema" in item
+        assert "example" in item
 
 
 def test_doctor_rejects_non_dry_run() -> None:

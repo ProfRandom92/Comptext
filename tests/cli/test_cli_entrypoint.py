@@ -21,6 +21,24 @@ def test_cli_validate_schemas_dry_run(capsys) -> None:
     assert output["results"][0]["status"] == "valid"
 
 
+def test_cli_validate_workspace_dry_run(capsys) -> None:
+    assert run(["validate", "workspace", "--dry-run"], repo_root=ROOT) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["mode"] == "dry-run"
+    assert len(output["results"]) == 3
+    for result in output["results"]:
+        assert result["status"] == "valid"
+        assert "schema" in result
+        assert "example" in result
+
+
+def test_cli_validate_workspace_returns_non_zero_when_validation_fails(tmp_path: Path, capsys) -> None:
+    assert run(["validate", "workspace", "--dry-run"], repo_root=tmp_path) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["mode"] == "dry-run"
+    assert output["results"][0]["status"] == "invalid"
+
+
 def test_cli_providers_list_dry_run(capsys) -> None:
     assert run(["providers", "list", "--dry-run"], repo_root=Path.cwd()) == 0
     output = json.loads(capsys.readouterr().out)
