@@ -17,6 +17,7 @@ from modules.gateway.gateway import (
 from modules.provider_registry.provider_registry import list_providers
 from modules.runtime.sample_run import run_sample
 from modules.validation.schema_validator import validate_local_schemas
+from modules.validation.workspace_validation import validate_workspace_schemas
 
 EXPECTED_COMMAND_ERRORS = (OSError, json.JSONDecodeError, ValueError, KeyError)
 
@@ -32,6 +33,8 @@ def build_parser() -> argparse.ArgumentParser:
     validate_subparsers = validate.add_subparsers(dest="target", required=True)
     schemas = validate_subparsers.add_parser("schemas")
     schemas.add_argument("--dry-run", action="store_true", required=True)
+    workspace = validate_subparsers.add_parser("workspace")
+    workspace.add_argument("--dry-run", action="store_true", required=True)
 
     providers = subparsers.add_parser("providers")
     providers_subparsers = providers.add_subparsers(dest="provider_command", required=True)
@@ -78,6 +81,14 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             return 0 if result.get("ok") is True else 1
         if args.command == "validate" and args.target == "schemas":
             _print_json({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)})
+            return 0
+        if args.command == "validate" and args.target == "workspace":
+            if not args.dry_run:
+                raise ValueError("CompText workspace validation currently supports --dry-run only")
+            results = validate_workspace_schemas(repo_root=root)
+            _print_json({"mode": "dry-run", "results": results})
+            if any(r.get("status") == "invalid" for r in results):
+                return 1
             return 0
         if args.command == "providers" and args.provider_command == "list":
             _print_json({"mode": "dry-run", "providers": list_providers(path=root / "examples/provider/provider-registry-sample.json", dry_run=args.dry_run)})
