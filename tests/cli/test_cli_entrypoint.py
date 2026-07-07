@@ -201,3 +201,29 @@ def test_cli_verify_dry_run(capsys) -> None:
 def test_cli_verify_requires_dry_run() -> None:
     with pytest.raises(SystemExit):
         run(["verify"])
+
+
+def test_cli_main_entry_point_exists_and_invokes_run(monkeypatch) -> None:
+    from modules.cli.cli_entrypoint import main
+    import modules.cli.cli_entrypoint
+    called = False
+
+    def mock_run(argv=None, repo_root=None):
+        nonlocal called
+        called = True
+        return 42
+
+    monkeypatch.setattr(modules.cli.cli_entrypoint, "run", mock_run)
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 42
+    assert called is True
+
+
+def test_pyproject_defines_correct_entrypoint() -> None:
+    import tomllib
+    pyproject_path = ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+    scripts = data.get("project", {}).get("scripts", {})
+    assert scripts.get("comptext") == "modules.cli.cli_entrypoint:main"
