@@ -67,3 +67,15 @@ def test_run_sample_performs_no_io_or_env_reads(monkeypatch) -> None:
 
     result = run_sample(dry_run=True)
     assert result["ok"] is True
+
+
+def test_sample_run_evidence_contains_workspace_refs() -> None:
+    events = build_sample_run_events()
+    execution_event = next(e for e in events if e["type"] == "execution.completed")
+    payload = execution_event["payload"]
+    assert "workspace_before_ref" in payload
+    assert "workspace_after_ref" in payload
+    assert "workspace_delta_ref" in payload
+    assert isinstance(payload["workspace_before_ref"], str)
+    assert isinstance(payload["workspace_after_ref"], str)
+    assert isinstance(payload["workspace_delta_ref"], str)

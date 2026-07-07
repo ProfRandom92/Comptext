@@ -37,6 +37,9 @@ def build_sample_run_events() -> list[dict[str, Any]]:
                 "network": "not_called",
                 "providers": "not_called",
                 "secrets": "not_read",
+                "workspace_before_ref": "examples/workspace/workspace-snapshot.sample.json",
+                "workspace_after_ref": "examples/workspace/reflection-gate.sample.json",
+                "workspace_delta_ref": "examples/workspace/workspace-delta.sample.json",
             },
         ),
     )
