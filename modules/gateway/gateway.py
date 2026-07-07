@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import copy
 from typing import Any
 
 DRY_RUN_MODEL_ID = "comptext-dry-run-model"
@@ -81,9 +82,9 @@ def normalize_gateway_request(request: dict[str, Any], *, dry_run: bool = True) 
         "mode": "dry-run",
         "provider": LOCAL_PROVIDER_ID,
         "model": model,
-        "messages": messages,
-        "tools": tools,
-        "metadata": metadata,
+        "messages": copy.deepcopy(messages),
+        "tools": copy.deepcopy(tools),
+        "metadata": copy.deepcopy(metadata),
     }
 
 

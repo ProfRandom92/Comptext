@@ -35,19 +35,28 @@ It contains:
 ## First read order
 
 1. `README.md`
-2. `docs/COMPTEXT_MVP.md`
-3. `docs/COMPTEXT_ARCHITECTURE_v1.md`
-4. `docs/COMPTEXT_SECURITY.md`
-5. `docs/COMPTEXT_GATEWAY.md`
-6. `docs/REPOSITORY_STRATEGY.md`
+2. `AGENTS.md`
+3. `docs/COMPTEXT_MVP.md`
+4. `docs/COMPTEXT_ARCHITECTURE_v1.md`
+5. `docs/COMPTEXT_SECURITY.md`
+6. `docs/COMPTEXT_GATEWAY.md`
+7. `docs/REPOSITORY_STRATEGY.md`
+
+## Workflow routes
+
+- New contributors: start with `README.md`, then use the first read order above.
+- Local autonomous Codex work: read `AGENTS.md`, then `docs/CODEX_LOCAL_AUTONOMY.md`.
+- Agent, skill, plugin, and memory model: read `docs/AGENT_SYSTEM.md`, `docs/SKILLS_SYSTEM.md`, `docs/PLUGIN_SYSTEM.md`, and `docs/CONTEXT_AND_MEMORY.md`.
+- PR Review Memory / Token Saver workflows: read `plugins/pr-review-memory/README.md`, `plugins/pr-review-memory/SKILL.md`, and `.agents/skills/pr-review-memory/SKILL.md`.
+- Community README follow-up: read `docs/README_COMMUNITY_REFRESH_PLAN.md`.
 
 ## Local checks
 
 From the repository root:
 
 ```bash
-python scripts/validate_clean_repo.py .
-python -m pytest -q
+python -m pytest
+git diff --check
 ```
 
 The checks must remain local-only. They must not call providers, start servers, read secrets, or modify remote Git state.

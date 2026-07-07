@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/workspace-snapshot.v0.schema.json",
+  "title": "CompText Workspace Snapshot v0",
+  "description": "Local dry-run contract for explicit task-scoped workspace state.",
+  "type": "object",
+  "required": [
+    "run_id",
+    "goal",
+    "active_concepts",
+    "constraints",
+    "next_allowed_actions",
+    "forbidden_actions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "active_concepts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_allowed_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

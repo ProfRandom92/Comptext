@@ -1,0 +1,24 @@
+{
+  "run_id": "run_01_workspace_init",
+  "goal": "Verify the workspace snapshot contract and schema",
+  "active_concepts": [
+    "workspace_snapshot",
+    "dry_run_validation"
+  ],
+  "constraints": [
+    "no_network_access",
+    "no_secrets_reads"
+  ],
+  "next_allowed_actions": [
+    "validate_schema",
+    "run_local_tests"
+  ],
+  "forbidden_actions": [
+    "auto_merge_pr",
+    "start_server"
+  ],
+  "evidence_refs": [
+    "task_log_46",
+    "git_commit_bda151b"
+  ]
+}

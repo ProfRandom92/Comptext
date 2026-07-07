@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/reflection-gate.v0.schema.json",
+  "title": "CompText Reflection Gate v0",
+  "description": "Local dry-run contract for deterministic policy checks before risky actions.",
+  "type": "object",
+  "required": [
+    "gate_id",
+    "run_id",
+    "workspace_ref",
+    "risk",
+    "principles",
+    "decision",
+    "allowed_next_action",
+    "forbidden_actions_confirmed"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "gate_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "workspace_ref": {
+      "type": "string"
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "scope_drift",
+        "secret_access",
+        "network_access",
+        "provider_call",
+        "file_write",
+        "git_remote",
+        "server_start"
+      ]
+    },
+    "principles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "deny",
+        "escalate"
+      ]
+    },
+    "allowed_next_action": {
+      "type": "string"
+    },
+    "forbidden_actions_confirmed": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "string",
+      "maxLength": 100
+    }
+  }
+}

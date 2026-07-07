@@ -9,6 +9,8 @@ description: Preserve compact PR review memory for dry-run CompText token-saving
 
 Use this skill to emit compact PR review memory blocks for recurring review workflows. The output is meant to be consumed by token-saving context workflows, including CompText Token Saver when available, without duplicating that plugin.
 
+For local autonomous Codex batches, also follow `docs/CODEX_LOCAL_AUTONOMY.md`.
+
 ## When to use
 
 - Before long PR review work, summarize the current review state.
@@ -73,6 +75,7 @@ Keep output compact. Preserve only decisions, blockers, file paths, thread state
 ## Related docs
 
 - [Plugin README](README.md)
+- [Codex Local Autonomy](../../docs/CODEX_LOCAL_AUTONOMY.md)
 - [CompText Plugin System](../../docs/PLUGIN_SYSTEM.md)
 - [CompText Context and Memory](../../docs/CONTEXT_AND_MEMORY.md)
 - [Codex Desktop Workflow](../../docs/CODEX_DESKTOP_WORKFLOW.md)

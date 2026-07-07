@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, Set
 from typing import Any
 
 
@@ -20,7 +20,7 @@ def render_pr_review_memory_handoff(data: dict[str, Any]) -> str:
     if not isinstance(data, dict):
         raise TypeError("PR review memory data must be a dictionary.")
 
-    missing = [field for field in REQUIRED_FIELDS if _is_empty(data.get(field))]
+    missing = [field for field in REQUIRED_FIELDS if _is_missing_required(field, data.get(field))]
     if missing:
         raise ValueError(f"Missing required PR review memory field(s): {', '.join(missing)}")
 
@@ -50,6 +50,14 @@ def _is_empty(value: Any) -> bool:
     return value is None or value == "" or value == [] or value == {}
 
 
+def _is_missing_required(field: str, value: Any) -> bool:
+    if _is_empty(value):
+        return True
+    if field == "validation_summary":
+        return not _validation_parts(value)
+    return _clean_text(value) == ""
+
+
 def _clean_text(value: Any) -> str:
     text = str(value)
     kept_lines = []
@@ -67,9 +75,10 @@ def _format_pr(pr_number: Any, pr_url: Any) -> str:
     number = _clean_text(pr_number)
     if not number.startswith("#"):
         number = f"#{number}"
-    if _is_empty(pr_url):
+    rendered_url = _clean_text(pr_url)
+    if not rendered_url:
         return number
-    return f"{number} ({_clean_text(pr_url)})"
+    return f"{number} ({rendered_url})"
 
 
 def _append_item_section(lines: list[str], label: str, items: Any) -> None:
@@ -88,6 +97,8 @@ def _append_item_section(lines: list[str], label: str, items: Any) -> None:
 def _normalize_items(items: Any) -> list[Any]:
     if _is_empty(items):
         return []
+    if isinstance(items, Set) and not isinstance(items, (str, bytes, Mapping)):
+        return sorted(items, key=_clean_text)
     if isinstance(items, Iterable) and not isinstance(items, (str, bytes, Mapping)):
         return list(items)
     return [items]
@@ -104,7 +115,8 @@ def _render_item(item: Any) -> str:
             parts.append(_clean_text(file_path))
         files = item.get("files")
         if isinstance(files, Iterable) and not isinstance(files, (str, bytes, Mapping)):
-            rendered_files = ", ".join(_clean_text(file) for file in files if not _is_empty(file))
+            file_values = sorted(files, key=_clean_text) if isinstance(files, Set) else files
+            rendered_files = ", ".join(_clean_text(file) for file in file_values if not _is_empty(file))
             if rendered_files:
                 parts.append(rendered_files)
         summary = item.get("summary") or item.get("reason") or item.get("status")
@@ -115,21 +127,24 @@ def _render_item(item: Any) -> str:
 
 
 def _append_validation(lines: list[str], validation: Any) -> None:
-    if _is_empty(validation):
-        return
+    parts = _validation_parts(validation)
+    if parts:
+        lines.append(f"Validation: {'; '.join(parts)}")
+
+
+def _validation_parts(validation: Any) -> list[str]:
     if isinstance(validation, Mapping):
-        parts = [f"{_clean_text(command)}: {_clean_text(status)}" for command, status in sorted(validation.items())]
-        if parts:
-            lines.append(f"Validation: {'; '.join(parts)}")
-        return
+        parts = []
+        for command, status in sorted(validation.items()):
+            rendered_command = _clean_text(command)
+            rendered_status = _clean_text(status)
+            if rendered_command and rendered_status:
+                parts.append(f"{rendered_command}: {rendered_status}")
+        return parts
     if isinstance(validation, Iterable) and not isinstance(validation, (str, bytes)):
-        parts = [_clean_text(item) for item in validation if not _is_empty(item)]
-        if parts:
-            lines.append(f"Validation: {'; '.join(parts)}")
-        return
+        return [_clean_text(item) for item in validation if not _is_empty(item) and _clean_text(item)]
     rendered = _render_item(validation)
-    if rendered:
-        lines.append(f"Validation: {rendered}")
+    return [rendered] if rendered else []
 
 
 def _append_merge_readiness(lines: list[str], readiness: Any) -> None:
@@ -139,11 +154,15 @@ def _append_merge_readiness(lines: list[str], readiness: Any) -> None:
         status = readiness.get("status")
         reason = readiness.get("reason")
         parts = []
-        if not _is_empty(status):
-            parts.append(_clean_text(status))
-        if not _is_empty(reason):
-            parts.append(_clean_text(reason))
+        rendered_status = _clean_text(status) if not _is_empty(status) else ""
+        rendered_reason = _clean_text(reason) if not _is_empty(reason) else ""
+        if rendered_status:
+            parts.append(rendered_status)
+        if rendered_reason:
+            parts.append(rendered_reason)
         if parts:
             lines.append(f"Merge readiness: {' - '.join(parts)}")
         return
-    lines.append(f"Merge readiness: {_clean_text(readiness)}")
+    rendered_readiness = _clean_text(readiness)
+    if rendered_readiness:
+        lines.append(f"Merge readiness: {rendered_readiness}")

@@ -11,6 +11,8 @@ Use this repo-side Codex skill bridge with the personal Token Saver prompt heade
 
 This bridge connects Codex instructions to the scaffold in `plugins/pr-review-memory/`. It can use deterministic local renderer v0 in `plugins/pr-review-memory/renderer.py` when structured review-memory JSON is already available, and the local schema contract in `plugins/pr-review-memory/schema/pr-review-memory.v0.schema.json` documents that input shape. It does not make provider calls, call GitHub APIs, write GitHub state, run an MCP server, resolve review threads, merge branches, or enable auto-merge.
 
+For local autonomous Codex batches, follow `docs/CODEX_LOCAL_AUTONOMY.md` and keep this bridge as compact instruction context.
+
 ## When to use
 
 - After PR creation.
@@ -18,6 +20,11 @@ This bridge connects Codex instructions to the scaffold in `plugins/pr-review-me
 - After actionable comments are fixed.
 - Before merge-readiness checks.
 - When preparing Token Saver handoff context.
+
+## When not to use
+
+- Do not use this bridge to fetch review state, call GitHub APIs, resolve threads, push, merge, enable auto-merge, call providers, read secrets, or run MCP runtime behavior.
+- Do not use renderer output as proof of mergeability or review resolution.
 
 ## Compact handoff fields
 
@@ -49,6 +56,7 @@ Preserve only the compact state needed to continue review work:
 
 ## Related scaffold files
 
+- `docs/CODEX_LOCAL_AUTONOMY.md`
 - `plugins/pr-review-memory/README.md`
 - `plugins/pr-review-memory/SKILL.md`
 - `plugins/pr-review-memory/plugin.json`

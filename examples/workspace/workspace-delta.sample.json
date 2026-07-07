@@ -1,0 +1,28 @@
+{
+  "workspace_before_ref": "run_01_workspace_init",
+  "workspace_after_ref": "run_02_delta_applied",
+  "active_concepts_added": [
+    "workspace_delta"
+  ],
+  "active_concepts_removed": [
+    "workspace_init_concept"
+  ],
+  "constraints_added": [
+    "check_additional_properties"
+  ],
+  "constraints_removed": [],
+  "next_allowed_actions_added": [
+    "validate_delta_schema"
+  ],
+  "next_allowed_actions_removed": [
+    "validate_snapshot_schema"
+  ],
+  "forbidden_actions_added": [
+    "modify_existing_schemas"
+  ],
+  "forbidden_actions_removed": [],
+  "evidence_refs": [
+    "task_log_134",
+    "git_commit_74b0f93"
+  ]
+}

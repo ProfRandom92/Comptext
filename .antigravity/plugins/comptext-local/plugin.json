@@ -1,0 +1,13 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "comptext-local",
+  "version": "0.1.0",
+  "description": "Local Antigravity bridge plugin for CompText, enforcing offline limits, workspace rules, and PR review memory renderer capability.",
+  "permissions": {
+    "network": false,
+    "provider_calls": false,
+    "github_write": false,
+    "secrets": false,
+    "filesystem_write": true
+  }
+}
