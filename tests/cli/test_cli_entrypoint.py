@@ -176,3 +176,28 @@ def test_cli_agents_dry_run(capsys) -> None:
 def test_cli_agents_requires_dry_run() -> None:
     with pytest.raises(SystemExit):
         run(["agents"])
+
+
+def test_cli_verify_dry_run(capsys) -> None:
+    assert run(["verify", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT LOCAL VERIFY" in out
+    assert "local-only / dry-run" in out
+    assert "Status screen" in out
+    assert "Subagent inventory" in out
+    assert "Workspace validation" in out
+    assert "Doctor diagnostics" in out
+    assert "Provider boundary" in out
+    assert "Network boundary" in out
+    assert "GitHub runtime boundary" in out
+    assert "MCP runtime boundary" in out
+    assert "Result: pass" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext agents --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor --dry-run" in out
+
+
+def test_cli_verify_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["verify"])

@@ -65,6 +65,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     agents = subparsers.add_parser("agents")
     agents.add_argument("--dry-run", action="store_true", required=True)
+
+    verify = subparsers.add_parser("verify")
+    verify.add_argument("--dry-run", action="store_true", required=True)
     return parser
 
 
@@ -93,6 +96,11 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
         if args.command == "agents":
             from modules.cli.agents_screen import build_agents_screen
             exit_code, output_text = build_agents_screen(root)
+            print(output_text)
+            return exit_code
+        if args.command == "verify":
+            from modules.cli.verify_screen import build_verify_screen
+            exit_code, output_text = build_verify_screen(root)
             print(output_text)
             return exit_code
         if args.command == "validate" and args.target == "schemas":
