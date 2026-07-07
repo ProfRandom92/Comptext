@@ -24,6 +24,10 @@ When executing local development tasks via the Antigravity CLI:
 4. **Commit Locally**: Once validation passes, make a clean git commit locally with a descriptive message.
 5. **Stop**: Report completion status, list changed files, and exit.
 
+## Subagent Roles
+
+Refer to [docs/SUBAGENTS.md](file:///C:/Users/contr/dev/Comptext/docs/SUBAGENTS.md) for the local subagent role specifications, task routing matrix, and safe offline escalation boundaries.
+
 ## Next Implementation Unit
 
 The next planned unit of work is:
