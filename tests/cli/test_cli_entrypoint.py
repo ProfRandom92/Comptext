@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import pytest
 
 from modules.cli.cli_entrypoint import run
 
@@ -117,3 +118,39 @@ def test_start_here_local_checks_match_available_commands() -> None:
     assert "python scripts/validate_clean_repo.py ." not in text
     assert "python -m pytest" in text
     assert "git diff --check" in text
+
+
+def test_cli_status_dry_run(capsys) -> None:
+    assert run(["status", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT" in out
+    assert "THE OPERATING SYSTEM FOR CONTEXT" in out
+    assert "local-only / dry-run" in out
+    assert "Doctor" in out
+    assert "Workspace validation" in out
+    assert "Runtime dry-run sample" in out
+    assert "Evidence chain" in out
+    assert "Providers" in out
+    assert "Network" in out
+    assert "GitHub runtime" in out
+    assert "MCP runtime" in out
+    assert "AGENTS.md" in out
+    assert "Antigravity plugin" in out
+    assert "Local skills" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor" in out
+    assert "python -m pytest" in out
+
+
+def test_cli_status_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["status"])
+
+
+def test_cli_status_fails_on_empty_dir(tmp_path: Path, capsys) -> None:
+    assert run(["status", "--dry-run"], repo_root=tmp_path) == 1
+    out = capsys.readouterr().out
+    assert "Doctor: fail" in out
+    assert "Workspace validation: fail" in out
+    assert "AGENTS.md: absent" in out
