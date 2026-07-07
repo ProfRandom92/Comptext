@@ -6,6 +6,8 @@ import platform
 import sys
 from pathlib import Path
 
+from modules.validation.workspace_validation import validate_workspace_schemas
+
 REQUIRED_PROJECT_FILES = (
     "AGENTS.md",
     "README.md",
@@ -29,6 +31,9 @@ def run_doctor(*, repo_root: Path | None = None, dry_run: bool = True) -> dict[s
         for relative_path in REQUIRED_PROJECT_FILES
     }
 
+    workspace_results = validate_workspace_schemas(repo_root=root)
+    workspace_ok = all(r.get("status") == "valid" for r in workspace_results)
+
     return {
         "command": "comptext doctor --dry-run",
         "mode": "dry-run",
@@ -41,7 +46,11 @@ def run_doctor(*, repo_root: Path | None = None, dry_run: bool = True) -> dict[s
             "release": platform.release() or "unknown",
         },
         "project_files": files,
-        "ok": all(files.values()) and sys.version_info >= (3, 10),
+        "workspace_validation": {
+            "results": workspace_results,
+            "ok": workspace_ok,
+        },
+        "ok": all(files.values()) and sys.version_info >= (3, 10) and workspace_ok,
         "network": "not_checked",
         "providers": "not_called",
     }
