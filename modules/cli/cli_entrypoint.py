@@ -62,6 +62,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     status = subparsers.add_parser("status")
     status.add_argument("--dry-run", action="store_true", required=True)
+
+    agents = subparsers.add_parser("agents")
+    agents.add_argument("--dry-run", action="store_true", required=True)
     return parser
 
 
@@ -85,6 +88,11 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
         if args.command == "status":
             from modules.cli.status_screen import build_status_screen
             exit_code, output_text = build_status_screen(root)
+            print(output_text)
+            return exit_code
+        if args.command == "agents":
+            from modules.cli.agents_screen import build_agents_screen
+            exit_code, output_text = build_agents_screen(root)
             print(output_text)
             return exit_code
         if args.command == "validate" and args.target == "schemas":

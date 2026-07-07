@@ -154,3 +154,25 @@ def test_cli_status_fails_on_empty_dir(tmp_path: Path, capsys) -> None:
     assert "Doctor: fail" in out
     assert "Workspace validation: fail" in out
     assert "AGENTS.md: absent" in out
+
+
+def test_cli_agents_dry_run(capsys) -> None:
+    assert run(["agents", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT LOCAL SUBAGENTS" in out
+    assert "local-only / dry-run" in out
+    assert "validation-agent" in out
+    assert "evidence-agent" in out
+    assert "runtime-dryrun-agent" in out
+    assert "pr-memory-agent" in out
+    assert "docs-agent" in out
+    assert "Routing Preview" in out
+    assert "Escalation" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor --dry-run" in out
+
+
+def test_cli_agents_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["agents"])
