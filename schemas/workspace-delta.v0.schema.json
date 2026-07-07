@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/workspace-delta.v0.schema.json",
+  "title": "CompText Workspace Delta v0",
+  "description": "Local dry-run contract for describing changes between WorkspaceSnapshot states.",
+  "type": "object",
+  "required": [
+    "workspace_before_ref",
+    "workspace_after_ref",
+    "active_concepts_added",
+    "active_concepts_removed",
+    "constraints_added",
+    "constraints_removed",
+    "next_allowed_actions_added",
+    "next_allowed_actions_removed",
+    "forbidden_actions_added",
+    "forbidden_actions_removed"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "workspace_before_ref": {
+      "type": "string"
+    },
+    "workspace_after_ref": {
+      "type": "string"
+    },
+    "active_concepts_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "active_concepts_removed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "constraints_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "constraints_removed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_allowed_actions_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_allowed_actions_removed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "forbidden_actions_removed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
