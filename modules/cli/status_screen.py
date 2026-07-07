@@ -21,6 +21,15 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
     skills_dir = repo_root / ".antigravity/plugins/comptext-local/skills"
     skills_status = "present" if skills_dir.is_dir() else "absent"
 
+    agents_dir = repo_root / ".antigravity/plugins/comptext-local/agents"
+    agents_status = "present" if agents_dir.is_dir() else "absent"
+
+    mcp_config = repo_root / ".antigravity/plugins/comptext-local/mcp_config.json"
+    mcp_status = "disabled/deferred" if mcp_config.is_file() else "none"
+
+    hooks_plan = repo_root / ".antigravity/plugins/comptext-local/hooks_plan.md"
+    hooks_status = "planned" if hooks_plan.is_file() else "none"
+
     # Run local checks
     doctor_ok = False
     try:
@@ -77,6 +86,9 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
         f"  AGENTS.md: {agents_status}",
         f"  Antigravity plugin: {plugin_status}",
         f"  Local skills: {skills_status}",
+        f"  Local agents: {agents_status}",
+        f"  MCP config: {mcp_status}",
+        f"  Hooks status: {hooks_status}",
         "",
         "Commands:",
         "  - comptext status --dry-run",

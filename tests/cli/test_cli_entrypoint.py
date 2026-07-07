@@ -137,6 +137,9 @@ def test_cli_status_dry_run(capsys) -> None:
     assert "AGENTS.md" in out
     assert "Antigravity plugin" in out
     assert "Local skills" in out
+    assert "Local agents" in out
+    assert "MCP config" in out
+    assert "Hooks status" in out
     assert "comptext status --dry-run" in out
     assert "comptext validate workspace --dry-run" in out
     assert "comptext doctor" in out
@@ -191,6 +194,10 @@ def test_cli_verify_dry_run(capsys) -> None:
     assert "Network boundary" in out
     assert "GitHub runtime boundary" in out
     assert "MCP runtime boundary" in out
+    assert "Plugin skills" in out
+    assert "Plugin agents" in out
+    assert "MCP config" in out
+    assert "Hooks status" in out
     assert "Result: pass" in out
     assert "comptext status --dry-run" in out
     assert "comptext agents --dry-run" in out

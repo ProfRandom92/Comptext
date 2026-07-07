@@ -39,12 +39,31 @@ def build_verify_screen(repo_root: Path) -> tuple[int, str]:
     except Exception:
         pass
 
+    # Antigravity plugin checks
+    plugin_json = repo_root / ".antigravity/plugins/comptext-local/plugin.json"
+    skills_dir = repo_root / ".antigravity/plugins/comptext-local/skills"
+    skills_ok = plugin_json.is_file() and skills_dir.is_dir()
+
+    agents_dir = repo_root / ".antigravity/plugins/comptext-local/agents"
+    agents_present = agents_dir.is_dir()
+
+    mcp_config = repo_root / ".antigravity/plugins/comptext-local/mcp_config.json"
+    mcp_present = mcp_config.is_file()
+
+    hooks_plan = repo_root / ".antigravity/plugins/comptext-local/hooks_plan.md"
+    hooks_present = hooks_plan.is_file()
+
     status_row = "pass" if status_ok else "fail"
     agents_row = "pass" if agents_ok else "fail"
     workspace_row = "pass" if workspace_ok else "fail"
     doctor_row = "pass" if doctor_ok else "fail"
+    skills_row = "pass" if skills_ok else "fail"
+    plugin_agents_row = "pass" if agents_present else "fail"
+    mcp_row = "disabled/deferred" if mcp_present else "none"
+    hooks_row = "planned" if hooks_present else "none"
 
-    overall_ok = status_ok and agents_ok and workspace_ok and doctor_ok
+    overall_ok = (status_ok and agents_ok and workspace_ok and doctor_ok and
+                  skills_ok and agents_present and mcp_present and hooks_present)
     exit_code = 0 if overall_ok else 1
     result_value = "pass" if overall_ok else "fail"
 
@@ -62,6 +81,10 @@ def build_verify_screen(repo_root: Path) -> tuple[int, str]:
         "  - Network boundary: pass",
         "  - GitHub runtime boundary: pass",
         "  - MCP runtime boundary: pass",
+        f"  - Plugin skills: {skills_row}",
+        f"  - Plugin agents: {plugin_agents_row}",
+        f"  - MCP config: {mcp_row}",
+        f"  - Hooks status: {hooks_row}",
         "",
         "Boundary values:",
         "  Providers: disabled",
