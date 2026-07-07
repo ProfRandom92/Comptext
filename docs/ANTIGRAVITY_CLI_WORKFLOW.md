@@ -28,13 +28,13 @@ When executing local development tasks via the Antigravity CLI:
 
 Refer to [docs/SUBAGENTS.md](file:///C:/Users/contr/dev/Comptext/docs/SUBAGENTS.md) for the local subagent role specifications, task routing matrix, and safe offline escalation boundaries.
 
-## Workspace Skills
+## Workspace Skills & Agents
 
-Google Antigravity loads workspace-specific skills directly from the active workspace skill surface:
-```text
-.agents/skills/{skill_name}/SKILL.md
-```
-while the directory `.antigravity/plugins/comptext-local/` serves as the plugin packaging source. After editing, verify that these skills are visible in your active TUI session by running the `/skills` slash command.
+Google Antigravity loads workspace-specific customization surfaces directly from:
+- Skills: `.agents/skills/{skill_name}/SKILL.md` (exposed via TUI `/skills`)
+- Agents: `.agents/agents/{agent_name}/agent.json` (exposed via TUI `/agents`)
+
+The directory `.antigravity/plugins/comptext-local/` serves as the plugin packaging source. The registered workspace agents are role definitions only for task delegation within AGY, not active runtime background schedulers. Verify their visibility by running `/skills` and `/agents` inside the active TUI session.
 
 ## Next Implementation Unit
 

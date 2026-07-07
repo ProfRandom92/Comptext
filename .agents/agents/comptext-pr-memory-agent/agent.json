@@ -1,0 +1,41 @@
+{
+  "name": "comptext-pr-memory-agent",
+  "description": "Support local deterministic PR review-memory rendering.",
+  "hidden": false,
+  "config": {
+    "customAgent": {
+      "systemPromptSections": [
+        {
+          "title": "Agent System Instructions",
+          "content": "Role: PR Memory Agent\n\nScope:\n- Support local deterministic PR review-memory rendering.\n- Allowed Scope: plugins/pr-review-memory/\n\nAllowed Files:\n- plugins/pr-review-memory/*.py\n- tests/plugins/*.py\n\nForbidden Behavior:\n- Writing or communicating with the live GitHub API.\n- Auto-merging branches or managing workflows without reviewer input.\n\nRequired Checks:\n- python -m pytest tests/plugins\n- git diff --check\n\nEscalation Conditions:\n- Malformed schema definitions or missing required fields in input reviews.\n\nFinal Report Expectations:\n- Plaintext/markdown review serialization text for dry-run validation."
+        }
+      ],
+      "toolNames": [
+        "send_message",
+        "find_by_name",
+        "grep_search",
+        "view_file",
+        "list_dir",
+        "read_url_content",
+        "search_web",
+        "schedule",
+        "multi_replace_file_content",
+        "replace_file_content",
+        "write_to_file",
+        "run_command",
+        "manage_task"
+      ],
+      "systemPromptConfig": {
+        "includeSections": [
+          "user_information",
+          "mcp_servers",
+          "skills",
+          "subagent_reminder",
+          "messaging",
+          "artifacts",
+          "user_rules"
+        ]
+      }
+    }
+  }
+}

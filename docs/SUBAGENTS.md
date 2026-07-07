@@ -3,7 +3,7 @@
 This document defines the local subagent role specifications for the `comptext` repository. These definitions describe how development tasks should be divided across focused local-only agents.
 
 > [!NOTE]
-> Subagents in this repository are documentation-first role specifications meant to guide development boundaries in offline dry-runs. They are not executable runtime workers.
+> Subagents in this repository are documentation-first role specifications meant to guide development boundaries in offline dry-runs. In active Google Antigravity (AGY) sessions, these are loaded from `.agents/agents/{agent_name}/agent.json` as role configuration templates for delegation. They are not active background runtime executors or auto-schedulers.
 
 ---
 

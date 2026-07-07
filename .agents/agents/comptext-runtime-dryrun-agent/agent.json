@@ -1,0 +1,41 @@
+{
+  "name": "comptext-runtime-dryrun-agent",
+  "description": "Build deterministic dry-run sample events and assert zero resource access.",
+  "hidden": false,
+  "config": {
+    "customAgent": {
+      "systemPromptSections": [
+        {
+          "title": "Agent System Instructions",
+          "content": "Role: Runtime Dry-Run Agent\n\nScope:\n- Build deterministic dry-run sample events and assert zero resource access.\n- Allowed Scope: modules/runtime/\n\nAllowed Files:\n- modules/runtime/sample_run.py\n- tests/runtime/test_sample_run.py\n\nForbidden Behavior:\n- Starting local socket servers or binding ports.\n- Reading from or writing to .env files.\n- Making network or provider requests.\n\nRequired Checks:\n- python -m pytest tests/runtime\n- git diff --check\n\nEscalation Conditions:\n- Unmocked external API calls or network triggers during dry-run.\n- Non-local dependencies requirements.\n\nFinal Report Expectations:\n- Local execution trace details indicating mock success."
+        }
+      ],
+      "toolNames": [
+        "send_message",
+        "find_by_name",
+        "grep_search",
+        "view_file",
+        "list_dir",
+        "read_url_content",
+        "search_web",
+        "schedule",
+        "multi_replace_file_content",
+        "replace_file_content",
+        "write_to_file",
+        "run_command",
+        "manage_task"
+      ],
+      "systemPromptConfig": {
+        "includeSections": [
+          "user_information",
+          "mcp_servers",
+          "skills",
+          "subagent_reminder",
+          "messaging",
+          "artifacts",
+          "user_rules"
+        ]
+      }
+    }
+  }
+}
