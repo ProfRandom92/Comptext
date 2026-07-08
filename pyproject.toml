@@ -24,6 +24,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
+    "pytest-asyncio>=0.24",
     "build>=1.2"
 ]
 
@@ -32,3 +33,9 @@ comptext = "modules.cli.cli_entrypoint:main"
 
 [tool.setuptools.packages.find]
 include = ["modules*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = [
+    "asyncio: marks tests as asyncio tests"
+]
