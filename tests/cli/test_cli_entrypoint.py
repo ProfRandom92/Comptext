@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import pytest
 
 from modules.cli.cli_entrypoint import run
 
@@ -117,3 +118,134 @@ def test_start_here_local_checks_match_available_commands() -> None:
     assert "python scripts/validate_clean_repo.py ." not in text
     assert "python -m pytest" in text
     assert "git diff --check" in text
+
+
+def test_cli_status_dry_run(capsys) -> None:
+    assert run(["status", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT" in out
+    assert "THE OPERATING SYSTEM FOR CONTEXT" in out
+    assert "local-only / dry-run" in out
+    assert "Doctor" in out
+    assert "Workspace validation" in out
+    assert "Runtime dry-run sample" in out
+    assert "Evidence chain" in out
+    assert "Providers" in out
+    assert "Network" in out
+    assert "GitHub runtime" in out
+    assert "MCP runtime" in out
+    assert "AGENTS.md" in out
+    assert "Antigravity plugin" in out
+    assert "Local skills" in out
+    assert "Local agents" in out
+    assert "MCP config" in out
+    assert "Hooks status" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor" in out
+    assert "python -m pytest" in out
+
+
+def test_cli_status_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["status"])
+
+
+def test_cli_status_fails_on_empty_dir(tmp_path: Path, capsys) -> None:
+    assert run(["status", "--dry-run"], repo_root=tmp_path) == 1
+    out = capsys.readouterr().out
+    assert "Doctor: fail" in out
+    assert "Workspace validation: fail" in out
+    assert "AGENTS.md: absent" in out
+
+
+def test_cli_agents_dry_run(capsys) -> None:
+    assert run(["agents", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT LOCAL SUBAGENTS" in out
+    assert "local-only / dry-run" in out
+    assert "validation-agent" in out
+    assert "evidence-agent" in out
+    assert "runtime-dryrun-agent" in out
+    assert "pr-memory-agent" in out
+    assert "docs-agent" in out
+    assert "Routing Preview" in out
+    assert "Escalation" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor --dry-run" in out
+
+
+def test_cli_agents_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["agents"])
+
+
+def test_cli_verify_dry_run(capsys) -> None:
+    assert run(["verify", "--dry-run"], repo_root=ROOT) == 0
+    out = capsys.readouterr().out
+    assert "COMPTEXT LOCAL VERIFY" in out
+    assert "local-only / dry-run" in out
+    assert "Status screen" in out
+    assert "Subagent inventory" in out
+    assert "Workspace validation" in out
+    assert "Doctor diagnostics" in out
+    assert "Provider boundary" in out
+    assert "Network boundary" in out
+    assert "GitHub runtime boundary" in out
+    assert "MCP runtime boundary" in out
+    assert "Plugin skills" in out
+    assert "Plugin agents" in out
+    assert "MCP config" in out
+    assert "Hooks status" in out
+    assert "Result: pass" in out
+    assert "comptext status --dry-run" in out
+    assert "comptext agents --dry-run" in out
+    assert "comptext validate workspace --dry-run" in out
+    assert "comptext doctor --dry-run" in out
+
+
+def test_cli_verify_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["verify"])
+
+
+def test_cli_tui_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["tui"])
+
+
+def test_cli_tui_dry_run(monkeypatch, capsys) -> None:
+    called = False
+    def mock_run(self, *args, **kwargs):
+        nonlocal called
+        called = True
+    monkeypatch.setattr("textual.app.App.run", mock_run)
+    assert run(["tui", "--dry-run"], repo_root=ROOT) == 0
+    assert called is True
+
+
+def test_cli_main_entry_point_exists_and_invokes_run(monkeypatch) -> None:
+    from modules.cli.cli_entrypoint import main
+    import modules.cli.cli_entrypoint
+    called = False
+
+    def mock_run(argv=None, repo_root=None):
+        nonlocal called
+        called = True
+        return 42
+
+    monkeypatch.setattr(modules.cli.cli_entrypoint, "run", mock_run)
+    with pytest.raises(SystemExit) as exc_info:
+        main()
+    assert exc_info.value.code == 42
+    assert called is True
+
+
+def test_pyproject_defines_correct_entrypoint() -> None:
+    import tomllib
+    pyproject_path = ROOT / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+    scripts = data.get("project", {}).get("scripts", {})
+    assert scripts.get("comptext") == "modules.cli.cli_entrypoint:main"

@@ -24,7 +24,29 @@ When executing local development tasks via the Antigravity CLI:
 4. **Commit Locally**: Once validation passes, make a clean git commit locally with a descriptive message.
 5. **Stop**: Report completion status, list changed files, and exit.
 
+## Subagent Roles
+
+Refer to [docs/SUBAGENTS.md](file:///C:/Users/contr/dev/Comptext/docs/SUBAGENTS.md) for the local subagent role specifications, task routing matrix, and safe offline escalation boundaries.
+
+## Workspace Skills & Agents
+
+Google Antigravity loads workspace-specific customization surfaces directly from:
+- Skills: `.agents/skills/{skill_name}/SKILL.md` (exposed via TUI `/skills`)
+- Agents: `.agents/agents/{agent_name}/agent.json` (exposed via TUI `/agents`)
+
+The directory `.antigravity/plugins/comptext-local/` serves as the plugin packaging source. The registered workspace agents are role definitions only for task delegation within AGY, not active runtime background schedulers. Verify their visibility by running `/skills` and `/agents` inside the active TUI session.
+
+## Textual Workbench v0
+
+The local CLI includes a Textual-based status and agent inventory workbench:
+```bash
+comptext tui --dry-run
+```
+- **Dry-run enforcement**: Missing the `--dry-run` flag causes the command to fail using standard `argparse` behavior.
+- **Strict offline boundaries**: It does not make provider queries, network requests, GitHub API calls, start subagents, use MCP runtime, or fix TUI `/agents` discovery.
+- **Dependency Guard**: In environments where `textual` is not installed, it exits with exit code 1 and prints `Textual is required for comptext tui --dry-run.`
+
 ## Next Implementation Unit
 
 The next planned unit of work is:
-- **WorkspaceSnapshot v0 standalone schema**: Defining the initial static JSON/YAML schema and standalone test fixtures for repository state tracking, without runtime orchestration.
+- **Offline Merkle Tree state log validation**: Building the local validation tools to link sequential git commit hashes directly into the evidence chain.

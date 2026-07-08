@@ -59,6 +59,18 @@ def build_parser() -> argparse.ArgumentParser:
     run_subparsers = run_parser.add_subparsers(dest="run_command", required=True)
     sample_run = run_subparsers.add_parser("sample")
     sample_run.add_argument("--dry-run", action="store_true", required=True)
+
+    status = subparsers.add_parser("status")
+    status.add_argument("--dry-run", action="store_true", required=True)
+
+    agents = subparsers.add_parser("agents")
+    agents.add_argument("--dry-run", action="store_true", required=True)
+
+    verify = subparsers.add_parser("verify")
+    verify.add_argument("--dry-run", action="store_true", required=True)
+
+    tui = subparsers.add_parser("tui")
+    tui.add_argument("--dry-run", action="store_true", required=True)
     return parser
 
 
@@ -79,6 +91,24 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             result = run_doctor(repo_root=root, dry_run=args.dry_run)
             _print_json(result)
             return 0 if result.get("ok") is True else 1
+        if args.command == "status":
+            from modules.cli.status_screen import build_status_screen
+            exit_code, output_text = build_status_screen(root)
+            print(output_text)
+            return exit_code
+        if args.command == "agents":
+            from modules.cli.agents_screen import build_agents_screen
+            exit_code, output_text = build_agents_screen(root)
+            print(output_text)
+            return exit_code
+        if args.command == "verify":
+            from modules.cli.verify_screen import build_verify_screen
+            exit_code, output_text = build_verify_screen(root)
+            print(output_text)
+            return exit_code
+        if args.command == "tui":
+            from modules.cli.tui import run_tui
+            return run_tui(root, dry_run=args.dry_run)
         if args.command == "validate" and args.target == "schemas":
             _print_json({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)})
             return 0

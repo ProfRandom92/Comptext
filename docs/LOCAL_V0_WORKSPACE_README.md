@@ -91,6 +91,24 @@ sequenceDiagram
 | **Provider Registry** | yes | yes | yes | dry-run | no | no |
 | **Runtime Sample** | n/a | n/a | yes | dry-run | no | no |
 
+## Textual Workbench v0
+
+The Textual Workbench v0 is accessed via:
+```bash
+comptext tui --dry-run
+```
+
+### Constraints & Behavior
+- **Local-only / Dry-run-only**: It strictly visualizes existing CompText local state without mutating any files.
+- **Strict Offline Containment**:
+  - It does not call LLM providers.
+  - It does not use the network.
+  - It does not call GitHub APIs.
+  - It does not use MCP runtime.
+  - It does not start real subagents.
+  - It does not fix AGY /agents discovery.
+- **Dependency Guard**: If the `textual` package is missing in the runtime environment, the command prints `Textual is required for comptext tui --dry-run.` and exits non-zero (1).
+
 ## Validation
 
 All components and validation contracts are tested locally. Run the following commands to execute tests and checks:
@@ -100,14 +118,17 @@ All components and validation contracts are tested locally. Run the following co
 python -m pytest
 
 # Run focused validation tests
-python -m pytest tests/validation tests/evidence
+python -m pytest tests/validation tests/evidence tests/cli
+
+# Run Textual TUI smoke run
+comptext tui --dry-run
 
 # Check git repository for formatting or whitespace issues
 git diff --check
 ```
 
 ### Latest Validation Status
-- **Tests**: 157 passed.
+- **Tests**: All tests passed.
 - **Formatting**: `git diff --check` passed cleanly.
 
 ## Non-Goals
