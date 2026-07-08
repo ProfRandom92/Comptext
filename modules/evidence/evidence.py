@@ -142,3 +142,67 @@ def verify_file_evidence(*, filepath: str | Path) -> dict[str, Any]:
         "providers": "not_called",
         **result,
     }
+
+
+def verify_state_log_chain(entries: list[dict[str, Any]]) -> dict[str, Any]:
+    """Verify sequence, previous state hashes, git commit refs, and content hashes in a state log chain."""
+    previous_hash = GENESIS_HASH
+    for expected_sequence, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            return {"ok": False, "error": f"entry at sequence {expected_sequence} must be an object"}
+        if entry.get("sequence") != expected_sequence:
+            return {"ok": False, "error": f"entry sequence mismatch at {expected_sequence}"}
+        if entry.get("previous_state_hash") != previous_hash:
+            return {"ok": False, "error": f"previous state hash mismatch at sequence {expected_sequence}"}
+        expected_hash = entry.get("state_hash")
+        if not isinstance(expected_hash, str):
+            return {"ok": False, "error": f"entry state hash missing at sequence {expected_sequence}"}
+
+        # Validate git_commit_ref format
+        git_ref = entry.get("git_commit_ref")
+        if not isinstance(git_ref, str):
+            return {"ok": False, "error": f"git_commit_ref at sequence {expected_sequence} must be a string"}
+        if len(git_ref) != 40 or not all(c in "0123456789abcdefABCDEF" for c in git_ref):
+            return {"ok": False, "error": f"git_commit_ref at sequence {expected_sequence} must be a 40-character hex string"}
+
+        # Validate evidence_event_hash format
+        event_hash = entry.get("evidence_event_hash")
+        if not isinstance(event_hash, str):
+            return {"ok": False, "error": f"evidence_event_hash at sequence {expected_sequence} must be a string"}
+        if len(event_hash) != 64 or not all(c in "0123456789abcdefABCDEF" for c in event_hash):
+            return {"ok": False, "error": f"evidence_event_hash at sequence {expected_sequence} must be a 64-character hex string"}
+
+        # Compute hash of state log entry content (excluding state_hash itself)
+        entry_without_hash = {k: v for k, v in entry.items() if k != "state_hash"}
+        actual_hash = hashlib.sha256(canonical_serialize(entry_without_hash).encode("utf-8")).hexdigest()
+        if actual_hash != expected_hash:
+            return {"ok": False, "error": f"entry state hash mismatch at sequence {expected_sequence}"}
+        previous_hash = expected_hash
+
+    return {
+        "ok": True,
+        "entries": len(entries),
+        "root_hash": previous_hash,
+    }
+
+
+def verify_file_state_log(*, filepath: str | Path) -> dict[str, Any]:
+    """Load and verify a local JSON file containing an array of state log entries."""
+    path = Path(filepath)
+    if not path.exists():
+        raise FileNotFoundError(f"State log file not found: {filepath}")
+
+    with open(path, "r", encoding="utf-8") as f:
+        entries = json.load(f)
+
+    if not isinstance(entries, list):
+        raise ValueError("State log file content must be a JSON array")
+
+    result = verify_state_log_chain(entries)
+    return {
+        "command": f"comptext evidence verify-state-log --file {filepath}",
+        "mode": "state-log",
+        "network": "not_called",
+        "providers": "not_called",
+        **result,
+    }
