@@ -4,12 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comptext"
-version = "0.0.0"
-description = "Local dry-run-first scaffold for CompText."
+version = "0.1.0"
+description = "Local dry-run developer preview for CompText AI orchestration."
 readme = "README.md"
 requires-python = ">=3.10"
+keywords = [
+    "comptext",
+    "ai-orchestration",
+    "developer-tools",
+    "dry-run",
+    "evidence-chain",
+    "local-first"
+]
 dependencies = [
     "textual>=0.50.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "build>=1.2"
 ]
 
 [project.scripts]

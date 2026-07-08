@@ -1,6 +1,6 @@
 # Repository Rules (comptext-local)
 
-This file thinly mirrors the root [AGENTS.md](file:///C:/Users/contr/dev/Comptext/AGENTS.md) as Antigravity-readable repository rules. All operational rules and boundaries in the root [AGENTS.md](file:///C:/Users/contr/dev/Comptext/AGENTS.md) must be strictly followed.
+This file thinly mirrors the root [AGENTS.md](../../../../AGENTS.md) as Antigravity-readable repository rules. All operational rules and boundaries in the root [AGENTS.md](../../../../AGENTS.md) must be strictly followed.
 
 ## Project Identity & Status
 - **Product Name**: `CompText`
@@ -23,4 +23,4 @@ This file thinly mirrors the root [AGENTS.md](file:///C:/Users/contr/dev/Comptex
 ## Validation & Autonomy
 - Validation requires running local tests with `python -m pytest` and check for trailing whitespace/errors using `git diff --check`.
 - In autonomous mode: Start with Token Saver/project state first. Only perform local commits.
-- Refer to [docs/CODEX_LOCAL_AUTONOMY.md](file:///C:/Users/contr/dev/Comptext/docs/CODEX_LOCAL_AUTONOMY.md) for the detailed playbook.
+- Refer to [docs/CODEX_LOCAL_AUTONOMY.md](../../../../docs/CODEX_LOCAL_AUTONOMY.md) for the detailed playbook.

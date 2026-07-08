@@ -1,10 +1,11 @@
 # README Community Refresh Plan
 
-Local follow-up plan for the community README batch. Do not apply this refresh as part of local-autonomy guidance cleanup.
+> [!NOTE]
+> This is a local planning reference note for a potential future community README refresh. It is not part of the active workspace setup and does not require downloading or installing any external packages or packs to run the local dry-run MVP.
 
-## Source Pack
+## Source Pack Reference
 
-- Local pack: `C:\Users\contr\Downloads\comptext_readme_community_pack.zip`
+- Local draft pack (optional reference): `comptext_readme_community_pack.zip`
 - Recommended branch from pack: `docs/community-readme`
 - Pack status notes:
   - Figma links are available as optional references.

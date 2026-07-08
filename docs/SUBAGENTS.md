@@ -71,7 +71,7 @@ This document defines the local subagent role specifications for the `comptext` 
   - Creating new files under `docs/`.
   - Updating CLI workflow notes and local plugins documentation.
 - **Forbidden Scope**:
-  - Modifying the root [README.md](file:///C:/Users/contr/dev/Comptext/README.md) file unless explicitly requested.
+  - Modifying the root [README.md](../README.md) file unless explicitly requested.
   - Implementing badge or pipeline automations.
 - **Expected Inputs**: Markdown documents and system updates.
 - **Expected Outputs**: Standardized markdown documentation files.

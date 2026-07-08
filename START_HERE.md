@@ -25,8 +25,7 @@ It contains:
 
 ## What this seed is not
 
-- not a release,
-- not an installable package yet,
+- not a public package release (local editable install only),
 - not a live provider gateway,
 - not a cloud service,
 - not a production security or compliance product,
@@ -50,11 +49,14 @@ It contains:
 - PR Review Memory / Token Saver workflows: read `plugins/pr-review-memory/README.md`, `plugins/pr-review-memory/SKILL.md`, and `.agents/skills/pr-review-memory/SKILL.md`.
 - Community README follow-up: read `docs/README_COMMUNITY_REFRESH_PLAN.md`.
 
-## Local checks
+## Local Setup and Checks
 
 From the repository root:
 
 ```bash
+python -m pip install -e ".[dev]"
+comptext status --dry-run
+comptext doctor --dry-run
 python -m pytest
 git diff --check
 ```

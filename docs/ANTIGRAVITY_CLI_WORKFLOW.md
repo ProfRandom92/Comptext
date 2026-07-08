@@ -7,7 +7,7 @@ This document explains how to set up and use the repo-local Antigravity bridge p
 To install the local bridge plugin in your Antigravity environment, run the following command:
 
 ```bash
-agy plugin install C:\Users\contr\dev\Comptext\.antigravity\plugins\comptext-local
+agy plugin install <repo-root>\.antigravity\plugins\comptext-local
 ```
 
 ## Safe Offline Development Workflow
@@ -26,7 +26,7 @@ When executing local development tasks via the Antigravity CLI:
 
 ## Subagent Roles
 
-Refer to [docs/SUBAGENTS.md](file:///C:/Users/contr/dev/Comptext/docs/SUBAGENTS.md) for the local subagent role specifications, task routing matrix, and safe offline escalation boundaries.
+Refer to [docs/SUBAGENTS.md](SUBAGENTS.md) for the local subagent role specifications, task routing matrix, and safe offline escalation boundaries.
 
 ## Workspace Skills & Agents
 

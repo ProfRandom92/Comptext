@@ -9,11 +9,11 @@ This skill bridges the repository's existing PR Review Memory companion scaffold
 
 ## Key References
 
-- Root Skill Bridge: [.agents/skills/pr-review-memory/SKILL.md](file:///C:/Users/contr/dev/Comptext/.agents/skills/pr-review-memory/SKILL.md)
-- Plugin Directory: [plugins/pr-review-memory/](file:///C:/Users/contr/dev/Comptext/plugins/pr-review-memory/)
-- Renderer Implementation: [plugins/pr-review-memory/renderer.py](file:///C:/Users/contr/dev/Comptext/plugins/pr-review-memory/renderer.py)
-- Schema Definitions: [plugins/pr-review-memory/schema/](file:///C:/Users/contr/dev/Comptext/plugins/pr-review-memory/schema/)
-- Examples & Fixtures: [plugins/pr-review-memory/examples/](file:///C:/Users/contr/dev/Comptext/plugins/pr-review-memory/examples/)
+- Root Skill Bridge: [.agents/skills/pr-review-memory/SKILL.md](../../../../.agents/skills/pr-review-memory/SKILL.md)
+- Plugin Directory: [plugins/pr-review-memory/](../../../../plugins/pr-review-memory/)
+- Renderer Implementation: [plugins/pr-review-memory/renderer.py](../../../../plugins/pr-review-memory/renderer.py)
+- Schema Definitions: [plugins/pr-review-memory/schema/](../../../../plugins/pr-review-memory/schema/)
+- Examples & Fixtures: [plugins/pr-review-memory/examples/](../../../../plugins/pr-review-memory/examples/)
 
 ## Scope and Boundaries
 
