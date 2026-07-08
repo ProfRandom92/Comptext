@@ -120,8 +120,8 @@ python -m pytest
 # Run focused validation tests
 python -m pytest tests/validation tests/evidence tests/cli
 
-# Run Textual TUI smoke run
-comptext tui --dry-run
+# Run Textual TUI headless validation
+python -m pytest tests/cli/test_tui.py
 
 # Check git repository for formatting or whitespace issues
 git diff --check

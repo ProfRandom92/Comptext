@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/evidence-state-log-entry.v0.schema.json",
+  "title": "CompText Evidence State Log Entry v0",
+  "description": "Local dry-run contract for state log entries linking git commits and evidence event hashes.",
+  "type": "object",
+  "required": [
+    "sequence",
+    "evidence_event_hash",
+    "git_commit_ref",
+    "previous_state_hash",
+    "state_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "sequence": {
+      "type": "integer"
+    },
+    "evidence_event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "git_commit_ref": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{40}$"
+    },
+    "previous_state_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "state_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    }
+  }
+}

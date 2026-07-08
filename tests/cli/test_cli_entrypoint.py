@@ -26,7 +26,7 @@ def test_cli_validate_workspace_dry_run(capsys) -> None:
     assert run(["validate", "workspace", "--dry-run"], repo_root=ROOT) == 0
     output = json.loads(capsys.readouterr().out)
     assert output["mode"] == "dry-run"
-    assert len(output["results"]) == 3
+    assert len(output["results"]) == 6
     for result in output["results"]:
         assert result["status"] == "valid"
         assert "schema" in result
@@ -83,6 +83,55 @@ def test_cli_evidence_verify_sample(capsys) -> None:
     assert output["events"] == 3
     assert output["network"] == "not_called"
     assert output["providers"] == "not_called"
+
+
+def test_cli_evidence_verify_file(capsys) -> None:
+    sample_file = "examples/workspace/evidence-chain.sample.json"
+    assert run(["evidence", "verify", "--file", sample_file]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["command"] == f"comptext evidence verify --file {sample_file}"
+    assert output["mode"] == "file"
+    assert output["ok"] is True
+    assert output["events"] == 3
+    assert output["network"] == "not_called"
+    assert output["providers"] == "not_called"
+
+
+def test_cli_evidence_verify_file_missing(capsys) -> None:
+    assert run(["evidence", "verify", "--file", "does_not_exist.json"]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is False
+    assert output["error"]["type"] == "FileNotFoundError"
+
+
+def test_cli_evidence_verify_conflict() -> None:
+    with pytest.raises(SystemExit):
+        run(["evidence", "verify", "--sample", "--file", "examples/workspace/evidence-chain.sample.json"])
+
+
+def test_cli_evidence_verify_neither() -> None:
+    with pytest.raises(SystemExit):
+        run(["evidence", "verify"])
+
+
+def test_cli_evidence_verify_invalid_json(tmp_path: Path, capsys) -> None:
+    file_path = tmp_path / "bad.json"
+    file_path.write_text("{bad json", encoding="utf-8")
+    assert run(["evidence", "verify", "--file", str(file_path)]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is False
+    assert output["error"]["type"] == "JSONDecodeError"
+
+
+def test_cli_evidence_verify_non_array_json(tmp_path: Path, capsys) -> None:
+    file_path = tmp_path / "non_array.json"
+    file_path.write_text('{"a": 1}', encoding="utf-8")
+    assert run(["evidence", "verify", "--file", str(file_path)]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is False
+    assert output["error"]["type"] == "ValueError"
+    assert "must be a JSON array" in output["error"]["message"]
+
 
 
 def test_cli_run_sample_dry_run(capsys) -> None:

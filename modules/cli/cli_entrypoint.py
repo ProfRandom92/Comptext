@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from modules.doctor.doctor import run_doctor
-from modules.evidence.evidence import verify_sample_evidence
+from modules.evidence.evidence import verify_file_evidence, verify_file_state_log, verify_sample_evidence
 from modules.gateway.gateway import (
     dry_run_gateway_response,
     get_gateway_health,
@@ -53,7 +53,12 @@ def build_parser() -> argparse.ArgumentParser:
     evidence = subparsers.add_parser("evidence")
     evidence_subparsers = evidence.add_subparsers(dest="evidence_command", required=True)
     evidence_verify = evidence_subparsers.add_parser("verify")
-    evidence_verify.add_argument("--sample", action="store_true", required=True)
+    group = evidence_verify.add_mutually_exclusive_group(required=True)
+    group.add_argument("--sample", action="store_true")
+    group.add_argument("--file", type=str)
+
+    evidence_verify_state = evidence_subparsers.add_parser("verify-state-log")
+    evidence_verify_state.add_argument("--file", type=str, required=True)
 
     run_parser = subparsers.add_parser("run")
     run_subparsers = run_parser.add_subparsers(dest="run_command", required=True)
@@ -140,7 +145,14 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             _print_json(result)
             return 0 if result.get("ok") is True else 1
         if args.command == "evidence" and args.evidence_command == "verify":
-            result = verify_sample_evidence(sample=args.sample)
+            if args.sample:
+                result = verify_sample_evidence(sample=args.sample)
+            else:
+                result = verify_file_evidence(filepath=args.file)
+            _print_json(result)
+            return 0 if result.get("ok") is True else 1
+        if args.command == "evidence" and args.evidence_command == "verify-state-log":
+            result = verify_file_state_log(filepath=args.file)
             _print_json(result)
             return 0 if result.get("ok") is True else 1
         if args.command == "run" and args.run_command == "sample":

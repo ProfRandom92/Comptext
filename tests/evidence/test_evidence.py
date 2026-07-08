@@ -1,6 +1,12 @@
+from pathlib import Path
 import pytest
 
-from modules.evidence.evidence import build_sample_evidence, verify_evidence_chain, verify_sample_evidence
+from modules.evidence.evidence import (
+    build_sample_evidence,
+    verify_evidence_chain,
+    verify_sample_evidence,
+    verify_file_evidence,
+)
 
 
 def test_build_sample_evidence_is_deterministic() -> None:
@@ -115,3 +121,119 @@ def test_evidence_rejects_embedded_workspace_payload_objects(ref_field: str) -> 
     result = verify_evidence_chain(events)
     assert result["ok"] is False
     assert f"payload field {ref_field} must be a string ref" in result["error"]
+
+
+def test_verify_file_evidence_valid() -> None:
+    sample_file = Path(__file__).resolve().parents[2] / "examples" / "workspace" / "evidence-chain.sample.json"
+    result = verify_file_evidence(filepath=sample_file)
+    assert result["ok"] is True
+    assert result["mode"] == "file"
+    assert result["events"] == 3
+    assert len(result["root_hash"]) == 64
+
+
+def test_verify_file_evidence_invalid_chain(tmp_path: Path) -> None:
+    events = build_sample_evidence()
+    events[1]["index"] = 99
+
+    file_path = tmp_path / "invalid_chain.json"
+    import json
+    file_path.write_text(json.dumps(events), encoding="utf-8")
+
+    result = verify_file_evidence(filepath=file_path)
+    assert result["ok"] is False
+    assert "event index mismatch" in result["error"]
+
+
+def test_verify_file_evidence_missing() -> None:
+    with pytest.raises(FileNotFoundError, match="Evidence file not found"):
+        verify_file_evidence(filepath="this_file_does_not_exist.json")
+
+
+def test_verify_file_evidence_invalid_json(tmp_path: Path) -> None:
+    file_path = tmp_path / "invalid_json.json"
+    file_path.write_text("{bad json", encoding="utf-8")
+
+    import json
+    with pytest.raises(json.JSONDecodeError):
+        verify_file_evidence(filepath=file_path)
+
+
+def test_verify_file_evidence_non_array_json(tmp_path: Path) -> None:
+    file_path = tmp_path / "non_array.json"
+    file_path.write_text('{"a": 1}', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="must be a JSON array"):
+        verify_file_evidence(filepath=file_path)
+
+
+def test_evidence_payload_valid_git_commit_ref_lowercase() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "a" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    events[1]["previous_hash"] = events[0]["hash"]
+    events[1].pop("hash")
+    events[1]["hash"] = _hash_event_content(events[1])
+    events[2]["previous_hash"] = events[1]["hash"]
+    events[2].pop("hash")
+    events[2]["hash"] = _hash_event_content(events[2])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is True
+
+
+def test_evidence_payload_valid_git_commit_ref_uppercase() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "A" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    events[1]["previous_hash"] = events[0]["hash"]
+    events[1].pop("hash")
+    events[1]["hash"] = _hash_event_content(events[1])
+    events[2]["previous_hash"] = events[1]["hash"]
+    events[2].pop("hash")
+    events[2]["hash"] = _hash_event_content(events[2])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is True
+
+
+def test_evidence_payload_git_commit_ref_non_string() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = 12345
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a string ref" in result["error"]
+
+
+def test_evidence_payload_git_commit_ref_wrong_length() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "a" * 39
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a 40-character hex string" in result["error"]
+
+
+def test_evidence_payload_git_commit_ref_non_hex() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "g" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a 40-character hex string" in result["error"]

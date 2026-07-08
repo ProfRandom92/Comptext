@@ -55,7 +55,10 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
     evidence_ok = False
     try:
         evidence_res = verify_sample_evidence(sample=True)
-        evidence_ok = bool(evidence_res.get("ok"))
+        state_log_path = repo_root / "examples/workspace/evidence-state-log.sample.json"
+        from modules.evidence.evidence import verify_file_state_log
+        state_log_res = verify_file_state_log(filepath=state_log_path)
+        evidence_ok = bool(evidence_res.get("ok")) and bool(state_log_res.get("ok"))
     except Exception:
         pass
 

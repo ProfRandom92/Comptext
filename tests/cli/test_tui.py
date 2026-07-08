@@ -94,3 +94,13 @@ def test_tui_missing_guard(monkeypatch, capsys) -> None:
     assert run_tui(ROOT, dry_run=True) == 1
     out = capsys.readouterr().out
     assert "Textual is required for comptext tui --dry-run." in out
+
+
+def test_build_tui_snapshot_evidence_fields() -> None:
+    snap = build_tui_snapshot(ROOT)
+    assert snap["evidence"]["status"] == "pass"
+    assert "local event chain and state log chain verified" in snap["evidence"]["note"]
+
+    # Check that all 6 workspace validation schemas are present in the TUI snapshot
+    results = snap["workspace_validation"]["results"]
+    assert len(results) == 6

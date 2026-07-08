@@ -49,4 +49,4 @@ comptext tui --dry-run
 ## Next Implementation Unit
 
 The next planned unit of work is:
-- **Offline Merkle Tree state log validation**: Building the local validation tools to link sequential git commit hashes directly into the evidence chain.
+- **Offline state log chain validation**: Building the local validation tools to link sequential git commit hashes directly into the evidence chain.
