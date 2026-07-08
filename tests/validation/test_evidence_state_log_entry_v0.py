@@ -74,3 +74,25 @@ def test_schema_rejects_invalid_git_commit_ref(invalid_git_ref) -> None:
     
     with pytest.raises(ValueError):
         validate_with_additional_properties(schema, sample)
+
+
+def test_state_log_schema_valid_sample() -> None:
+    schema = json.loads((ROOT / "schemas" / "evidence-state-log.v0.schema.json").read_text(encoding="utf-8"))
+    sample = json.loads((ROOT / "examples" / "workspace" / "evidence-state-log.sample.json").read_text(encoding="utf-8"))
+    validate_with_additional_properties(schema, sample)
+
+
+def test_state_log_schema_rejects_empty_array() -> None:
+    schema = json.loads((ROOT / "schemas" / "evidence-state-log.v0.schema.json").read_text(encoding="utf-8"))
+    sample = []
+    with pytest.raises(ValueError, match="must have at least 1 items"):
+        validate_with_additional_properties(schema, sample)
+
+
+def test_state_log_schema_rejects_invalid_entry() -> None:
+    schema = json.loads((ROOT / "schemas" / "evidence-state-log.v0.schema.json").read_text(encoding="utf-8"))
+    sample = json.loads((ROOT / "examples" / "workspace" / "evidence-state-log.sample.json").read_text(encoding="utf-8"))
+
+    sample[1]["git_commit_ref"] = "a" * 39
+    with pytest.raises(ValueError):
+        validate_with_additional_properties(schema, sample)

@@ -15,7 +15,7 @@ def test_doctor_reports_required_project_files() -> None:
     assert all(result["project_files"].values())
     assert "workspace_validation" in result
     assert result["workspace_validation"]["ok"] is True
-    assert len(result["workspace_validation"]["results"]) == 5
+    assert len(result["workspace_validation"]["results"]) == 6
     assert result["ok"] is True
 
 
