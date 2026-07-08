@@ -243,7 +243,10 @@ def test_cli_main_entry_point_exists_and_invokes_run(monkeypatch) -> None:
 
 
 def test_pyproject_defines_correct_entrypoint() -> None:
-    import tomllib
+    try:
+        import tomllib
+    except ModuleNotFoundError:
+        import tomli as tomllib
     pyproject_path = ROOT / "pyproject.toml"
     with open(pyproject_path, "rb") as f:
         data = tomllib.load(f)
