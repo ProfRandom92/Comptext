@@ -9,12 +9,23 @@ from typing import Any
 GENESIS_HASH = "0" * 64
 
 
-def _canonical_json(value: Any) -> str:
+def canonical_serialize(value: Any) -> str:
+    """Return deterministic canonical JSON string with sorted keys and no optional whitespace."""
     return json.dumps(value, separators=(",", ":"), sort_keys=True)
 
 
+def hash_event_content(event_without_hash: dict[str, Any]) -> str:
+    """Compute the SHA-256 hash of the canonical serialized event content without the hash field."""
+    content = {k: v for k, v in event_without_hash.items() if k != "hash"}
+    return hashlib.sha256(canonical_serialize(content).encode("utf-8")).hexdigest()
+
+
+def _canonical_json(value: Any) -> str:
+    return canonical_serialize(value)
+
+
 def _hash_event_content(event_without_hash: dict[str, Any]) -> str:
-    return hashlib.sha256(_canonical_json(event_without_hash).encode("utf-8")).hexdigest()
+    return hash_event_content(event_without_hash)
 
 
 def _validate_payload(payload: Any) -> None:

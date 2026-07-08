@@ -26,7 +26,7 @@ def test_cli_validate_workspace_dry_run(capsys) -> None:
     assert run(["validate", "workspace", "--dry-run"], repo_root=ROOT) == 0
     output = json.loads(capsys.readouterr().out)
     assert output["mode"] == "dry-run"
-    assert len(output["results"]) == 3
+    assert len(output["results"]) == 4
     for result in output["results"]:
         assert result["status"] == "valid"
         assert "schema" in result

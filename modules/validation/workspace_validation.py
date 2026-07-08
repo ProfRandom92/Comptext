@@ -21,6 +21,10 @@ WORKSPACE_SCHEMA_EXAMPLE_PAIRS = (
         Path("schemas/reflection-gate.v0.schema.json"),
         Path("examples/workspace/reflection-gate.sample.json"),
     ),
+    (
+        Path("schemas/evidence-event.v0.schema.json"),
+        Path("examples/workspace/evidence-event.sample.json"),
+    ),
 )
 
 

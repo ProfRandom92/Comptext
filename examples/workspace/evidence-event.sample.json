@@ -1,0 +1,10 @@
+{
+  "index": 0,
+  "type": "run.started",
+  "payload": {
+    "command": "comptext evidence verify --sample",
+    "mode": "sample"
+  },
+  "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "hash": "75e38380712627db05eb0d187f9e2a7ec809c7ab3ea4255bed0c9a96f55a5aa7"
+}

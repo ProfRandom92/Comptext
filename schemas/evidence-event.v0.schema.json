@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://comptext.local/schemas/evidence-event.v0.schema.json",
+  "title": "CompText Evidence Event v0",
+  "description": "Local dry-run contract for explicit evidence event log entry.",
+  "type": "object",
+  "required": [
+    "index",
+    "type",
+    "payload",
+    "previous_hash",
+    "hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "index": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "previous_hash": {
+      "type": "string"
+    },
+    "hash": {
+      "type": "string"
+    }
+  }
+}
