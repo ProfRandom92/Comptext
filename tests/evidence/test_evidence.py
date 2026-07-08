@@ -165,3 +165,75 @@ def test_verify_file_evidence_non_array_json(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="must be a JSON array"):
         verify_file_evidence(filepath=file_path)
+
+
+def test_evidence_payload_valid_git_commit_ref_lowercase() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "a" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    events[1]["previous_hash"] = events[0]["hash"]
+    events[1].pop("hash")
+    events[1]["hash"] = _hash_event_content(events[1])
+    events[2]["previous_hash"] = events[1]["hash"]
+    events[2].pop("hash")
+    events[2]["hash"] = _hash_event_content(events[2])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is True
+
+
+def test_evidence_payload_valid_git_commit_ref_uppercase() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "A" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    events[1]["previous_hash"] = events[0]["hash"]
+    events[1].pop("hash")
+    events[1]["hash"] = _hash_event_content(events[1])
+    events[2]["previous_hash"] = events[1]["hash"]
+    events[2].pop("hash")
+    events[2]["hash"] = _hash_event_content(events[2])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is True
+
+
+def test_evidence_payload_git_commit_ref_non_string() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = 12345
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a string ref" in result["error"]
+
+
+def test_evidence_payload_git_commit_ref_wrong_length() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "a" * 39
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a 40-character hex string" in result["error"]
+
+
+def test_evidence_payload_git_commit_ref_non_hex() -> None:
+    events = build_sample_evidence()
+    events[0]["payload"]["git_commit_ref"] = "g" * 40
+    from modules.evidence.evidence import _hash_event_content
+    events[0].pop("hash")
+    events[0]["hash"] = _hash_event_content(events[0])
+
+    result = verify_evidence_chain(events)
+    assert result["ok"] is False
+    assert "must be a 40-character hex string" in result["error"]

@@ -36,6 +36,13 @@ def _validate_payload(payload: Any) -> None:
                 val = payload[ref_field]
                 if not isinstance(val, str):
                     raise ValueError(f"payload field {ref_field} must be a string ref, not {type(val).__name__}")
+        if "git_commit_ref" in payload:
+            val = payload["git_commit_ref"]
+            if not isinstance(val, str):
+                raise ValueError(f"payload field git_commit_ref must be a string ref, not {type(val).__name__}")
+            if len(val) != 40 or not all(c in "0123456789abcdefABCDEF" for c in val):
+                raise ValueError("payload field git_commit_ref must be a 40-character hex string")
+
 
 
 def _make_event(*, index: int, event_type: str, payload: dict[str, Any], previous_hash: str) -> dict[str, Any]:
