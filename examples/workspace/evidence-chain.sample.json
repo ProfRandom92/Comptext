@@ -1,0 +1,33 @@
+[
+  {
+    "index": 0,
+    "type": "run.started",
+    "payload": {
+      "command": "comptext evidence verify --sample",
+      "mode": "sample"
+    },
+    "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "75e38380712627db05eb0d187f9e2a7ec809c7ab3ea4255bed0c9a96f55a5aa7"
+  },
+  {
+    "index": 1,
+    "type": "tool.completed",
+    "payload": {
+      "tool": "sample-check",
+      "status": "ok"
+    },
+    "previous_hash": "75e38380712627db05eb0d187f9e2a7ec809c7ab3ea4255bed0c9a96f55a5aa7",
+    "hash": "f2ff96cbd5d3deb8fcc1b480235ae43648cbab1055369934cfcd48d9454125c3"
+  },
+  {
+    "index": 2,
+    "type": "run.completed",
+    "payload": {
+      "status": "verified",
+      "network": "not_called",
+      "providers": "not_called"
+    },
+    "previous_hash": "f2ff96cbd5d3deb8fcc1b480235ae43648cbab1055369934cfcd48d9454125c3",
+    "hash": "4b686649a35a7b9d69828db72a679e868f2ddf2301052e80c10a1e58c8a65d82"
+  }
+]

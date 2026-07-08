@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 from typing import Any
 
 GENESIS_HASH = "0" * 64
@@ -108,6 +109,28 @@ def verify_sample_evidence(*, sample: bool = True) -> dict[str, Any]:
     return {
         "command": "comptext evidence verify --sample",
         "mode": "sample",
+        "network": "not_called",
+        "providers": "not_called",
+        **result,
+    }
+
+
+def verify_file_evidence(*, filepath: str | Path) -> dict[str, Any]:
+    """Load and verify a local JSON file containing an array of evidence events."""
+    path = Path(filepath)
+    if not path.exists():
+        raise FileNotFoundError(f"Evidence file not found: {filepath}")
+
+    with open(path, "r", encoding="utf-8") as f:
+        events = json.load(f)
+
+    if not isinstance(events, list):
+        raise ValueError("Evidence file content must be a JSON array")
+
+    result = verify_evidence_chain(events)
+    return {
+        "command": f"comptext evidence verify --file {filepath}",
+        "mode": "file",
         "network": "not_called",
         "providers": "not_called",
         **result,
