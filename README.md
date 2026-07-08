@@ -13,6 +13,7 @@
   <img alt="Providers" src="https://img.shields.io/badge/providers-disabled%20or%20experimental-orange">
   <img alt="PR Review Memory" src="https://img.shields.io/badge/PR%20Review%20Memory-local%20v0-purple">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows--first-informational">
+  <a href="https://github.com/ProfRandom92/Comptext/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/ProfRandom92/Comptext/actions/workflows/ci.yml/badge.svg"></a>
 </p>
 
 CompText is a local AI orchestration platform for software engineering. It is not a package release, hosted service, desktop app, live provider router, or production-ready system. This repository is a local dry-run MVP seed for the `comptext` CLI, the local Textual Workbench, Antigravity workspace skills, and surrounding contracts.

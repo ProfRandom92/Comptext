@@ -39,4 +39,4 @@ Before proposing changes, ensure you have set up your development environment an
    git diff --check
    ```
 
-All checks must pass cleanly.
+All checks must pass cleanly. These same validation checks are automatically run on GitHub Actions CI for every push and pull request.
