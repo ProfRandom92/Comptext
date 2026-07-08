@@ -36,3 +36,13 @@ def test_validate_json_schema_instance_pattern_search_semantics() -> None:
     # pattern "^foo$" rejects "xxfooyy"
     with pytest.raises(ValueError, match="does not match pattern"):
         validate_json_schema_instance({"type": "string", "pattern": "^foo$"}, "xxfooyy")
+
+
+def test_validate_json_schema_instance_pattern_failures() -> None:
+    # pattern as non-string raises ValueError
+    with pytest.raises(ValueError, match="pattern must be a string"):
+        validate_json_schema_instance({"type": "string", "pattern": 123}, "some_string")
+
+    # invalid regex pattern raises ValueError
+    with pytest.raises(ValueError, match="invalid regex pattern"):
+        validate_json_schema_instance({"type": "string", "pattern": "[invalid"}, "some_string")
