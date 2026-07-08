@@ -43,6 +43,11 @@ def validate_json_schema_instance(schema: dict[str, Any], instance: Any, locatio
     if "enum" in schema and instance not in schema["enum"]:
         raise ValueError(f"{location} must be one of {schema['enum']}")
 
+    if "pattern" in schema and isinstance(instance, str):
+        import re
+        if not re.match(schema["pattern"], instance):
+            raise ValueError(f"{location} does not match pattern {schema['pattern']}")
+
     if isinstance(instance, dict):
         for key in schema.get("required", []):
             if key not in instance:

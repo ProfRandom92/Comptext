@@ -25,6 +25,10 @@ WORKSPACE_SCHEMA_EXAMPLE_PAIRS = (
         Path("schemas/evidence-event.v0.schema.json"),
         Path("examples/workspace/evidence-event.sample.json"),
     ),
+    (
+        Path("schemas/evidence-state-log-entry.v0.schema.json"),
+        Path("examples/workspace/evidence-state-log-entry.sample.json"),
+    ),
 )
 
 
