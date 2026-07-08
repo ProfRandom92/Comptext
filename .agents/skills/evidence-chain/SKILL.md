@@ -5,13 +5,13 @@ description: Design evidence schemas, validate serialization, and plan hash chai
 
 # Evidence Chain Skill
 
-Draft and validate evidence event models, hash-chain sequences, and Merkle tree state logs.
+Draft and validate evidence event models, hash-chain sequences, and state log chains.
 
 ## Use when
 - Designing JSON schemas for evidence events and run records (e.g. `schemas/`).
 - Refining event serialization modules and formatting sample evidence logs.
 - Implementing or validating local hash-chain verification routines.
-- Planning local Merkle tree state logs to link git commit hashes into the evidence chain.
+- Planning local state log chains to link git commit hashes into the evidence chain.
 
 ## Do not use when
 - Implementing live provider attestation or hosted cryptographic verification.

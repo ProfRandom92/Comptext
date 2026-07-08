@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://comptext.local/schemas/evidence-state-log-entry.v0.schema.json",
   "title": "CompText Evidence State Log Entry v0",
-  "description": "Local dry-run contract for Merkle-like state log entries linking git commits and evidence event hashes.",
+  "description": "Local dry-run contract for state log entries linking git commits and evidence event hashes.",
   "type": "object",
   "required": [
     "sequence",
