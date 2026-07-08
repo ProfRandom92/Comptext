@@ -210,6 +210,21 @@ def test_cli_verify_requires_dry_run() -> None:
         run(["verify"])
 
 
+def test_cli_tui_requires_dry_run() -> None:
+    with pytest.raises(SystemExit):
+        run(["tui"])
+
+
+def test_cli_tui_dry_run(monkeypatch, capsys) -> None:
+    called = False
+    def mock_run(self, *args, **kwargs):
+        nonlocal called
+        called = True
+    monkeypatch.setattr("textual.app.App.run", mock_run)
+    assert run(["tui", "--dry-run"], repo_root=ROOT) == 0
+    assert called is True
+
+
 def test_cli_main_entry_point_exists_and_invokes_run(monkeypatch) -> None:
     from modules.cli.cli_entrypoint import main
     import modules.cli.cli_entrypoint

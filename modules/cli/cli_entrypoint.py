@@ -68,6 +68,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     verify = subparsers.add_parser("verify")
     verify.add_argument("--dry-run", action="store_true", required=True)
+
+    tui = subparsers.add_parser("tui")
+    tui.add_argument("--dry-run", action="store_true", required=True)
     return parser
 
 
@@ -103,6 +106,9 @@ def run(argv: list[str] | None = None, *, repo_root: Path | None = None) -> int:
             exit_code, output_text = build_verify_screen(root)
             print(output_text)
             return exit_code
+        if args.command == "tui":
+            from modules.cli.tui import run_tui
+            return run_tui(root, dry_run=args.dry_run)
         if args.command == "validate" and args.target == "schemas":
             _print_json({"mode": "dry-run", "results": validate_local_schemas(repo_root=root, dry_run=args.dry_run)})
             return 0

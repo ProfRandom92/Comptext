@@ -36,7 +36,17 @@ Google Antigravity loads workspace-specific customization surfaces directly from
 
 The directory `.antigravity/plugins/comptext-local/` serves as the plugin packaging source. The registered workspace agents are role definitions only for task delegation within AGY, not active runtime background schedulers. Verify their visibility by running `/skills` and `/agents` inside the active TUI session.
 
+## Textual Workbench v0
+
+The local CLI includes a Textual-based status and agent inventory workbench:
+```bash
+comptext tui --dry-run
+```
+- **Dry-run enforcement**: Missing the `--dry-run` flag causes the command to fail using standard `argparse` behavior.
+- **Strict offline boundaries**: It does not make provider queries, network requests, GitHub API calls, start subagents, use MCP runtime, or fix TUI `/agents` discovery.
+- **Dependency Guard**: In environments where `textual` is not installed, it exits with exit code 1 and prints `Textual is required for comptext tui --dry-run.`
+
 ## Next Implementation Unit
 
 The next planned unit of work is:
-- **WorkspaceSnapshot v0 standalone schema**: Defining the initial static JSON/YAML schema and standalone test fixtures for repository state tracking, without runtime orchestration.
+- **Offline Merkle Tree state log validation**: Building the local validation tools to link sequential git commit hashes directly into the evidence chain.
