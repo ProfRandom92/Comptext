@@ -13,7 +13,7 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
     """Build deterministic local agent status screen text and return exit code."""
     # Check project files presence
     agents_md = repo_root / "AGENTS.md"
-    agents_status = "present" if agents_md.is_file() else "absent"
+    agents_md_status = "present" if agents_md.is_file() else "absent"
 
     plugin_json = repo_root / ".antigravity/plugins/comptext-local/plugin.json"
     plugin_status = "present" if plugin_json.is_file() else "absent"
@@ -22,7 +22,7 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
     skills_status = "present" if skills_dir.is_dir() else "absent"
 
     agents_dir = repo_root / ".antigravity/plugins/comptext-local/agents"
-    agents_status = "present" if agents_dir.is_dir() else "absent"
+    agents_dir_status = "present" if agents_dir.is_dir() else "absent"
 
     mcp_config = repo_root / ".antigravity/plugins/comptext-local/mcp_config.json"
     mcp_status = "disabled/deferred" if mcp_config.is_file() else "none"
@@ -83,10 +83,10 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
         "  MCP runtime: none",
         "",
         "Agent Workspace:",
-        f"  AGENTS.md: {agents_status}",
+        f"  AGENTS.md: {agents_md_status}",
         f"  Antigravity plugin: {plugin_status}",
         f"  Local skills: {skills_status}",
-        f"  Local agents: {agents_status}",
+        f"  Local agents: {agents_dir_status}",
         f"  MCP config: {mcp_status}",
         f"  Hooks status: {hooks_status}",
         "",
