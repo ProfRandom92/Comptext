@@ -45,7 +45,7 @@ def validate_json_schema_instance(schema: dict[str, Any], instance: Any, locatio
 
     if "pattern" in schema and isinstance(instance, str):
         import re
-        if not re.match(schema["pattern"], instance):
+        if not re.search(schema["pattern"], instance):
             raise ValueError(f"{location} does not match pattern {schema['pattern']}")
 
     if "minItems" in schema and isinstance(instance, list):

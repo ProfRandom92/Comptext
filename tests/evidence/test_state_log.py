@@ -24,6 +24,12 @@ def test_verify_state_log_chain_valid() -> None:
     assert len(result["root_hash"]) == 64
 
 
+def test_verify_state_log_chain_empty() -> None:
+    result = verify_state_log_chain([])
+    assert result["ok"] is False
+    assert "at least 1 entry" in result["error"]
+
+
 def test_verify_file_state_log_valid() -> None:
     sample_file = ROOT / "examples" / "workspace" / "evidence-state-log.sample.json"
     result = verify_file_state_log(filepath=sample_file)
