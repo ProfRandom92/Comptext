@@ -4,6 +4,22 @@ This document records the actual backend command invocations and the actual outp
 
 ---
 
+## Slash Commands Live Exploration Results
+
+| Slash command | Backend invocation | Actual output | Pass/Fail | UI/UX issue | Notes |
+| ------------- | ------------------ | ------------- | --------- | ----------- | ----- |
+| `/help` | (Built-in help text) | Prints help text and lists available commands. | Pass | None | Non-interactive mode prints help text immediately. |
+| `/status` | `python -m modules.cli.cli_entrypoint status --dry-run` | Prints plaintext status screen. | Pass | None | Invokes Python CLI backend status command. |
+| `/doctor` | `python -m modules.cli.cli_entrypoint doctor --dry-run` | Prints JSON doctor diagnostics. | Pass | None | Invokes Python CLI backend doctor command. |
+| `/validate workspace` | `python -m modules.cli.cli_entrypoint validate workspace --dry-run` | Prints JSON workspace validation results. | Pass | None | Invokes Python CLI backend workspace validator. |
+| `/evidence verify` | `python -m modules.cli.cli_entrypoint evidence verify --sample` | Prints JSON evidence verification results. | Pass | None | Invokes Python CLI backend evidence verify command. |
+| `/gateway health` | `python -m modules.cli.cli_entrypoint gateway health --dry-run` | Prints JSON gateway health status. | Pass | None | Invokes Python CLI backend gateway health command. |
+| `/run sample` | `python -m modules.cli.cli_entrypoint run sample --dry-run` | Prints JSON run sample results. | Pass | None | Invokes Python CLI backend run sample command. |
+| `/clear` | `console.clear()` | Terminal is cleared. | Pass | None | Clears console and exits. |
+| `/quit` | `process.exit(0)` | Exits application cleanly. | Pass | None | Exits cleanly. |
+
+---
+
 ## 1. Status Command Verification
 
 - **Command Invoked**: `python -m modules.cli.cli_entrypoint status --dry-run`
