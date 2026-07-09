@@ -1,6 +1,6 @@
 ---
 name: comptext-subagent-inventory
-description: Query the inventory list, routing preview, and boundaries of local subagent roles.
+description: Inspect local subagent definitions, allowed file scopes, and routing matrix.
 ---
 
 # CompText Subagent Inventory Skill

@@ -1,0 +1,22 @@
+{
+  "hooks": [
+    {
+      "event": "pre-final-report",
+      "enabled": false,
+      "timeout_seconds": 5,
+      "command": "git status --short"
+    },
+    {
+      "event": "diff-reminder",
+      "enabled": false,
+      "timeout_seconds": 5,
+      "command": "git diff --check"
+    },
+    {
+      "event": "verify-reminder",
+      "enabled": false,
+      "timeout_seconds": 5,
+      "command": "comptext status --dry-run"
+    }
+  ]
+}

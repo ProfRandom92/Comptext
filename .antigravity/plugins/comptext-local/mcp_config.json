@@ -1,3 +1,16 @@
 {
-  "mcpServers": {}
+  "mcpServers": {
+    "comptext-schema-validator": {
+      "command": "python",
+      "args": [
+        "-m",
+        "modules.validation.schema_validator"
+      ],
+      "env": {
+        "COMPTEXT_LOCAL_ONLY": "true"
+      },
+      "disabled": true,
+      "note": "Local-only schema validator template. Currently disabled for safety."
+    }
+  }
 }

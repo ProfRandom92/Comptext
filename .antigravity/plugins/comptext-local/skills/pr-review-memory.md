@@ -1,6 +1,6 @@
 ---
-name: pr-review-memory-bridge
-description: Bridge for local deterministic PR review-memory rendering in CompText.
+name: pr-review-memory
+description: Bridge Codex prompts to the dry-run PR Review Memory scaffold for compact Token Saver handoffs.
 ---
 
 # PR Review Memory Bridge

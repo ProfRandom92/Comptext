@@ -1,6 +1,6 @@
 ---
 name: comptext-status
-description: Query the status and presence of local CompText agent workspace files and configs.
+description: View a summary of active workspace file presence and local diagnostics status.
 ---
 
 # CompText Status Skill

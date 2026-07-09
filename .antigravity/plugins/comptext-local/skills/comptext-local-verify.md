@@ -1,6 +1,6 @@
 ---
 name: comptext-local-verify
-description: Perform offline smoke testing and verification checks on the CompText repository.
+description: Perform offline verify checks on status, subagents, workspace validation, and doctor diagnostics.
 ---
 
 # CompText Local Verify Skill

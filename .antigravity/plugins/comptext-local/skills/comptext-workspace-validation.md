@@ -1,6 +1,6 @@
 ---
 name: comptext-workspace-validation
-description: Validate workspace snapshot, delta, and reflection-gate schemas and fixtures.
+description: Validate workspace snapshot and delta files against JSON Schema schemas.
 ---
 
 # CompText Workspace Validation Skill

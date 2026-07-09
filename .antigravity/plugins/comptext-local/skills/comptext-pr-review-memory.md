@@ -1,6 +1,6 @@
 ---
 name: comptext-pr-review-memory
-description: Local rendering and schema checks for PR review memory.
+description: Local checks and markdown rendering for pull request review summaries.
 ---
 
 # CompText PR Review Memory Skill

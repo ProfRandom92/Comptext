@@ -1,6 +1,6 @@
 ---
 name: comptext-local-boundaries
-description: Verify strict dry-run boundaries and local doctor configurations.
+description: Audit project doctor files and verify the containment boundaries.
 ---
 
 # CompText Local Boundaries Skill
