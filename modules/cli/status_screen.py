@@ -6,7 +6,7 @@ from pathlib import Path
 from modules.doctor.doctor import run_doctor
 from modules.validation.workspace_validation import validate_workspace_schemas
 from modules.runtime.sample_run import run_sample
-from modules.evidence.evidence import verify_sample_evidence
+from modules.evidence.evidence import verify_file_state_log, verify_sample_evidence
 
 
 def build_status_screen(repo_root: Path) -> tuple[int, str]:
@@ -56,7 +56,6 @@ def build_status_screen(repo_root: Path) -> tuple[int, str]:
     try:
         evidence_res = verify_sample_evidence(sample=True)
         state_log_path = repo_root / "examples/workspace/evidence-state-log.sample.json"
-        from modules.evidence.evidence import verify_file_state_log
         state_log_res = verify_file_state_log(filepath=state_log_path)
         evidence_ok = bool(evidence_res.get("ok")) and bool(state_log_res.get("ok"))
     except Exception:

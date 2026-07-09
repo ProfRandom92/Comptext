@@ -146,6 +146,8 @@ def verify_file_evidence(*, filepath: str | Path) -> dict[str, Any]:
 
 def verify_state_log_chain(entries: list[dict[str, Any]]) -> dict[str, Any]:
     """Verify sequence, previous state hashes, git commit refs, and content hashes in a state log chain."""
+    if not entries:
+        return {"ok": False, "error": "State log chain must contain at least 1 entry"}
     previous_hash = GENESIS_HASH
     for expected_sequence, entry in enumerate(entries):
         if not isinstance(entry, dict):

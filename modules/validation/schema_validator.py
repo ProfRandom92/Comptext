@@ -44,9 +44,16 @@ def validate_json_schema_instance(schema: dict[str, Any], instance: Any, locatio
         raise ValueError(f"{location} must be one of {schema['enum']}")
 
     if "pattern" in schema and isinstance(instance, str):
+        pattern = schema["pattern"]
+        if not isinstance(pattern, str):
+            raise ValueError(f"{location} pattern must be a string")
         import re
-        if not re.match(schema["pattern"], instance):
-            raise ValueError(f"{location} does not match pattern {schema['pattern']}")
+        try:
+            compiled_pattern = re.compile(pattern)
+        except re.error as e:
+            raise ValueError(f"{location} has invalid regex pattern '{pattern}': {e}")
+        if not compiled_pattern.search(instance):
+            raise ValueError(f"{location} does not match pattern {pattern}")
 
     if "minItems" in schema and isinstance(instance, list):
         if len(instance) < schema["minItems"]:
