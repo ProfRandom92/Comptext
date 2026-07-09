@@ -185,7 +185,7 @@ Executes a dry-run chat completion request against the gateway.
 
 ### 8. Evidence Verify
 Validates sequential indices, previous hashes, and SHA-256 signatures in an evidence log chain.
-- **Syntax**: 
+- **Syntax**:
   - `python -m modules.cli.cli_entrypoint evidence verify --sample`
   - `python -m modules.cli.cli_entrypoint evidence verify --file <path>`
 - **Output Format**: JSON

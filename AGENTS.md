@@ -42,6 +42,50 @@ Branch prefixes:
 - Do not auto-push or auto-merge unless the user explicitly asks.
 - Do not create pull requests, merge, or release unless repository policy is explicitly changed.
 
+## Mandatory Skill-First Workflow
+
+For every non-trivial local development task, the agent MUST use the available Comptext workspace skills before planning or editing.
+
+Required behavior:
+- Open or inspect `/skills` or the corresponding `.agents/skills/` files.
+- Select the relevant Comptext skills for the task.
+- Do not merely list skill names.
+- Extract the actionable workflow rules from each selected skill.
+- Incorporate those rules into the implementation plan.
+- Map each selected skill to:
+  - concrete action
+  - validation command
+  - safety boundary
+  - expected artifact or report output
+
+Default required skills for local autonomous development:
+- `comptext-local-autonomy`
+- `comptext-local-verify`
+- `comptext-workspace-validation`
+- `comptext-status`
+- `workspace-state`
+
+Before implementation, produce a Skill-Grounded Plan containing:
+
+| Skill | Applied rule | Concrete action | Validation command | Safety impact |
+| ----- | ------------ | --------------- | ------------------ | ------------- |
+
+The agent MUST stop and report if:
+- required skills are missing
+- skills conflict with `AGENTS.md`
+- a selected skill would require network/provider/secret/MCP/hook activity not explicitly approved
+- the task cannot be mapped to concrete validation commands
+
+This skill-first rule applies before:
+- creating branches
+- editing files
+- implementing features
+- running broad searches
+- committing changes
+
+Hard boundary:
+Browsing `/skills` is not sufficient. A skill only counts as used when its rules are extracted and applied to the plan.
+
 ## Codex local autonomous mode
 
 - Use local autonomous mode only when explicitly requested.
