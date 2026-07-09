@@ -109,7 +109,11 @@ comptext tui --dry-run
 
 `comptext tui --dry-run` opens the local Textual Workbench v0 when Textual is available. The workbench visualizes a deterministic snapshot of existing local CompText state: status, doctor diagnostics, workspace validation, verification, evidence summary, provider boundary, MCP boundary, local agent inventory, workspace skills, commands, and known limitations.
 
-The workbench does not call providers, use the network, call GitHub APIs, use MCP runtime behavior, start servers, start real subagents, mutate workspace files while rendering, or fix Antigravity `/agents` discovery.
+## Ink Terminal Workbench
+
+CompText also includes an Ink/TypeScript terminal workbench under [`comptext-tui/`](comptext-tui/). It provides a local-only frontend for verified Python backend commands in interactive TTY mode and non-interactive slash-command mode.
+
+The Ink workbench is currently a verification workbench, not the full future modular panel TUI. It does not call providers, read secrets, start MCP servers, activate hooks, or simulate backend success responses. See [`comptext-tui/docs/cli-contract.md`](comptext-tui/docs/cli-contract.md) and [`comptext-tui/docs/verification-report.md`](comptext-tui/docs/verification-report.md).
 
 ## Antigravity Workspace Surface
 
