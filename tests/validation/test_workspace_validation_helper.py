@@ -57,3 +57,12 @@ def test_validation_fails_on_missing_required_property() -> None:
     
     with pytest.raises(ValueError, match="forbidden_actions is required"):
         validate_with_additional_properties(schema, invalid_instance)
+
+
+def test_validate_workspace_schemas_fails_on_missing_files(tmp_path: Path) -> None:
+    results = validate_workspace_schemas(repo_root=tmp_path)
+    assert len(results) == len(WORKSPACE_SCHEMA_EXAMPLE_PAIRS)
+    for result in results:
+        assert result["status"] == "invalid"
+        assert "error" in result
+        assert "Schema not found" in result["error"] or "Example not found" in result["error"]
