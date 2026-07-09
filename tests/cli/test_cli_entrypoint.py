@@ -274,6 +274,13 @@ def test_cli_tui_dry_run(monkeypatch, capsys) -> None:
     assert called is True
 
 
+def test_cli_verify_fails_on_empty_dir(tmp_path: Path, capsys) -> None:
+    assert run(["verify", "--dry-run"], repo_root=tmp_path) == 1
+    out = capsys.readouterr().out
+    assert "COMPTEXT LOCAL VERIFY" in out
+    assert "Result: fail" in out
+
+
 def test_cli_main_entry_point_exists_and_invokes_run(monkeypatch) -> None:
     from modules.cli.cli_entrypoint import main
     import modules.cli.cli_entrypoint

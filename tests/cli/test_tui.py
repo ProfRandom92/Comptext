@@ -47,6 +47,8 @@ def test_build_tui_snapshot_skills() -> None:
     # Check that skill names are read from .agents/skills
     assert "comptext-local-verify" in skills_names
     assert "comptext-status" in skills_names
+    assert "comptext-local-autonomy" in skills_names
+    assert "workspace-state" in skills_names
 
 
 @pytest.mark.asyncio
