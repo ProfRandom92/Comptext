@@ -78,7 +78,15 @@ function handleNonInteractive(argsString: string) {
     return;
   }
 
-  console.error(`Error: Unrecognized slash command: ${cmd}\n`);
+  const errPayload = {
+    error: {
+      message: `Unrecognized slash command: ${cmd}`,
+      type: "UnrecognizedCommandError"
+    },
+    ok: false
+  };
+  console.error(JSON.stringify(errPayload, null, 2));
+  console.error();
   printHelp();
   process.exit(1);
 }
