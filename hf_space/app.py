@@ -30,7 +30,7 @@ def _export(payload: object) -> str:
 @spaces.GPU
 def compress_ui(text: str, retention_percent: int):
     result = compress_text(text, retention_rate=retention_percent / 100)
-    checks = run_safety_checks(result.original_text, result.compressed_text)
+    checks = run_safety_checks(result.original_text, result.candidate_text)
     summary = summarize_checks(checks)
     metrics = {
         "Decision": "ACCEPTED" if result.accepted else "FALLBACK TO ORIGINAL",
@@ -41,7 +41,7 @@ def compress_ui(text: str, retention_percent: int):
         "Protected segments": result.protected_segments,
         "Compressed segments": result.compressed_segments,
         "Runtime": f"{result.runtime_seconds}s",
-        "Relevant safety checks": f"{summary['passed']}/{summary['total']}",
+        "Candidate safety": f"{summary['passed']}/{summary['total']}",
     }
     rows = [
         {
@@ -53,7 +53,7 @@ def compress_ui(text: str, retention_percent: int):
         }
         for c in checks
     ]
-    payload = {"compression": result.to_dict(), "safety": summary}
+    payload = {"compression": result.to_dict(), "candidate_safety": summary}
     return result.compressed_text, metrics, pd.DataFrame(rows), json.dumps(payload, ensure_ascii=False, indent=2), _export(payload)
 
 
@@ -63,7 +63,7 @@ def run_benchmark(retention_percent: int):
     for case in BENCHMARK_CASES:
         try:
             result = compress_text(case["text"], retention_rate=retention_percent / 100)
-            checks = run_safety_checks(result.original_text, result.compressed_text)
+            checks = run_safety_checks(result.original_text, result.candidate_text)
             summary = summarize_checks(checks)
             rows.append({
                 "Case": case["name"],
@@ -74,7 +74,7 @@ def run_benchmark(retention_percent: int):
                 "Reduction %": result.token_reduction_percent,
                 "Protected": result.protected_segments,
                 "Compressed": result.compressed_segments,
-                "Safety %": summary["score_percent"],
+                "Candidate safety %": summary["score_percent"],
                 "Reason": result.fallback_reason or "",
                 "Runtime s": result.runtime_seconds,
             })
@@ -95,7 +95,7 @@ with gr.Blocks(title="CompText Prompt Compression Lab") as demo:
         button = gr.Button("Compress safely", variant="primary")
         compressed = gr.Textbox(label="Safe output", lines=14)
         metrics = gr.JSON(label="Decision and metrics")
-        checks = gr.Dataframe(label="Relevant safety checks", interactive=False)
+        checks = gr.Dataframe(label="Candidate safety checks", interactive=False)
         raw = gr.Code(label="Raw result", language="json")
         download = gr.File(label="Download JSON result")
         button.click(compress_ui, [input_text, retention], [compressed, metrics, checks, raw, download])
