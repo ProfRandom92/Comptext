@@ -6,6 +6,7 @@ from tempfile import NamedTemporaryFile
 
 import gradio as gr
 import pandas as pd
+import spaces
 
 from compression import DEFAULT_MODEL, compress_text
 from metrics import summarize_checks
@@ -16,6 +17,7 @@ BENCHMARK_CASES = json.loads((ROOT / "benchmark_cases.json").read_text(encoding=
 EXAMPLE_TEXT = "Führe keine Live-Provider-Aufrufe aus. Ändere AGENTS.md nicht. Analysiere modules/cli/cli_entrypoint.py mit --dry-run und gib JSON zurück."
 
 
+@spaces.GPU(duration=180)
 def compress_ui(text: str, retention_percent: int):
     result = compress_text(text, retention_rate=retention_percent / 100)
     checks = run_safety_checks(result.original_text, result.compressed_text)
@@ -27,14 +29,29 @@ def compress_ui(text: str, retention_percent: int):
         "Runtime": f"{result.runtime_seconds}s",
         "Safety checks": f"{summary['passed']}/{summary['total']}",
     }
-    rows = [{"Check": c.name, "Passed": "Yes" if c.passed else "No", "Expected": ", ".join(c.expected), "Missing": ", ".join(c.missing)} for c in checks]
+    rows = [
+        {
+            "Check": c.name,
+            "Passed": "Yes" if c.passed else "No",
+            "Expected": ", ".join(c.expected),
+            "Missing": ", ".join(c.missing),
+        }
+        for c in checks
+    ]
     payload = {"compression": result.to_dict(), "safety": summary}
     with NamedTemporaryFile("w", encoding="utf-8", suffix=".json", delete=False) as handle:
         json.dump(payload, handle, ensure_ascii=False, indent=2)
         export_path = handle.name
-    return result.compressed_text, metrics, pd.DataFrame(rows), json.dumps(payload, ensure_ascii=False, indent=2), export_path
+    return (
+        result.compressed_text,
+        metrics,
+        pd.DataFrame(rows),
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        export_path,
+    )
 
 
+@spaces.GPU(duration=300)
 def run_benchmark(retention_percent: int):
     rows = []
     for case in BENCHMARK_CASES:
@@ -42,9 +59,25 @@ def run_benchmark(retention_percent: int):
             result = compress_text(case["text"], retention_rate=retention_percent / 100)
             checks = run_safety_checks(result.original_text, result.compressed_text)
             summary = summarize_checks(checks)
-            rows.append({"Case": case["name"], "Category": case["category"], "Original tokens": result.origin_tokens, "Compressed tokens": result.compressed_tokens, "Reduction %": result.token_reduction_percent, "Runtime s": result.runtime_seconds, "Safety %": summary["score_percent"]})
+            rows.append(
+                {
+                    "Case": case["name"],
+                    "Category": case["category"],
+                    "Original tokens": result.origin_tokens,
+                    "Compressed tokens": result.compressed_tokens,
+                    "Reduction %": result.token_reduction_percent,
+                    "Runtime s": result.runtime_seconds,
+                    "Safety %": summary["score_percent"],
+                }
+            )
         except Exception as exc:
-            rows.append({"Case": case["name"], "Category": case["category"], "Error": str(exc)})
+            rows.append(
+                {
+                    "Case": case["name"],
+                    "Category": case["category"],
+                    "Error": str(exc),
+                }
+            )
     frame = pd.DataFrame(rows)
     with NamedTemporaryFile("w", encoding="utf-8", suffix=".json", delete=False) as handle:
         json.dump(rows, handle, ensure_ascii=False, indent=2)
@@ -53,7 +86,11 @@ def run_benchmark(retention_percent: int):
 
 
 with gr.Blocks(title="CompText Prompt Compression Lab") as demo:
-    gr.Markdown("# 🗜️ CompText Prompt Compression Lab\nEvaluate multilingual prompt compression with Microsoft LLMLingua-2 on free CPU hardware. The first request may take several minutes.")
+    gr.Markdown(
+        "# 🗜️ CompText Prompt Compression Lab\n"
+        "Evaluate multilingual prompt compression with Microsoft LLMLingua-2 on ZeroGPU. "
+        "The first request may take several minutes while the model loads."
+    )
     with gr.Tab("Single prompt"):
         input_text = gr.Textbox(label="Original prompt", value=EXAMPLE_TEXT, lines=14)
         retention = gr.Slider(10, 100, value=60, step=5, label="Retention rate (%)")
@@ -63,7 +100,11 @@ with gr.Blocks(title="CompText Prompt Compression Lab") as demo:
         checks = gr.Dataframe(label="Safety checks", interactive=False)
         raw = gr.Code(label="Raw result", language="json")
         download = gr.File(label="Download JSON result")
-        button.click(compress_ui, [input_text, retention], [compressed, metrics, checks, raw, download])
+        button.click(
+            compress_ui,
+            [input_text, retention],
+            [compressed, metrics, checks, raw, download],
+        )
     with gr.Tab("Benchmark suite"):
         bench_rate = gr.Slider(10, 100, value=60, step=5, label="Retention rate (%)")
         bench_button = gr.Button("Run built-in benchmark", variant="primary")
@@ -71,7 +112,11 @@ with gr.Blocks(title="CompText Prompt Compression Lab") as demo:
         bench_download = gr.File(label="Download benchmark JSON")
         bench_button.click(run_benchmark, bench_rate, [bench_table, bench_download])
     with gr.Accordion("Model and limitations", open=False):
-        gr.Markdown(f"**Model:** `{DEFAULT_MODEL}`\n\nCPU inference can be slow. Free Spaces sleep after inactivity. Safety checks are heuristics, not semantic guarantees.")
+        gr.Markdown(
+            f"**Model:** `{DEFAULT_MODEL}`\n\n"
+            "ZeroGPU is allocated only while compression runs. "
+            "Safety checks are heuristics, not semantic guarantees."
+        )
 
 demo.queue(default_concurrency_limit=1, max_size=8)
 
