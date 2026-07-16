@@ -17,7 +17,7 @@ BENCHMARK_CASES = json.loads((ROOT / "benchmark_cases.json").read_text(encoding=
 EXAMPLE_TEXT = "Führe keine Live-Provider-Aufrufe aus. Ändere AGENTS.md nicht. Analysiere modules/cli/cli_entrypoint.py mit --dry-run und gib JSON zurück."
 
 
-@spaces.GPU(duration=180)
+@spaces.GPU
 def compress_ui(text: str, retention_percent: int):
     result = compress_text(text, retention_rate=retention_percent / 100)
     checks = run_safety_checks(result.original_text, result.compressed_text)
@@ -51,7 +51,7 @@ def compress_ui(text: str, retention_percent: int):
     )
 
 
-@spaces.GPU(duration=300)
+@spaces.GPU
 def run_benchmark(retention_percent: int):
     rows = []
     for case in BENCHMARK_CASES:
