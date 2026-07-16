@@ -23,6 +23,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Validate Space source
+        run: python -m compileall -q hf_space
+
       - name: Install Hugging Face client
         run: pip install --upgrade huggingface_hub
 
@@ -42,6 +45,6 @@ jobs:
               repo_id="Profrandom/comptext",
               repo_type="space",
               folder_path="hf_space",
-              commit_message="Deploy CompText Prompt Compression Lab from GitHub",
+              commit_message="Deploy CompText Safe Hybrid Compression Lab from GitHub",
           )
           PY
