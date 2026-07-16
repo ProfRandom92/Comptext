@@ -32,7 +32,7 @@ class CompressionResult:
 
 
 @lru_cache(maxsize=2)
-def get_compressor(model_name: str = DEFAULT_MODEL):
+def get_compressor(model_name: str = DEFAULT_MODEL) -> PromptCompressor:
     try:
         from llmlingua import PromptCompressor
     except Exception as exc:
