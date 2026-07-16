@@ -1,0 +1,8 @@
+[
+  {"name":"Safety instructions DE","category":"policy","text":"Führe keine Live-Provider-Aufrufe aus. Ändere AGENTS.md nicht. Verwende niemals git add . und arbeite nur mit --dry-run."},
+  {"name":"CLI contract","category":"cli","text":"Run comptext analyze --dry-run --output-format json for modules/cli/cli_entrypoint.py and do not write files."},
+  {"name":"JSON configuration","category":"json","text":"{\"provider\":\"local\",\"dry_run\":true,\"max_tokens\":4096,\"model_version\":\"v2.4.1\"}"},
+  {"name":"Windows paths","category":"paths","text":"Read C:\\Users\\contr\\dev\\Comptext\\modules\\cli\\cli_entrypoint.py but do not modify C:\\Users\\contr\\dev\\Comptext\\AGENTS.md."},
+  {"name":"Python symbols","category":"code","text":"Inspect PromptCompressor, compress_prompt_llmlingua2, CompressionResult, and token_reduction_percent without changing behavior."},
+  {"name":"Mixed language","category":"multilingual","text":"Bitte analysiere den current git diff, but do not commit anything and never expose secrets from .env or config/local.json."}
+]
