@@ -1,38 +1,54 @@
 ---
-title: CompText Prompt Compression Lab
-emoji: 🗜️
-colorFrom: blue
-colorTo: purple
+title: CompText Universe
+emoji: 🧭
+colorFrom: indigo
+colorTo: blue
 sdk: gradio
+python_version: 3.10.13
 sdk_version: 5.44.1
 app_file: app.py
+fullWidth: true
+header: mini
 pinned: false
 license: apache-2.0
+short_description: Explore CompText architecture, contracts and safe context compression.
+models:
+  - microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank
+tags:
+  - context-engineering
+  - prompt-compression
+  - software-engineering
+  - gradio
+preload_from_hub:
+  - microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank
 ---
 
-# CompText Prompt Compression Lab
+# CompText Universe
 
-A CPU-friendly Hugging Face Space for evaluating prompt and context compression with Microsoft LLMLingua-2.
+> Models are providers. Context is the product. Evidence is the trust layer. CompText is the kernel.
 
-## Features
+A public, experimental showcase for the CompText local engineering-orchestration architecture. The real CompText runtime remains local; this Space visualizes architecture and contracts, builds non-executable AIR and simulated Evidence previews, and tests fail-closed context compression.
 
-- Compress arbitrary prompts at configurable retention rates
-- Compare original and compressed text
-- Measure token reduction and runtime
-- Check preservation of negations, CLI flags, file paths, JSON keys, version numbers, and code-like symbols
-- Run a built-in benchmark suite
-- Export results as JSON
+## Included surfaces
 
-## Default model
+- Static seven-layer architecture explorer
+- Explicit capability maturity matrix
+- Workspace skill and safety-boundary explorer
+- Fail-closed hybrid LLMLingua-2 compression
+- Deterministic, non-executable AIR previews
+- Simulated, non-persistent Evidence previews
+- CompText-specific benchmark and JSON exports
 
-`microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank`
+## Hard boundaries
 
-The first startup can take several minutes because the model must be downloaded.
+- No provider calls
+- No repository writes
+- No runtime GitHub access
+- No API keys or runtime secrets
+- No AIR execution
+- No persistent prompt storage
+- No claim that planned or scaffolded components are production-ready
 
-## Hardware
+## Runtime
 
-Designed for Hugging Face Spaces `CPU Basic` (2 vCPU, 16 GB RAM, 50 GB ephemeral storage).
-
-## Safety
-
-This Space does not call external LLM APIs, require runtime secrets, access private repositories, or modify repositories.
+Only compression callbacks request ZeroGPU. Universe navigation, preview construction, contract views and secret-pattern checks are CPU-only and deterministic. The model is preloaded from the Hub during build to reduce first-request latency.
