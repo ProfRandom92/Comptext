@@ -1,8 +1,37 @@
 [
-  {"name":"Safety instructions DE","category":"policy","text":"Führe keine Live-Provider-Aufrufe aus. Ändere AGENTS.md nicht. Verwende niemals git add . und arbeite nur mit --dry-run."},
-  {"name":"CLI contract","category":"cli","text":"Run comptext analyze --dry-run --output-format json for modules/cli/cli_entrypoint.py and do not write files."},
-  {"name":"JSON configuration","category":"json","text":"{\"provider\":\"local\",\"dry_run\":true,\"max_tokens\":4096,\"model_version\":\"v2.4.1\"}"},
-  {"name":"Windows paths","category":"paths","text":"Read C:\\Users\\contr\\dev\\Comptext\\modules\\cli\\cli_entrypoint.py but do not modify C:\\Users\\contr\\dev\\Comptext\\AGENTS.md."},
-  {"name":"Python symbols","category":"code","text":"Inspect PromptCompressor, compress_prompt_llmlingua2, CompressionResult, and token_reduction_percent without changing behavior."},
-  {"name":"Mixed language","category":"multilingual","text":"Bitte analysiere den current git diff, but do not commit anything and never expose secrets from .env or config/local.json."}
+  {
+    "name": "Safety plus prose DE",
+    "category": "policy",
+    "text": "Führe keine Live-Provider-Aufrufe aus. Ändere AGENTS.md nicht. Verwende niemals git add . und arbeite nur mit --dry-run. Die folgende ausführliche Architekturbegründung beschreibt, wie CompText Aufgaben zwischen Orchestrierung, Provider-Adaptern, Kontextaufbereitung und Validierung verteilt. Wiederholte Erläuterungen und nebensächliche Übergänge dürfen gekürzt werden, solange alle verbindlichen Regeln exakt erhalten bleiben."
+  },
+  {
+    "name": "CLI plus explanation",
+    "category": "cli",
+    "text": "Run comptext analyze --dry-run --output-format json for modules/cli/cli_entrypoint.py and do not write files. The command is accompanied by a deliberately verbose explanation of why repository analysis should separate discovery, validation, and reporting so that the natural-language portion can be compressed without altering the command contract."
+  },
+  {
+    "name": "JSON configuration",
+    "category": "json",
+    "text": "{\"provider\":\"local\",\"dry_run\":true,\"max_tokens\":4096,\"model_version\":\"v2.4.1\"}"
+  },
+  {
+    "name": "Windows paths plus prose",
+    "category": "paths",
+    "text": "Read C:\\Users\\contr\\dev\\Comptext\\modules\\cli\\cli_entrypoint.py but do not modify C:\\Users\\contr\\dev\\Comptext\\AGENTS.md. The surrounding explanation describes the repository structure in intentionally repetitive language and may be shortened when the two exact paths and the prohibition remain unchanged."
+  },
+  {
+    "name": "Python symbols plus prose",
+    "category": "code",
+    "text": "Inspect PromptCompressor, compress_prompt_llmlingua2, CompressionResult, and token_reduction_percent without changing behavior. These components form a small processing pipeline whose verbose conceptual description can be reduced while every named symbol and the behavioral constraint remain intact."
+  },
+  {
+    "name": "Natural prose only",
+    "category": "prose",
+    "text": "The project contains a long architectural explanation that repeatedly describes the same separation of concerns. The orchestration layer prepares requests, the provider layer sends them, and the validation layer checks outputs. Several sentences restate these responsibilities with slightly different wording, making this passage a useful candidate for safe extractive compression."
+  },
+  {
+    "name": "Mixed language protected",
+    "category": "multilingual",
+    "text": "Bitte analysiere den current git diff, but do not commit anything and never expose secrets from .env or config/local.json. Der restliche Kontext erklärt ausführlich und teilweise redundant, warum Änderungen zuerst gelesen, dann validiert und erst danach berichtet werden sollen. Diese erklärende Prosa darf gekürzt werden, die Verbote und Pfade jedoch nicht."
+  }
 ]
