@@ -5,8 +5,6 @@ from functools import lru_cache
 from time import perf_counter
 from typing import Any
 
-from llmlingua import PromptCompressor
-
 DEFAULT_MODEL = "microsoft/llmlingua-2-bert-base-multilingual-cased-meetingbank"
 
 
@@ -35,7 +33,19 @@ class CompressionResult:
 
 @lru_cache(maxsize=2)
 def get_compressor(model_name: str = DEFAULT_MODEL) -> PromptCompressor:
-    return PromptCompressor(model_name=model_name, use_llmlingua2=True)
+    try:
+        from llmlingua import PromptCompressor
+    except Exception as exc:
+        raise RuntimeError(
+            "LLMLingua could not be imported. Check the Space build logs and pinned dependencies."
+        ) from exc
+
+    try:
+        return PromptCompressor(model_name=model_name, use_llmlingua2=True)
+    except Exception as exc:
+        raise RuntimeError(
+            "The LLMLingua-2 model could not be loaded. The first load can take several minutes on CPU Basic."
+        ) from exc
 
 
 def compress_text(text: str, retention_rate: float = 0.6, model_name: str = DEFAULT_MODEL) -> CompressionResult:
@@ -47,16 +57,19 @@ def compress_text(text: str, retention_rate: float = 0.6, model_name: str = DEFA
 
     compressor = get_compressor(model_name)
     started = perf_counter()
-    raw = compressor.compress_prompt_llmlingua2(
-        clean_text,
-        rate=retention_rate,
-        force_tokens=["\n", ".", "!", "?", ",", ":", ";", "{", "}", "[", "]"],
-        chunk_end_tokens=[".", "\n"],
-        return_word_label=True,
-        drop_consecutive=True,
-    )
-    runtime = perf_counter() - started
+    try:
+        raw = compressor.compress_prompt_llmlingua2(
+            clean_text,
+            rate=retention_rate,
+            force_tokens=["\n", ".", "!", "?", ",", ":", ";", "{", "}", "[", "]"],
+            chunk_end_tokens=[".", "\n"],
+            return_word_label=True,
+            drop_consecutive=True,
+        )
+    except Exception as exc:
+        raise RuntimeError(f"Compression failed: {exc}") from exc
 
+    runtime = perf_counter() - started
     return CompressionResult(
         original_text=clean_text,
         compressed_text=raw.get("compressed_prompt", ""),
