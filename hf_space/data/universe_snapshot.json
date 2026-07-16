@@ -1,0 +1,65 @@
+{
+  "snapshot_version": "1.0",
+  "product": {
+    "name": "CompText",
+    "repository_name": "comptext",
+    "status": "local-dry-run-mvp",
+    "claim": "Models are providers. Context is the product. Evidence is the trust layer. CompText is the kernel.",
+    "description": "A local AI orchestration platform for software engineering. This public Space is an experimental, non-executing showcase."
+  },
+  "source": {
+    "repository": "ProfRandom92/Comptext",
+    "mode": "committed-static-snapshot",
+    "runtime_github_access": false,
+    "allowed_sources": [
+      "AGENTS.md",
+      "docs/COMPTEXT_ARCHITECTURE_v1.md",
+      ".agents/skills/comptext-local-autonomy/SKILL.md",
+      ".agents/skills/comptext-local-verify/SKILL.md",
+      ".agents/skills/comptext-workspace-validation/SKILL.md",
+      ".agents/skills/comptext-status/SKILL.md",
+      ".agents/skills/workspace-state/SKILL.md"
+    ]
+  },
+  "boundaries": [
+    "No provider calls",
+    "No repository writes",
+    "No runtime GitHub access",
+    "No secrets or environment access",
+    "No AIR execution",
+    "No persistent user input storage"
+  ],
+  "layers": [
+    {"id":"ui","name":"Terminal OS / UI","status":"scaffolded","purpose":"Human-facing workbench for sessions, workspaces, commands, providers, evidence and run queues.","inputs":"user intent","outputs":"normalized commands and views"},
+    {"id":"runtime","name":"Runtime","status":"scaffolded","purpose":"Coordinates runs, plans, verification, retries, queues and replay.","inputs":"AIR plans","outputs":"run state and events"},
+    {"id":"gateway","name":"Gateway","status":"planned","purpose":"Normalizes local provider-compatible message and response routes.","inputs":"local API requests","outputs":"normalized traffic"},
+    {"id":"agent-bus","name":"Agent Bus","status":"planned","purpose":"Coordinates specialized agents as explicit tasks with approval gates.","inputs":"tasks and roles","outputs":"task results and evidence"},
+    {"id":"air","name":"AIR","status":"scaffolded","purpose":"Describes intended work before execution: goal, context, tools, constraints, permissions and outputs.","inputs":"intent and context","outputs":"non-executed plan contract"},
+    {"id":"evidence","name":"Evidence","status":"scaffolded","purpose":"Records what actually happened without secrets, raw provider payloads or hidden reasoning.","inputs":"runtime and validation events","outputs":"redacted evidence events"},
+    {"id":"memory","name":"Memory / Knowledge Graph","status":"future","purpose":"Structured workspace knowledge spanning files, functions, tests, runs and evidence.","inputs":"validated workspace state","outputs":"retrievable context relationships"}
+  ],
+  "capabilities": [
+    {"name":"Local status","surface":"CLI","status":"implemented","network":"no","provider":"no","mutating":"no"},
+    {"name":"Local verification","surface":"CLI","status":"implemented","network":"no","provider":"no","mutating":"no"},
+    {"name":"Workspace schema validation","surface":"CLI","status":"implemented","network":"no","provider":"no","mutating":"no"},
+    {"name":"Hybrid context compression","surface":"HF Space","status":"experimental","network":"model-cache","provider":"no","mutating":"no"},
+    {"name":"AIR preview","surface":"HF Space","status":"experimental","network":"no","provider":"no","mutating":"no"},
+    {"name":"Simulated Evidence preview","surface":"HF Space","status":"experimental","network":"no","provider":"no","mutating":"no"},
+    {"name":"Provider Router","surface":"Kernel","status":"scaffolded","network":"disabled","provider":"not_configured","mutating":"no"},
+    {"name":"Workspace reflection runtime","surface":"Kernel","status":"future","network":"no","provider":"no","mutating":"local"},
+    {"name":"Autonomous PR merge","surface":"Agent workflow","status":"disabled","network":"yes","provider":"no","mutating":"yes"}
+  ],
+  "skills": [
+    {"name":"comptext-local-autonomy","purpose":"One-unit-at-a-time offline development loop.","validation":"python -m pytest; git diff --check","boundary":"No network, providers, secrets, GitHub writes or servers."},
+    {"name":"comptext-local-verify","purpose":"Verify status, subagents, workspace validation and doctor diagnostics.","validation":"comptext verify --dry-run","boundary":"Offline dry-run checks only."},
+    {"name":"comptext-workspace-validation","purpose":"Validate committed workspace examples against strict schemas.","validation":"comptext validate workspace --dry-run","boundary":"No active generation, network, databases or providers."},
+    {"name":"comptext-status","purpose":"Show file presence and local diagnostic state.","validation":"comptext status --dry-run","boundary":"Offline local-only data collection."},
+    {"name":"workspace-state","purpose":"Define future snapshot, delta and reflection-gate concepts.","validation":"schema and fixture validation","boundary":"No active runtime or interpretability claims."}
+  ],
+  "contracts": [
+    {"name":"AIR Plan","kind":"intent","fields":"version, intent, goal, context, files, tools, permissions, expected_outputs, metadata","execution":"never in this Space"},
+    {"name":"Evidence Event","kind":"observed-event","fields":"event_id, run_id, type, actor, tool, summary, hashes, timestamp, redaction","execution":"simulated preview only"},
+    {"name":"Run Record","kind":"run-index","fields":"run_id, air_hash, status, start_time, end_time, event_hashes, metrics","execution":"not created in this Space"},
+    {"name":"Workspace Snapshot","kind":"workspace-state","fields":"schema-defined local state","execution":"static concept preview only"}
+  ]
+}
