@@ -31,8 +31,30 @@ class CompressionResult:
         return data
 
 
+def _parse_reported_rate(value: Any) -> float:
+    """Normalize LLMLingua rate values to a 0..1 ratio.
+
+    LLMLingua versions may return a numeric ratio, a numeric percentage,
+    or a percentage string such as ``"74.4%"``.
+    """
+    if value is None:
+        return 0.0
+
+    if isinstance(value, str):
+        cleaned = value.strip()
+        if not cleaned:
+            return 0.0
+        if cleaned.endswith("%"):
+            return float(cleaned[:-1].strip()) / 100.0
+        number = float(cleaned)
+    else:
+        number = float(value)
+
+    return number / 100.0 if number > 1.0 else number
+
+
 @lru_cache(maxsize=2)
-def get_compressor(model_name: str = DEFAULT_MODEL) -> PromptCompressor:
+def get_compressor(model_name: str = DEFAULT_MODEL):
     try:
         from llmlingua import PromptCompressor
     except Exception as exc:
@@ -44,11 +66,15 @@ def get_compressor(model_name: str = DEFAULT_MODEL) -> PromptCompressor:
         return PromptCompressor(model_name=model_name, use_llmlingua2=True)
     except Exception as exc:
         raise RuntimeError(
-            "The LLMLingua-2 model could not be loaded. The first load can take several minutes on CPU Basic."
+            "The LLMLingua-2 model could not be loaded. The first load can take several minutes."
         ) from exc
 
 
-def compress_text(text: str, retention_rate: float = 0.6, model_name: str = DEFAULT_MODEL) -> CompressionResult:
+def compress_text(
+    text: str,
+    retention_rate: float = 0.6,
+    model_name: str = DEFAULT_MODEL,
+) -> CompressionResult:
     clean_text = (text or "").strip()
     if not clean_text:
         raise ValueError("Please enter text to compress.")
@@ -75,7 +101,7 @@ def compress_text(text: str, retention_rate: float = 0.6, model_name: str = DEFA
         compressed_text=raw.get("compressed_prompt", ""),
         origin_tokens=int(raw.get("origin_tokens", 0)),
         compressed_tokens=int(raw.get("compressed_tokens", 0)),
-        reported_rate=float(raw.get("rate", 0.0)),
+        reported_rate=_parse_reported_rate(raw.get("rate")),
         requested_retention_rate=retention_rate,
         runtime_seconds=round(runtime, 4),
         model_name=model_name,
