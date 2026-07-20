@@ -38,8 +38,13 @@ def test_secret_redaction_renderer_matrix():
     assert _clean_text("TOKEN=val1 API_KEY=val2") == "TOKEN=<redacted> API_KEY=<redacted>"
     assert _clean_text('TOKEN="<redacted>"') == 'TOKEN="<redacted>"'
 
-    # Line boundary checks (no processing across lines)
-    from previews import redact_secrets
-    assert redact_secrets("TOKEN=\n'value'") == ("TOKEN=\n'value'", False)
-
+    # Explicit cases required by Thread C
+    assert _clean_text('TOKEN="value\\"with\\"escapes"') == 'TOKEN="<redacted>"'
+    assert _clean_text("TOKEN='value\\'with\\'escapes'") == "TOKEN='<redacted>'"
+    assert _clean_text("HF_TOKEN=") == "HF_TOKEN="
+    assert _clean_text("HF_TOKEN=\n'value'") == "HF_TOKEN= '<redacted>'"  # _clean_text collapses newlines to space first
     assert _clean_text("NORMAL_VAR=value") == "NORMAL_VAR=value"
+
+    # Line boundary checks (no processing across lines on raw multiline text)
+    from previews import redact_secrets
+    assert redact_secrets("HF_TOKEN=\n'value'") == ("HF_TOKEN=\n'value'", False)
