@@ -1,10 +1,4 @@
 import pytest
-import sys
-from pathlib import Path
-
-# Add plugins/pr-review-memory/ and hf_space/ to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "hf_space"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "plugins" / "pr-review-memory"))
 
 from previews import scan_secrets
 from renderer import _clean_text
@@ -35,4 +29,17 @@ def test_secret_redaction_renderer_matrix():
     assert _clean_text('TOKEN="value"') == 'TOKEN="<redacted>"'
     assert _clean_text("TOKEN='value'") == "TOKEN='<redacted>'"
     
+    # New edge cases
+    assert _clean_text('TOKEN="abc\\"def"') == 'TOKEN="<redacted>"'
+    assert _clean_text('"TOKEN": "value"') == '"TOKEN": "<redacted>"'
+    assert _clean_text("'API_KEY': 'value'") == "'API_KEY': '<redacted>'"
+    assert _clean_text('{"api_key": "value"}') == '{"api_key": "<redacted>"}'
+    assert _clean_text('{"normal": "value"}') == '{"normal": "value"}'
+    assert _clean_text("TOKEN=val1 API_KEY=val2") == "TOKEN=<redacted> API_KEY=<redacted>"
+    assert _clean_text('TOKEN="<redacted>"') == 'TOKEN="<redacted>"'
+
+    # Line boundary checks (no processing across lines)
+    from previews import redact_secrets
+    assert redact_secrets("TOKEN=\n'value'") == ("TOKEN=\n'value'", False)
+
     assert _clean_text("NORMAL_VAR=value") == "NORMAL_VAR=value"

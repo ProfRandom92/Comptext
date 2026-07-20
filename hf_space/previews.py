@@ -29,9 +29,13 @@ def redact_secrets(text: str) -> tuple[str, bool]:
         return "", False
 
     sensitive_keywords = {"token", "secret", "password", "api_key", "access_key", "private_key", "credential"}
-    # Matches: var_name = value  or  var_name: value
+
+    # Key-value assignment pattern:
+    # Group 1: Key (can include quotes, word characters, dashes, dots, slashes)
+    # Group 2: Separator (: or = with surrounding whitespace)
+    # Group 3: Value (double-quoted with escapes, single-quoted with escapes, or unquoted characters)
     assignment_pattern = re.compile(
-        r"\b([A-Za-z_][A-Za-z0-9_]*)(\s*[:=]\s*)(\"[^\"]*\"|'[^']*'|[^\s,;]+)"
+        r"([A-Za-z0-9_\-'\".\s/\\()]+?)(\s*[:=]\s*)(\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'|[^\s,;}]+)"
     )
 
     lines = text.splitlines(keepends=True)
@@ -39,23 +43,29 @@ def redact_secrets(text: str) -> tuple[str, bool]:
     any_redacted = False
 
     for line in lines:
-        new_line = line
-        matches = list(assignment_pattern.finditer(line))
-        for match in reversed(matches):
-            var_name = match.group(1)
-            if any(kw in var_name.lower() for kw in sensitive_keywords):
-                start, end = match.span(3)
-                val = match.group(3)
-                if val == "<redacted>" or val == '"<redacted>"' or val == "'<redacted>'":
-                    continue
+        def repl(match):
+            nonlocal any_redacted
+            var_name = match.group(1).strip()
+            sep = match.group(2)
+            val = match.group(3)
+
+            # Check if clean key contains any sensitive keyword
+            clean_key = var_name.replace('"', '').replace("'", "").lower()
+            if any(kw in clean_key for kw in sensitive_keywords):
+                if val in ('"<redacted>"', "'<redacted>'", "<redacted>"):
+                    return match.group(0)
+
                 if val.startswith('"') and val.endswith('"'):
                     replacement = '"<redacted>"'
                 elif val.startswith("'") and val.endswith("'"):
                     replacement = "'<redacted>'"
                 else:
                     replacement = "<redacted>"
-                new_line = new_line[:start] + replacement + new_line[end:]
                 any_redacted = True
+                return match.group(1) + sep + replacement
+            return match.group(0)
+
+        new_line = assignment_pattern.sub(repl, line)
         redacted_lines.append(new_line)
 
     return "".join(redacted_lines), any_redacted
