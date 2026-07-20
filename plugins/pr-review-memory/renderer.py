@@ -9,9 +9,8 @@ from typing import Any
 
 REQUIRED_FIELDS = ("repository", "pr_number", "branch", "head_sha", "validation_summary", "next_action")
 DIFF_MARKER_PREFIXES = ("diff --git", "index ", "@@", "+++", "---")
-SECRET_PATTERN = re.compile(
-    r"(?i)\b(api[_-]?key|secret|token|password)\b\s*[:=]\s*(?:\"[^\"]*\"|'[^']*'|[^\s,;]+)"
-)
+
+from hf_space.previews import redact_secrets
 
 
 def render_pr_review_memory_handoff(data: dict[str, Any]) -> str:
@@ -67,8 +66,9 @@ def _clean_text(value: Any) -> str:
             continue
         kept_lines.append(stripped)
     cleaned = " ".join(part for part in kept_lines if part)
-    cleaned = SECRET_PATTERN.sub(lambda match: f"{match.group(1)}=<redacted>", cleaned)
-    return cleaned
+
+    redacted_text, _ = redact_secrets(cleaned)
+    return redacted_text
 
 
 def _format_pr(pr_number: Any, pr_url: Any) -> str:

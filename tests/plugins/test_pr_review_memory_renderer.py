@@ -276,8 +276,8 @@ def test_renderer_redacts_quoted_multi_word_secret_values() -> None:
 
     assert "multi word secret" not in markdown
     assert "another multi word value" not in markdown
-    assert "token=<redacted>" in markdown
-    assert "secret=<redacted>" in markdown
+    assert 'token="<redacted>"' in markdown
+    assert "secret='<redacted>'" in markdown
 
 
 def test_renderer_handles_general_iterable_items_as_bullets() -> None:
