@@ -13,7 +13,6 @@ _SECRET_PATTERNS = {
     "openai-key": re.compile(r"\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b"),
     "aws-access-key": re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
     "bearer-token": re.compile(r"\bBearer\s+[A-Za-z0-9._~+/=-]{16,}", re.I),
-    "secret-assignment": re.compile(r"\b(?:API_KEY|TOKEN|SECRET|PASSWORD)\s*=\s*[^\s]+", re.I),
 }
 
 
@@ -21,8 +20,65 @@ def _sha256(text: str) -> str:
     return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def redact_secrets(text: str) -> tuple[str, bool]:
+    """Redact sensitive variable assignments line-by-line.
+
+    Returns the redacted text and a boolean indicating if any secret assignment was redacted.
+    """
+    if not text:
+        return "", False
+
+    sensitive_keywords = {"token", "secret", "password", "api_key", "access_key", "private_key", "credential"}
+
+    # Key-value assignment pattern:
+    # Group 1: Key (can include quotes, word characters, dashes, dots, slashes)
+    # Group 2: Separator (: or = with surrounding whitespace)
+    # Group 3: Value (double-quoted with escapes, single-quoted with escapes, or unquoted characters)
+    assignment_pattern = re.compile(
+        r"([A-Za-z0-9_\-'\".\s/\\()]+?)(\s*[:=]\s*)(\"(?:[^\"\\]|\\.)*\"|'(?:[^'\\]|\\.)*'|[^\s,;}]+)"
+    )
+
+    lines = text.splitlines(keepends=True)
+    redacted_lines = []
+    any_redacted = False
+
+    for line in lines:
+        def repl(match):
+            nonlocal any_redacted
+            var_name = match.group(1).strip()
+            sep = match.group(2)
+            val = match.group(3)
+
+            # Check if clean key contains any sensitive keyword
+            clean_key = var_name.replace('"', '').replace("'", "").lower()
+            if any(kw in clean_key for kw in sensitive_keywords):
+                if val in ('"<redacted>"', "'<redacted>'", "<redacted>"):
+                    return match.group(0)
+
+                if val.startswith('"') and val.endswith('"'):
+                    replacement = '"<redacted>"'
+                elif val.startswith("'") and val.endswith("'"):
+                    replacement = "'<redacted>'"
+                else:
+                    replacement = "<redacted>"
+                any_redacted = True
+                return match.group(1) + sep + replacement
+            return match.group(0)
+
+        new_line = assignment_pattern.sub(repl, line)
+        redacted_lines.append(new_line)
+
+    return "".join(redacted_lines), any_redacted
+
+
 def scan_secrets(text: str) -> list[str]:
-    return sorted(name for name, pattern in _SECRET_PATTERNS.items() if pattern.search(text or ""))
+    matches = [name for name, pattern in _SECRET_PATTERNS.items() if pattern.search(text or "")]
+
+    _, has_assignment = redact_secrets(text or "")
+    if has_assignment:
+        matches.append("secret-assignment")
+
+    return sorted(matches)
 
 
 def _constraints(text: str) -> list[str]:
